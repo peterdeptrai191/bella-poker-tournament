@@ -16,3 +16,4 @@
 @media(max-width:340px){.game-shell.many-seats{--board-card-width:23px;--board-card-height:36px}.game-shell.many-seats .game-board .card{font-size:15px;padding:3px}.game-shell.many-seats .game-board .card span{font-size:16px}}
 .game-shell .rail-seat .opponent-plaque .opponent-stack{font-size:8px}.game-shell .rail-seat .opponent-plaque .table-wager{font-size:6.5px;padding:1px}
 .game-shell .game-board .board-slot .card{font-size:calc(var(--board-card-width)*.58);padding:3px 4px}.game-shell .game-board .board-slot .card span{font-size:calc(var(--board-card-width)*.62)}
+.game-shell .hero-character{left:-25px;width:32px;height:48px}

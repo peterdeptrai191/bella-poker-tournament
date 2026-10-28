@@ -39,7 +39,7 @@ test('all 2–9 player layouts have disjoint cells and leave HUD, board and loca
   const height=Math.max(viewport,viewport<=740?620:670),short=viewport<=740,dock=short?153:166,hero=short?105:114;
   const cardWidth=Math.min(34,Math.max(23,width*.08)),cardHeight=Math.round(cardWidth*1.44),boardWidth=cardWidth*5+12;
   const board={left:(width-boardWidth)/2,top:height-dock-hero-8-28-cardHeight,width:boardWidth,height:cardHeight};
-  const top=(short?166:191)+12,bottom=height-dock-8-6;
+  const top=(short?166:191)+12,bottom=height-dock-66;
   const players=Array.from({length:count},(_,seat)=>({id:'p'+seat,seat})),seats=circularSeats(players,players[0]);
   const metrics=seatMetrics({width,top,bottom,boardTop:board.top,boardLeft:board.left,boardRight:board.left+board.width,opponents:count-1});
   assert.ok(metrics.cellHeight>=66,`Readable seat height at ${width}x${viewport}, ${count} players`);

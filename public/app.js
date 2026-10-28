@@ -106,7 +106,8 @@ function positionTableSeats(){
  const base=stage.getBoundingClientRect(),hud=[...stage.querySelectorAll('.game-pot,.game-chip-card')],board=stage.querySelector('.game-board .board'),hero=stage.querySelector('.hero-plaque');if(!board||!hero)return;
  const top=Math.max(...hud.map(el=>el.getBoundingClientRect().bottom))-base.top+12;
  const slots=[...board.querySelectorAll('.board-slot')].map(el=>el.getBoundingClientRect());
- const metrics=seatMetrics({width:stage.clientWidth,top,bottom:hero.getBoundingClientRect().bottom-base.top-6,boardTop:board.getBoundingClientRect().top-base.top,boardLeft:Math.min(...slots.map(r=>r.left))-base.left,boardRight:Math.max(...slots.map(r=>r.right))-base.left,opponents});
+ const utilities=[...stage.querySelectorAll('.game-rank-shortcut,.game-level')].map(el=>el.getBoundingClientRect()).filter(r=>r.width>0);const bottom=Math.min(hero.getBoundingClientRect().bottom,...utilities.map(r=>r.top))-base.top-12;
+ const metrics=seatMetrics({width:stage.clientWidth,top,bottom,boardTop:board.getBoundingClientRect().top-base.top,boardLeft:Math.min(...slots.map(r=>r.left))-base.left,boardRight:Math.max(...slots.map(r=>r.right))-base.left,opponents});
  for(const [name,value] of Object.entries({top:metrics.top,bottom:metrics.bottom,width:metrics.cellWidth,railWidth:metrics.railWidth,height:metrics.cellHeight,portrait:metrics.portrait}))stage.style.setProperty('--seat-'+name,value+'px');
 }
 function watchTableSeats(){seatResizeObserver?.disconnect();positionTableSeats();const stage=$('.game-shell');if(stage)seatResizeObserver?.observe(stage);}
