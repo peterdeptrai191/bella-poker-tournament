@@ -3,8 +3,9 @@ export const displayedPot=room=>!room?.hand?0:room.hand.stage==='complete'?(room
 export function diffTableEffects(before,after){
  if(!before||before.code!==after.code||!after.hand)return [];
  const events=[],hand=after.hand,sameHand=before.hand?.id===hand.id;
- const pot=displayedPot(after),previousPot=sameHand?displayedPot(before):0;
- if(pot!==previousPot)events.push({key:`${after.code}:${hand.id}:pot:${pot}`,type:'pot',amount:pot,delta:pot-previousPot,newHand:!sameHand,duration:3000,delay:0});
+ // Hand blinds are the stakes actually in play; the level clock may advance mid-hand.
+ const oldBlinds=before.hand?.blinds,blinds=hand.blinds;
+ if(before.status==='running'&&after.status==='running'&&oldBlinds&&blinds&&(blinds.sb>oldBlinds.sb||blinds.bb>oldBlinds.bb))events.push({key:`${after.code}:blind:${blinds.level}:${blinds.sb}:${blinds.bb}`,type:'blind',from:{sb:oldBlinds.sb,bb:oldBlinds.bb},to:{sb:blinds.sb,bb:blinds.bb},duration:4500,delay:0});
  const count=sameHand?before.hand.board.length:0;
  for(let i=count;i<hand.board.length;i++)events.push({key:`${after.code}:${hand.id}:board:${i}`,type:'board',index:i,delay:(i-count)*190,duration:540+(i-count)*190});
  for(const p of after.players){

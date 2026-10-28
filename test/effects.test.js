@@ -27,25 +27,37 @@ test('only confirmed new elimination ranks notify; simultaneous busts are groupe
  const champion=structuredClone(before);champion.players[0].rank=1;assert.ok(!diffTableEffects(before,champion).some(e=>e.type==='elimination'));
 });
 
-test('pot notifications show each changed total and increment, but never repeat on polling',()=>{
+test('pot updates and new hands at unchanged blinds never create a notification',()=>{
  const before=snapshot();before.hand.pot=75;const after=structuredClone(before);after.hand.pot=200;
- const event=diffTableEffects(before,after).find(e=>e.type==='pot');
- assert.equal(event.amount,200);assert.equal(event.delta,125);assert.equal(event.newHand,false);
- assert.ok(!diffTableEffects(after,structuredClone(after)).some(e=>e.type==='pot'));
+ assert.ok(!diffTableEffects(before,after).some(e=>e.type==='pot'||e.type==='blind'));
  const complete=structuredClone(after);complete.hand.stage='complete';complete.hand.pot=0;complete.hand.winners=[{amount:200}];
- assert.equal(displayedPot(complete),200);assert.ok(!diffTableEffects(after,complete).some(e=>e.type==='pot'));
+ assert.equal(displayedPot(complete),200);assert.ok(!diffTableEffects(after,complete).some(e=>e.type==='pot'||e.type==='blind'));
  const next=structuredClone(after);next.hand.id='hand-2';next.hand.pot=75;
- const fresh=diffTableEffects(complete,next).find(e=>e.type==='pot');assert.equal(fresh.amount,75);assert.equal(fresh.delta,75);assert.equal(fresh.newHand,true);
- assert.deepEqual(diffTableEffects(null,next),[]);
+ assert.ok(!diffTableEffects(complete,next).some(e=>e.type==='pot'||e.type==='blind'));
 });
 
-test('a skipped snapshot can show card reveals, actual chip deductions, pot and elimination together',()=>{
+test('blind increase notifies once when new stakes actually apply, never on initial load or clock-only changes',()=>{
+ const before=snapshot();before.hand.blinds={level:1,sb:25,bb:50};
+ const clock=structuredClone(before);clock.blinds={level:2,sb:50,bb:100};
+ assert.ok(!diffTableEffects(before,clock).some(e=>e.type==='blind'));
+ const after=structuredClone(clock);after.hand.id='hand-2';after.hand.blinds={level:2,sb:50,bb:100};
+ const events=diffTableEffects(clock,after).filter(e=>e.type==='blind');assert.equal(events.length,1);
+ assert.deepEqual(events[0].from,{sb:25,bb:50});assert.deepEqual(events[0].to,{sb:50,bb:100});
+ assert.ok(!diffTableEffects(after,structuredClone(after)).some(e=>e.type==='blind'));
+ assert.deepEqual(diffTableEffects(null,after),[]);
+ const waiting=structuredClone(before);waiting.status='waiting';waiting.hand=null;
+ assert.ok(!diffTableEffects(waiting,after).some(e=>e.type==='blind'));
+ const finished=structuredClone(after);finished.status='finished';
+ assert.ok(!diffTableEffects(before,finished).some(e=>e.type==='blind'));
+});
+
+test('a skipped snapshot can show card reveals, actual chip deductions and elimination together',()=>{
  const before=snapshot();before.hand.pot=100;const after=structuredClone(before);after.hand.stage='complete';after.hand.board=[1,2,3,4,5];after.hand.winners=[{amount:10000}];after.hand.pot=0;
  after.players[0].lastAction={at:10,kind:'raise',paid:5000,total:5000};after.players[0].stack=10000;after.players[0].rank=1;
  after.players[1].lastAction={at:11,kind:'call',paid:5000,total:5000};after.players[1].stack=0;after.players[1].rank=2;
  const events=diffTableEffects(before,after);
  assert.equal(events.filter(e=>e.type==='board').length,5);assert.equal(events.filter(e=>e.type==='chips').length,2);
- assert.equal(events.find(e=>e.type==='pot').amount,10000);
+ assert.ok(!events.some(e=>e.type==='pot'));
  assert.deepEqual(events.find(e=>e.type==='elimination').players,[{id:'b',name:'Bob',rank:2}]);
  assert.deepEqual(diffTableEffects(after,structuredClone(after)),[]);
 });
