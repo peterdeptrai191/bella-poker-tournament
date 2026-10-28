@@ -1,0 +1,5 @@
+import test from 'node:test';import assert from 'node:assert/strict';import handler from '../api/index.js';
+function response(){return {headers:{},statusCode:0,setHeader(key,value){this.headers[key]=value;},end(body){this.body=JSON.parse(body);}};}
+test('HTTP handler rejects unsupported methods',async()=>{const res=response();await handler({method:'DELETE',headers:{host:'localhost'},url:'/api'},res);assert.equal(res.statusCode,405);assert.equal(res.headers.Allow,'GET, POST');});
+test('HTTP handler rejects cross-origin mutations',async()=>{const res=response();await handler({method:'POST',headers:{host:'localhost',origin:'https://other.example'},url:'/api',body:{op:'create',name:'User'}},res);assert.equal(res.statusCode,403);});
+test('HTTP handler exposes health without credentials and prevents caching',async()=>{const res=response();await handler({method:'GET',headers:{host:'localhost'},url:'/api?code=health'},res);assert.equal(res.statusCode,200);assert.equal(res.body.ok,true);assert.equal(res.headers['Cache-Control'],'no-store, private');});
