@@ -26,5 +26,5 @@
 @media(orientation:landscape) and (max-height:600px){.table-notices{top:70px;left:25%;right:25%}.table-notices .elimination-banner{left:auto;right:auto}.pot-notice{padding:7px 12px}.pot-notice strong{font-size:17px}}
 .game-shell>.game-pot{position:absolute;z-index:8;top:108px;left:20px;right:174px;width:auto;min-width:0;max-width:none;height:82px;justify-content:center;margin:0;padding:9px 12px;border-radius:14px}.game-shell>.game-pot strong{font-size:34px}.game-shell>.game-pot span{font-size:8px}
 @media(max-width:375px){.game-shell>.game-pot{left:13px;right:150px}.game-shell>.game-pot strong{font-size:30px}}
-@media(max-height:740px) and (min-height:601px),(max-height:740px) and (orientation:portrait){.game-shell>.game-pot{top:96px;height:70px;padding:7px 10px}.game-shell>.game-pot strong{font-size:29px}.heads-up .opponent{top:39%}}
+@media(max-height:740px) and (min-height:601px),(max-height:740px) and (orientation:portrait){.game-shell>.game-pot{top:96px;height:70px;padding:7px 10px}.game-shell>.game-pot strong{font-size:29px}.heads-up .opponent-action{top:calc(var(--portrait-size) - 43px)}}
 @media(orientation:landscape) and (max-height:600px){.game-shell>.game-pot{top:78px;left:16px;right:auto;width:150px;height:67px}.game-shell>.game-pot strong{font-size:27px}}
