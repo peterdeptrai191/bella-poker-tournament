@@ -1,17 +1,6 @@
-/* Reserve the HUD first, then distribute opponent rows through the available play area.
-   Seat centers include half their height so the portrait itself clears both HUD cards. */
-.game-shell{--hud-bottom:190px;--seat-hud-gap:40px}
-.opponent{
- --seat-height:143px;
- --seat-limit:calc(100% - var(--dock-height) - var(--hero-height) - var(--hero-gap) - var(--board-clearance) - var(--board-card-height) - var(--seat-height)/2 - 10px);
- --seat-start:max(calc(var(--hud-bottom) + var(--seat-hud-gap) + var(--seat-height)/2),min(var(--seat-first),var(--seat-limit)));
- --seat-end:max(var(--seat-start),min(var(--seat-last),var(--seat-limit)));
- height:var(--seat-height);
- top:calc(var(--seat-start) + (var(--seat-end) - var(--seat-start))*var(--seat-progress));
-}
-.many-seats{--seat-hud-gap:14px}.many-seats .opponent{--seat-height:116px;--seat-limit:var(--seat-last)}
-@media(max-width:375px){.opponent{--seat-height:130px}.many-seats .opponent{--seat-height:104px}}
-@media(max-height:740px) and (min-height:601px),(max-height:740px) and (orientation:portrait){.game-shell{--hud-bottom:166px}.opponent{--seat-height:124px}.many-seats .opponent{--seat-height:100px}}
-@media(orientation:landscape) and (max-height:600px){.game-shell{--hud-bottom:145px}.opponent{--seat-height:108px;top:calc(var(--seat-y)*.82)}.many-seats .opponent{--seat-height:88px}.opponent.hud-edge{top:max(calc(var(--seat-y)*.82),calc(var(--hud-bottom) + var(--seat-hud-gap) + var(--seat-height)/2))}}
-
-@media(max-height:640px) and (orientation:portrait){.game-shell{--seat-hud-gap:14px}.opponent-action{top:calc(var(--portrait-size) - 43px)}}
+/* Measured cells, rather than independently clamped percentage rows. */
+.game-shell{--seat-top:202px;--seat-bottom:660px;--seat-width:88px;--seat-height:120px;--seat-portrait:70px}
+.game-shell .opponent{--portrait-size:var(--seat-portrait);width:var(--seat-width);height:var(--seat-height);left:var(--seat-x);top:calc(var(--seat-top) + var(--seat-height)/2 + (var(--seat-bottom) - var(--seat-top) - var(--seat-height))*var(--seat-progress));transform:translate(-50%,-50%)}
+.game-shell .opponent-portrait{width:var(--portrait-size);height:var(--portrait-size);left:50%;right:auto;top:0;transform:translateX(-50%)}
+.game-shell .opponent.rail-seat{width:var(--seat-railWidth,var(--seat-width));--portrait-size:min(var(--seat-portrait),var(--seat-railWidth,var(--seat-width)))}
+.game-shell .game-board .result-link{position:absolute;top:calc(100% + 6px);left:50%;transform:translateX(-50%);margin:0;padding:4px 9px;font-size:8px;white-space:nowrap}
