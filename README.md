@@ -31,7 +31,7 @@ Git dùng nhánh `main`. Vercel tự deploy các lần push tiếp theo sau khi 
 
 ## Luồng sử dụng
 
-Tên hiển thị → tạo phòng (stack / thời gian level / số ghế) → chia sẻ mã 6 ký tự hoặc link → mọi người sẵn sàng → chủ phòng bắt đầu. Người chơi được xếp ghế ngẫu nhiên. Chọn giao diện 2D/FPP; ở FPP giữ vào bài để hé, thả để úp. Xem vị trí trong bảng xếp hạng ngay tại bàn hoặc mục riêng.
+Tên hiển thị → tạo phòng (stack / thời gian level) → chia sẻ mã 6 ký tự hoặc link → mọi người sẵn sàng → chủ phòng bắt đầu. Người chơi được xếp ghế ngẫu nhiên. Chỉ có góc nhìn FPP; giữ vào bài để hé, thả để úp. Phòng tự đếm người tham gia, không cần chọn số ghế. Chủ phòng bắt đầu với số người thực tế khi mọi người sẵn sàng (2–9 người). Xem vị trí trong bảng xếp hạng ngay tại bàn hoặc mục riêng.
 
 ## Phạm vi luật được triển khai
 
