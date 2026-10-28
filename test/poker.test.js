@@ -21,6 +21,33 @@ test('heads-up: button posts small blind and acts first before flop, big blind f
 test('only own hole cards are returned; deck/token hashes never leave server',()=>{
  const r=fixture();startTournament(r);const pub=publicRoom(r,'p0');assert.equal(pub.players.find(p=>p.id==='p0').hole.length,2);assert.equal(pub.players.find(p=>p.id==='p1').hole,null);const raw=JSON.stringify(pub);assert.ok(!raw.includes('tokenHash'));assert.ok(!raw.includes('secret'));assert.ok(!raw.includes('"deck"'));assert.ok(!raw.includes('"holes"'));
 });
+
+test('public action records distinguish call cost, raise target and street; reset on next hand',()=>{
+ const r=fixture(2);startTournament(r,1000);const sb=r.hand.sbId,bb=r.hand.bbId;
+ assert.equal(publicRoom(r,sb).hand.lastAction,null);
+ act(r,sb,{kind:'call',handId:r.hand.id},1100);
+ const call=publicRoom(r,bb).players.find(p=>p.id===sb).lastAction;
+ assert.deepEqual(call,{playerId:sb,kind:'call',paid:25,total:50,stage:'preflop',at:1100,allIn:false});
+ move(r,bb,'check');assert.equal(r.hand.stage,'flop');
+ assert.equal(publicRoom(r,sb).players.find(p=>p.id===bb).lastAction.stage,'preflop');
+ move(r,bb,'raise',100);const pub=publicRoom(r,sb);
+ assert.equal(pub.hand.lastAction.kind,'raise');assert.equal(pub.hand.lastAction.total,100);
+ assert.equal(pub.hand.lastAction.paid,100);assert.equal(pub.hand.lastAction.stage,'flop');
+ assert.equal(pub.players.find(p=>p.id===bb).lastAction.total,100);
+ assert.equal(pub.players.filter(p=>p.hole).length,1);
+ const previous=JSON.stringify(pub.hand.lastAction);
+ assert.throws(()=>move(r,sb,'raise',101),/tối thiểu/);
+ assert.equal(JSON.stringify(publicRoom(r,sb).hand.lastAction),previous);
+ move(r,sb,'fold');assert.equal(publicRoom(r,bb).players.find(p=>p.id===sb).lastAction.kind,'fold');
+ startHand(r);const next=publicRoom(r,sb);assert.equal(next.hand.lastAction,null);assert.ok(next.players.every(p=>p.lastAction===null));
+});
+
+test('short all-in action exposes actual paid amount and total without private card data',()=>{
+ const r=fixture(3);startTournament(r);const id=r.hand.turn;r.players.find(p=>p.id===id).stack=75;
+ move(r,id,'allin');const a=publicRoom(r,r.hand.turn).players.find(p=>p.id===id).lastAction;
+ assert.equal(a.kind,'raise');assert.equal(a.paid,75);assert.equal(a.total,75);assert.equal(a.allIn,true);
+ assert.deepEqual(Object.keys(a).sort(),['allIn','at','kind','paid','playerId','stage','total'].sort());
+});
 test('completed showdown reveals every dealt hand, including folded humans and bots; next hand is private',()=>{
  const r=fixture(3);r.players[1].isBot=true;startTournament(r);const folded=r.hand.turn;move(r,folded,'fold');
  for(const player of r.players){const view=publicRoom(r,player.id);assert.equal(view.players.filter(p=>p.hole).length,1);}
