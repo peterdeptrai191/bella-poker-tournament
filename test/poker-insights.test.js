@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';
-import {equityInputs,estimateEquity,bestFive,winningSelection} from '../public/poker-insights.js';
+import {equityInputs,estimateEquity,bestFive,winningSelection,showdownHighlights} from '../public/poker-insights.js';
 const cards=s=>s.split(' ').map(c=>({rank:'23456789TJQKA'.indexOf(c[0])+2,suit:c[1]}));
 const randomSeed=seed=>()=>{seed=(1664525*seed+1013904223)>>>0;return seed/4294967296;};
 const room=()=>({status:'running',me:'me',players:[{id:'me',inHand:true,folded:false,hole:cards('Ah Kc')},{id:'other',inHand:true,folded:false,hole:cards('As Ad')}],hand:{stage:'flop',board:cards('Ad 7s 2h'),winners:[],pots:[]}});
@@ -48,4 +48,14 @@ test('board-only wins highlight community cards without inventing a match in the
  const a=room();a.players[0].hole=cards('2c 3d');a.hand={stage:'complete',showdown:true,board:cards('Ah Kh Qh Jh Th'),winners:[{id:'me',amount:100,hand:'Thùng phá sảnh'}],pots:[]};
  const selection=winningSelection(a);assert.deepEqual(selection.hole,[]);assert.deepEqual(selection.board,[0,1,2,3,4]);
  a.players[0].folded=true;assert.equal(winningSelection(a),null);
+});
+
+
+test('table highlights winners visible to a losing player and resets next hand',()=>{
+ const a=room();a.players[0].hole=cards('2c 3d');a.players[1].hole=cards('Ah Kc');
+ a.hand={stage:'complete',showdown:true,board:cards('Qd Js Tc 7h 8c'),winners:[{id:'other',amount:200,hand:'Sảnh'}],pots:[]};
+ assert.equal(winningSelection(a),null);
+ assert.deepEqual(showdownHighlights(a),{players:{me:[],other:[0,1]},board:[0,1,2]});
+ a.hand.winners.push({id:'me',amount:10,hand:'Hoàn phần cược dư'});assert.deepEqual(showdownHighlights(a).players.me,[]);
+ a.hand.stage='preflop';assert.equal(showdownHighlights(a),null);
 });

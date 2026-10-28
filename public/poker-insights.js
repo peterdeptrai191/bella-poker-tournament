@@ -32,10 +32,17 @@ export function bestFive(cards){
  return {indices,score:best,name:handName(best)};
 }
 
-export function winningSelection(room){
- const h=room?.hand,me=room?.players.find(p=>p.id===room.me);
+export function winningSelection(room,playerId=room?.me){
+ const h=room?.hand,me=room?.players.find(p=>p.id===playerId);
  if(!h||h.stage!=='complete'||!h.showdown||h.board.length!==5||me?.folded||me?.hole?.length!==2)return null;
- const realWins=h.winners.filter(w=>w.id===room.me&&w.amount>0&&w.hand!=='Hoàn phần cược dư'&&w.hand!=='Đối thủ bỏ bài');if(!realWins.length)return null;
+ const realWins=h.winners.filter(w=>w.id===playerId&&w.amount>0&&w.hand!=='Hoàn phần cược dư'&&w.hand!=='Đối thủ bỏ bài');if(!realWins.length)return null;
  const result=bestFive([...me.hole,...h.board]);
- return {...result,hole:result.indices.filter(i=>i<2),board:result.indices.filter(i=>i>=2).map(i=>i-2),cards:result.indices.map(i=>({card:[...me.hole,...h.board][i],source:i<2?'Bài bạn':'Bài chung'})),shared:(h.pots||[]).some(p=>p.winners?.includes(room.me)&&p.winners.length>1),amount:realWins.reduce((n,w)=>n+w.amount,0)};
+ return {...result,hole:result.indices.filter(i=>i<2),board:result.indices.filter(i=>i>=2).map(i=>i-2),cards:result.indices.map(i=>({card:[...me.hole,...h.board][i],source:i<2?'Bài bạn':'Bài chung'})),shared:(h.pots||[]).some(p=>p.winners?.includes(playerId)&&p.winners.length>1),amount:realWins.reduce((n,w)=>n+w.amount,0)};
+}
+
+export function showdownHighlights(room){
+ if(room?.hand?.stage!=='complete'||!room.hand.showdown)return null;
+ const players={},board=new Set();
+ for(const p of room.players){const win=winningSelection(room,p.id);players[p.id]=win?.hole||[];for(const i of win?.board||[])board.add(i);}
+ return {players,board:[...board]};
 }
