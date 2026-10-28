@@ -1,0 +1,20 @@
+/* Keep every seat label, stack and committed bet inside one compact plaque. */
+.game-shell .opponent-plaque{left:50%;right:auto;transform:translateX(-50%);width:92px;max-width:100%;padding:4px 6px;border-radius:9px;line-height:1.15}
+.game-shell .opponent-plaque>strong{font-size:10px;line-height:1.2}
+.game-shell .seat-balances{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:2px 4px;margin-top:3px}
+.game-shell .opponent-plaque .opponent-stack{display:inline-block;font-size:11px;line-height:1.15;margin:0}
+.game-shell .opponent-plaque .table-wager{position:static;display:inline-block;min-width:0;max-width:100%;margin:0;padding:2px 3px;border:1px solid #a6c9c448;border-radius:4px;background:#224338;color:#daeed3;font-size:8px;line-height:1.1;box-shadow:none;font-variant-numeric:tabular-nums;white-space:nowrap}
+.game-shell .seat-condition{display:block;font-size:7px;line-height:1.1;margin-top:3px;color:#ead69d}
+.game-shell.many-seats .opponent-plaque{width:70px;padding:3px}
+.game-shell.many-seats .opponent-plaque>strong{font-size:8px}
+.game-shell.many-seats .opponent-plaque .opponent-stack{font-size:9px}
+.game-shell.many-seats .opponent-plaque .table-wager{font-size:7px;padding:1px 2px}
+.game-shell .hero-plaque{left:25px;right:25px;min-height:43px;padding:5px;border-radius:9px}
+.game-shell .hero-plaque strong{font-size:10px}.game-shell .hero-plaque b{font-size:14px;margin-top:2px}
+.turn-ring{position:absolute;inset:-4px;width:calc(100% + 8px);height:calc(100% + 8px);overflow:visible;pointer-events:none;z-index:5;fill:none}
+.turn-ring rect{vector-effect:non-scaling-stroke;stroke-width:2.5px}
+.turn-ring-track{stroke:#ffd66e26}.turn-ring-progress{stroke:#ffd66e;stroke-linecap:round;stroke-dasharray:100;stroke-dashoffset:0;transition:stroke-dashoffset .25s linear;filter:drop-shadow(0 0 2px #ffbe4d77)}
+.game-shell .opponent.is-turn .opponent-plaque,.game-shell .hero-plaque.is-turn{border-color:#7b879d;box-shadow:0 4px 8px #0008,inset 0 0 0 1px #253243}
+@media(max-width:375px){.game-shell .opponent-plaque{width:82px;padding:4px}.game-shell .opponent-plaque>strong{font-size:9px}.game-shell .opponent-plaque .opponent-stack{font-size:10px}.game-shell.many-seats .opponent-plaque{width:60px;padding:3px}.game-shell.many-seats .opponent-plaque>strong{font-size:8px}.game-shell.many-seats .opponent-plaque .opponent-stack{font-size:9px}.game-shell .seat-balances{gap:2px}}
+@media(max-width:340px){.game-shell.many-seats{--board-card-width:23px;--board-card-height:36px}.game-shell.many-seats .game-board .card{font-size:15px;padding:3px}.game-shell.many-seats .game-board .card span{font-size:16px}}
+@media(orientation:landscape) and (max-height:600px){.game-shell .opponent-plaque{width:76px;padding:3px 4px}.game-shell .opponent-plaque>strong{font-size:8px}.game-shell .opponent-plaque .opponent-stack{font-size:9px}.game-shell .hero-plaque{left:5px;right:5px;min-height:31px;padding:3px}.game-shell .hero-plaque strong{font-size:8px}.game-shell .hero-plaque b{font-size:10px}.turn-ring rect{stroke-width:2px}}
