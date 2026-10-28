@@ -19,3 +19,24 @@ test('real multiplayer service lifecycle: concurrent join, authorization, ready/
 });
 test('automatic room count ignores requested capacity and atomically enforces nine seats',async()=>{clearMemory();const host=await call({op:'create',name:'Host',maxPlayers:2});assert.equal(host.room.config.maxPlayers,9);const attempts=await Promise.allSettled(Array.from({length:12},(_,i)=>call({op:'join',name:'Guest '+i,code:host.room.code})));assert.equal(attempts.filter(r=>r.status==='fulfilled').length,8);assert.equal((await call(null,host.token,host.room.code)).room.players.length,9);});
 test('sensitive operations require player credentials, not just a room code',async()=>{clearMemory();const h=await call({op:'create',name:'Host'});await assert.rejects(()=>call({op:'ready',ready:true,code:h.room.code},undefined),/không hợp lệ/);});
+
+test('character selection persists for all players without exposing private cards',async()=>{
+ clearMemory();const h=await call({op:'create',name:'Host',character:'doctor',withBot:true});const code=h.room.code;
+ const guest=await call({op:'join',name:'Guest',character:'dj',code});
+ assert.equal(guest.room.players.find(p=>p.id===h.room.me).character,'doctor');
+ assert.equal(guest.room.players.find(p=>p.id===guest.room.me).character,'dj');
+ assert.ok(guest.room.players.find(p=>p.isBot).character);
+ await assert.rejects(()=>call({op:'character',character:'invalid',code},h.token),/Nhân vật không hợp lệ/);
+ await assert.rejects(()=>call({op:'character',character:'chef',code}),/không hợp lệ/);
+ await Promise.all([h,guest].map(p=>call({op:'ready',ready:true,code},p.token)));
+ const before=(await call({op:'start',code},h.token)).room;
+ const change={op:'character',character:'gardener',code,requestId:randomUUID()};
+ const changed=await call(change,guest.token);const repeated=await call(change,guest.token);
+ assert.equal(changed.room.version,repeated.room.version);
+ const updated=(await call(null,h.token,code)).room;
+ assert.equal(updated.players.find(p=>p.id===guest.room.me).character,'gardener');
+ assert.equal(updated.leaderboard.find(p=>p.id===guest.room.me).character,'gardener');
+ assert.equal(updated.hand.id,before.hand.id);assert.equal(updated.hand.pot,before.hand.pot);
+ assert.equal(updated.players.filter(p=>p.hole).length,1);
+ await assert.rejects(()=>call({op:'create',name:'Bad',character:'<script>'}),/Nhân vật không hợp lệ/);
+});

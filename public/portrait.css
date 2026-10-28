@@ -8,3 +8,11 @@ body.in-game{background:#191b22;overflow-x:hidden}body.in-game:before{content:''
 
 
 
+
+/* Reserve a shared vertical gap above the hero, including the lift animation. */
+.game-shell{--hero-height:114px;--hero-gap:21px;--board-clearance:44px}
+.game-shell .hero-hand{height:var(--hero-height);bottom:calc(var(--dock-height) + var(--hero-gap))}
+.game-shell .game-board{top:auto;bottom:calc(var(--dock-height) + var(--hero-gap) + var(--hero-height) + var(--board-clearance))}
+@media(max-width:375px){.game-shell{--hero-height:128px;--hero-gap:17px}}
+@media(max-height:740px) and (min-height:601px),(max-height:740px) and (orientation:portrait){.game-shell{--hero-height:105px;--hero-gap:15px}}
+@media(orientation:landscape) and (max-height:600px){.game-shell{--hero-height:87px;--hero-gap:13px}.game-shell .game-board{top:32%;bottom:auto}}
