@@ -21,6 +21,17 @@ test('heads-up: button posts small blind and acts first before flop, big blind f
 test('only own hole cards are returned; deck/token hashes never leave server',()=>{
  const r=fixture();startTournament(r);const pub=publicRoom(r,'p0');assert.equal(pub.players.find(p=>p.id==='p0').hole.length,2);assert.equal(pub.players.find(p=>p.id==='p1').hole,null);const raw=JSON.stringify(pub);assert.ok(!raw.includes('tokenHash'));assert.ok(!raw.includes('secret'));assert.ok(!raw.includes('"deck"'));assert.ok(!raw.includes('"holes"'));
 });
+test('completed showdown reveals every dealt hand, including folded humans and bots; next hand is private',()=>{
+ const r=fixture(3);r.players[1].isBot=true;startTournament(r);const folded=r.hand.turn;move(r,folded,'fold');
+ for(const player of r.players){const view=publicRoom(r,player.id);assert.equal(view.players.filter(p=>p.hole).length,1);}
+ while(r.hand.stage!=='complete')move(r,r.hand.turn,'allin');assert.equal(r.hand.showdown,true);
+ for(const player of r.players){const view=publicRoom(r,player.id);assert.equal(view.players.filter(p=>p.hole?.length===2).length,3);assert.equal(view.players.find(p=>p.id===folded).folded,true);assert.equal(view.players.find(p=>p.isBot).hole.length,2);assert.ok(!JSON.stringify(view).includes('"deck"'));}
+ startHand(r);for(const player of r.players){const view=publicRoom(r,player.id);assert.ok(view.players.every(p=>p.id===player.id||p.hole===null));}
+});
+test('winning by folds without showdown does not reveal other players cards',()=>{
+ const r=fixture(3);startTournament(r);while(r.hand.stage!=='complete')move(r,r.hand.turn,'fold');assert.equal(r.hand.showdown,false);
+ for(const player of r.players)assert.equal(publicRoom(r,player.id).players.filter(p=>p.hole).length,1);
+});
 test('out-of-turn and stale hand actions are rejected',()=>{
  const r=fixture();startTournament(r);const turn=r.hand.turn;assert.throws(()=>move(r,r.players.find(p=>p.id!==turn).id,'fold'),/Chưa đến lượt/);assert.throws(()=>act(r,turn,{kind:'fold',handId:'stale'}),/đã thay đổi/);
 });

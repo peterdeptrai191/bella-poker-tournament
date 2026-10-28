@@ -46,7 +46,7 @@ Bot là chiến lược luyện tập dựa trên độ mạnh bài, pot odds v�
 - Dealer chia bài và burn card trên máy chủ. Deck xáo bằng `crypto.randomInt`, không dùng `Math.random` cho bài.
 - Check / call / fold / raise-to / all-in. Minimum raise theo full raise gần nhất; short all-in không tự mở lại raise; tổng short raises có thể mở lại khi đạt full raise.
 - Main pot / side pots / hoàn cược không được theo. So 5 lá tốt nhất từ 7 lá, wheel A–5, hòa pot và chia chip lẻ từ trái button.
-- Showdown công khai bài của những người chưa fold; không tiết lộ bài đã fold. Trước showdown chỉ người sở hữu nhận hole cards.
+- Sau khi showdown hoàn tất, công khai hai lá của tất cả người được chia bài trong ván (người thật và bot, kể cả đã fold), và hiển thị bảng bài từng người. Trong khi ván còn diễn ra, hoặc ván kết thúc vì mọi đối thủ fold mà không showdown, chỉ chủ bài nhận hole cards. Ván mới lại giữ kín bài riêng.
 - Timeout 25 giây: check nếu được phép, nếu không fold. Mất kết nối không dừng giải hoặc miễn blinds. Quay lại bằng token lưu trong trình duyệt.
 - Hết chip bị loại. Loại cùng ván so stack đầu ván; bằng stack thì đồng hạng. Người cuối còn chip xếp #1. BXH hiện tại theo stack; chip đã cược nằm trong pot cho đến khi quyết toán.
 - Đây là luật tự động cho ứng dụng online, không tái tạo các quyết định của tournament director, quy trình live misdeal, chip race, multiple tables hoặc cân bàn.
