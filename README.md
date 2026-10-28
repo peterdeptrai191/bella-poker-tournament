@@ -35,6 +35,12 @@ Tên hiển thị → tạo phòng (stack / thời gian level) → chia sẻ mã
 
 ## Chơi với bot
 
+## Giao diện mobile dọc
+
+Màn chơi sử dụng góc nhìn thứ nhất theo chiều dọc, nền lounge ấm, bàn nỉ phối cảnh và nhân vật ngồi quanh bàn. Ba thao tác chính nằm trong thanh kính mờ ở đáy: Bỏ bài, Theo/Check, Tăng cược. Bấm Tăng cược để mở thanh kéo và ô nhập chip đồng bộ, rồi xác nhận tăng hoặc chọn Tất tay. Nhấn biểu tượng Bella / thứ hạng để mở bảng xếp hạng nổi. Khi showdown kết thúc, bài của mọi người được mở tại ghế và trong bảng kết quả; các ván mới vẫn giữ kín bài riêng. Bài của chính mình hiển thị ở tiền cảnh, giữ vào bài để nâng lên.
+
+## Chơi cùng bot
+
 Trong form tạo phòng, chọn **Chơi với bot** để có sẵn một Bella Bot. Hoặc tạo phòng thường, rồi chủ phòng bấm **Thêm bot** trong phòng chờ. Có thể chơi một người với bot hoặc trộn bạn bè và bot; tổng số ghế vẫn tối đa 9. Chủ phòng có thể xóa bot trước khi giải bắt đầu. Bot tự sẵn sàng; người thật bấm Sẵn sàng rồi chủ phòng Bắt đầu giải.
 
 Bot là chiến lược luyện tập dựa trên độ mạnh bài, pot odds và mức cược, không phải solver tối ưu. Bot chỉ nhận snapshot công khai cho người chơi đó (hai lá riêng của bot và bài chung), không nhận deck hoặc bài kín của đối thủ. Quyết định check/call/fold/raise của bot đi qua cùng bộ kiểm tra luật như người thật. Mỗi lượt bot chờ khoảng 1,2–2 giây, được xử lý bởi request/poll trên server. Giữ trang giải mở để bot và timer tiếp tục chạy. Bot có nhãn BOT và tham gia bảng xếp hạng cùng người thật.
