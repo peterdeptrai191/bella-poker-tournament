@@ -23,7 +23,7 @@ Không có Redis: trạng thái được chia sẻ trong **một tiến trình N
    - `UPSTASH_REDIS_REST_URL`
    - `UPSTASH_REDIS_REST_TOKEN`
 
-   Không đưa token vào client, Git, log hay biến có prefix public. `.env.example` chỉ chứa tên biến. Database được khuyến nghị cùng khu vực với Vercel Function.
+   Vercel Marketplace có thể tự tạo `KV_REST_API_URL` và `KV_REST_API_TOKEN` thay vì tên trên; app hỗ trợ cả hai. Không đưa token vào client, Git, log hay biến có prefix public. `.env.example` chỉ chứa tên biến. Database và Function được đặt cùng khu vực Singapore.
 4. Deploy hoặc redeploy sau khi thêm biến. Kiểm tra `/api?code=health` trả `onlineReady: true`, `storage: redis`.
 5. Mở URL production trên hai thiết bị: tạo phòng, join bằng link/mã, cả hai sẵn sàng, chủ phòng bắt đầu. Xác nhận bài riêng chỉ hiện cho đúng người và bảng xếp hạng đồng bộ.
 
