@@ -33,8 +33,6 @@ Git dùng nhánh `main`. Vercel tự deploy các lần push tiếp theo sau khi 
 
 Tên hiển thị → tạo phòng (stack / thời gian level) → chia sẻ mã 6 ký tự hoặc link → mọi người sẵn sàng → chủ phòng bắt đầu. Người chơi được xếp ghế ngẫu nhiên. Chỉ có góc nhìn FPP; giữ vào bài để hé, thả để úp. Phòng tự đếm người tham gia, không cần chọn số ghế. Chủ phòng bắt đầu với số người thực tế khi mọi người sẵn sàng (2–9 người). Xem vị trí trong bảng xếp hạng ngay tại bàn hoặc mục riêng.
 
-## Chơi với bot
-
 ## Giao diện mobile dọc
 
 Màn chơi sử dụng góc nhìn thứ nhất theo chiều dọc, nền lounge ấm, bàn nỉ phối cảnh và nhân vật ngồi quanh bàn. Ba thao tác chính nằm trong thanh kính mờ ở đáy: Bỏ bài, Theo/Check, Tăng cược. Bấm Tăng cược để mở thanh kéo và ô nhập chip đồng bộ, rồi xác nhận tăng hoặc chọn Tất tay. Nhấn biểu tượng Bella / thứ hạng để mở bảng xếp hạng nổi. Khi showdown kết thúc, bài của mọi người được mở tại ghế và trong bảng kết quả; các ván mới vẫn giữ kín bài riêng. Bài của chính mình hiển thị ở tiền cảnh, giữ vào bài để nâng lên.
@@ -79,3 +77,4 @@ Test bao gồm xếp hạng bài, side pots, raise, heads-up, privacy, timeout, 
 `public/`: giao diện và tài nguyên. `lib/poker.js`: luật và bộ đánh giá bài. `lib/store.js`: Redis REST / store cục bộ. `lib/service.js`: tạo phòng, phiên và command handler. `api/index.js`: Vercel Function. `server.mjs`: server phát triển cục bộ. `test/`: kiểm thử Node native.
 
 Asset Bella và cảnh bàn được cung cấp/tạo trong quá trình thiết kế của dự án. Không có thông tin tài khoản hoặc khóa dịch vụ trong repository.
+
