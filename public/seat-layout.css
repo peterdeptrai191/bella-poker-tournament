@@ -1,0 +1,15 @@
+/* Reserve the HUD first, then distribute opponent rows through the available play area.
+   Seat centers include half their height so the portrait itself clears both HUD cards. */
+.game-shell{--hud-bottom:190px}
+.opponent{
+ --seat-height:143px;
+ --seat-limit:calc(100% - var(--dock-height) - var(--hero-height) - var(--hero-gap) - var(--board-clearance) - var(--board-card-height) - var(--seat-height)/2 - 10px);
+ --seat-start:max(calc(var(--hud-bottom) + 14px + var(--seat-height)/2),min(var(--seat-first),var(--seat-limit)));
+ --seat-end:max(var(--seat-start),min(var(--seat-last),var(--seat-limit)));
+ height:var(--seat-height);
+ top:calc(var(--seat-start) + (var(--seat-end) - var(--seat-start))*var(--seat-progress));
+}
+.many-seats .opponent{--seat-height:116px;--seat-limit:var(--seat-last)}
+@media(max-width:375px){.opponent{--seat-height:130px}.many-seats .opponent{--seat-height:104px}}
+@media(max-height:740px) and (min-height:601px),(max-height:740px) and (orientation:portrait){.game-shell{--hud-bottom:166px}.opponent{--seat-height:124px}.many-seats .opponent{--seat-height:100px}}
+@media(orientation:landscape) and (max-height:600px){.game-shell{--hud-bottom:145px}.opponent{--seat-height:108px;top:calc(var(--seat-y)*.82)}.many-seats .opponent{--seat-height:88px}.opponent.hud-edge{top:max(calc(var(--seat-y)*.82),calc(var(--hud-bottom) + 14px + var(--seat-height)/2))}}
