@@ -33,7 +33,13 @@ Git dùng nhánh `main`. Vercel tự deploy các lần push tiếp theo sau khi 
 
 Tên hiển thị → tạo phòng (stack / thời gian level) → chia sẻ mã 6 ký tự hoặc link → mọi người sẵn sàng → chủ phòng bắt đầu. Người chơi được xếp ghế ngẫu nhiên. Chỉ có góc nhìn FPP; giữ vào bài để hé, thả để úp. Phòng tự đếm người tham gia, không cần chọn số ghế. Chủ phòng bắt đầu với số người thực tế khi mọi người sẵn sàng (2–9 người). Xem vị trí trong bảng xếp hạng ngay tại bàn hoặc mục riêng.
 
-## Phạm vi luật được triển khai
+## Chơi với bot
+
+Trong form tạo phòng, chọn **Chơi với bot** để có sẵn một Bella Bot. Hoặc tạo phòng thường, rồi chủ phòng bấm **Thêm bot** trong phòng chờ. Có thể chơi một người với bot hoặc trộn bạn bè và bot; tổng số ghế vẫn tối đa 9. Chủ phòng có thể xóa bot trước khi giải bắt đầu. Bot tự sẵn sàng; người thật bấm Sẵn sàng rồi chủ phòng Bắt đầu giải.
+
+Bot là chiến lược luyện tập dựa trên độ mạnh bài, pot odds và mức cược, không phải solver tối ưu. Bot chỉ nhận snapshot công khai cho người chơi đó (hai lá riêng của bot và bài chung), không nhận deck hoặc bài kín của đối thủ. Quyết định check/call/fold/raise của bot đi qua cùng bộ kiểm tra luật như người thật. Mỗi lượt bot chờ khoảng 1,2–2 giây, được xử lý bởi request/poll trên server. Giữ trang giải mở để bot và timer tiếp tục chạy. Bot có nhãn BOT và tham gia bảng xếp hạng cùng người thật.
+
+## Phạm vi luật tournament
 
 - No-limit Texas Hold’em, freezeout một bàn; không late registration, ante, tiền thưởng hoặc chức năng tiền thật.
 - Mỗi người có stack bằng nhau. Blind schedule SB: 25, 50, 75, 100, 150, 200, 300, 400, 600, 800, 1.000, 1.500; BB = 2 × SB. Level mới áp dụng ở đầu ván sau. Button/BB và trường hợp heads-up xử lý riêng; ván sau dùng dead-button theo vị trí BB.
