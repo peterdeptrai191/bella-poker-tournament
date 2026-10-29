@@ -22,6 +22,18 @@ test('card skins cost 3 coins, require ownership, and charge atomically only onc
  const {CARD_SKINS}=await import('../public/card-skin-catalog.js');assert.equal(CARD_SKINS.find(c=>c.id==='classic').price,0);assert.equal(CARD_SKINS.filter(c=>c.price===3).length,6);
 });
 
+test('rooms share trusted card skins and freeze each hand appearance for results',async()=>{
+ clearMemory();const u=await user('NeonPlayer'),v=await user('RubyPlayer');
+ for(const [user,skin] of [[u,'neon'],[v,'ruby']]){const {raw,value}=await accountDocument(user.identity);value.coins=3;await writeRecord(user.identity.key,raw,value);await auth('buyCardSkin',{skin},user.token);await auth('equipCardSkin',{skin},user.token);}
+ const created=await roomCall(u.identity,{op:'create',peek:true,cardSkin:'gold'}),code=created.room.code;
+ const joined=await roomCall(v.identity,{op:'join',code,cardSkin:'gold'});assert.equal(joined.room.players.find(p=>p.id===created.room.me).cardSkin,'neon');assert.equal(joined.room.players.find(p=>p.id===joined.room.me).cardSkin,'ruby');
+ await roomCall(u.identity,{op:'ready',ready:true,code},created.token);await roomCall(v.identity,{op:'ready',ready:true,code},joined.token);
+ await roomCall(u.identity,{op:'start',code},created.token);await auth('equipCardSkin',{skin:'classic'},u.token);
+ const live=await roomCall(u.identity,null,created.token,code);assert.equal(live.room.players.find(p=>p.id===created.room.me).cardSkin,'neon');assert.equal(live.room.players.find(p=>p.id===joined.room.me).hole,null);
+ const {raw,room}=await readRoom(code);room.hand.stage='complete';room.hand.showdown=true;room.hand.nextHandAt=Date.now()+60000;await writeRoom(code,raw,room);
+ const result=await roomCall(v.identity,null,joined.token,code);assert.equal(result.room.players.find(p=>p.id===created.room.me).cardSkin,'neon');assert.equal(result.room.players.find(p=>p.id===joined.room.me).cardSkin,'ruby');assert.ok(result.room.players.every(p=>p.hole?.length===2));assert.ok(!JSON.stringify(result.room).includes('accountKey'));
+});
+
 test('registration, password verification, session restoration, case uniqueness and revocable logout',async()=>{
  clearMemory();const u=await user('Player One');assert.equal(u.result.account.coins,0);assert.equal(u.result.account.equippedSkin,DEFAULT_CHARACTER);assert.deepEqual(u.result.account.ownedSkins,[DEFAULT_CHARACTER]);
  const stored=(await accountDocument(u.identity)).value;assert.notEqual(stored.passwordHash,'test password');assert.equal(stored.passwordHash.length,128);assert.ok(!JSON.stringify(u.result.account).includes('password'));

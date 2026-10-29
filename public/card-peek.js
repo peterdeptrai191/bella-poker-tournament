@@ -3,6 +3,7 @@
 // appear above the cards. The stage lives outside #app, so the table re-rendering on every
 // server update never interrupts a drag.
 import {MOODS,moodIcon} from '/reactions.js';
+import {CARD_SKINS} from '/card-skin-catalog.js';
 
 const suits={c:'♣',d:'♦',h:'♥',s:'♠'},ranks={11:'J',12:'Q',13:'K',14:'A'};
 const FLING_SHARE=.45;      // drag this share of the card's height to pull the cover off
@@ -60,6 +61,7 @@ export function createCardPeek({onReact,soundUrl}){
  function build(state){
   el?.remove();cancelAnimationFrame(frame);revealed=[false,false];chosen=state.mood??null;handId=state.handId;
   el=document.createElement('section');el.className='peek-stage';el.setAttribute('role','dialog');el.setAttribute('aria-label','Nặn bài');
+  el.dataset.cardSkin=CARD_SKINS.some(s=>s.id===state.cardSkin)?state.cardSkin:'classic';
   el.innerHTML=`<div class="peek-panel"><header class="peek-head"><strong>Nặn bài</strong><span class="peek-time" aria-live="off"></span></header><div class="peek-bar" aria-hidden="true"><i></i></div><div class="peek-moods" role="group" aria-label="Thả cảm xúc">${MOODS.map((m,i)=>`<button type="button" class="peek-mood" data-mood="${i}" aria-pressed="${chosen===i}" style="--mood-color:${m.color}">${moodIcon(i)}<span>${m.label}</span></button>`).join('')}</div><div class="peek-cards">${state.cards.map((c,i)=>`<div class="peek-card">${face(c)}<button type="button" class="peek-cover" aria-label="Kéo tấm che để xem lá bài ${i+1}"></button></div>`).join('')}</div><p class="peek-tip">Kéo tấm che theo hướng bất kỳ để xem bài</p></div>`;
   document.body.append(el);document.body.classList.add('peek-open');
   el.querySelectorAll('.peek-cover').forEach(bindCover);
@@ -73,6 +75,7 @@ export function createCardPeek({onReact,soundUrl}){
   sync(state){
    if(!state?.active||state.until<=Date.now()){if(el&&(!state||state.handId!==handId||state.until<=Date.now()||!state.active))close();return;}
    if(state.handId!==handId||!el||closing===el)build(state);
+   el.dataset.cardSkin=CARD_SKINS.some(s=>s.id===state.cardSkin)?state.cardSkin:'classic';
    until=state.until;total=state.seconds*1000;
    if(state.mood!=null&&state.mood!==chosen){chosen=state.mood;markMood();}
    cancelAnimationFrame(frame);tickClock();
