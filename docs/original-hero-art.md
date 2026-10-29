@@ -7,7 +7,7 @@ The built-in imagegen tool generated two original costumes from text alone, with
 
 Both cost 5 coins in the account-owned catalog. Motion is contained inside each avatar's existing box, uses no API polling, and respects reduced-motion preferences.
 
-The third striped red/blue design is a draft only. The requested revision to a Spider-Man style outfit was rejected by the image tool's output safety check. It is not registered in the shop. The web-shot animation remains available in `hero-motion.js` for a later completed skin.
+The third striped red/blue design is a draft only. The requested revision to a Spider-Man style outfit was rejected by the image tool's output safety check. That generated draft is not used. A later user-supplied Bella spider illustration is now registered as Spider-Man for 10 coins, with the surrounding web animation. The supplied PNG remains unchanged, including its original white background.
 
 ## Text-only image prompts
 

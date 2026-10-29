@@ -10,8 +10,8 @@ export function heroEffects(type){
  return '';
 }
 
-// Activated only by catalog entries with real cutout artwork and an effect.
+// Catalog-owned artwork is rendered as supplied; effects stay in the avatar box.
 export function heroCharacter(character,cls){
  if(!HERO_EFFECTS.has(character.effect))return null;
- return `<svg class="${escape(cls)} character-motion hero-motion hero-${character.effect}" viewBox="0 0 640 676" role="img" aria-label="${escape(character.name)}" style="--character-color:${character.color}">${heroEffects(character.effect)}<image href="/assets/characters/${escape(character.id)}.webp" x="90" y="25" width="460" height="626" preserveAspectRatio="xMidYMid meet"/></svg>`;
+ return `<svg class="${escape(cls)} character-motion hero-motion hero-${character.effect}" viewBox="0 0 640 676" role="img" aria-label="${escape(character.name)}" style="--character-color:${character.color}">${heroEffects(character.effect)}<image href="/assets/characters/${escape(character.asset||character.id+'.webp')}" x="90" y="25" width="460" height="626" preserveAspectRatio="xMidYMid meet"/></svg>`;
 }
