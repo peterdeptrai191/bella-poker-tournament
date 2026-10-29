@@ -7,6 +7,21 @@ const auth=(op,extra={},token)=>accountRequest({body:{op,requestId:randomUUID(),
 async function user(username){const result=await auth('register',{username,password:'test password'});return {result,identity:await authenticateAccount(result.cookieToken),token:result.cookieToken};}
 const roomCall=(account,body,token,code)=>service({account,method:body?'POST':'GET',body:body?{requestId:randomUUID(),...body}:undefined,token,code,ip:'wallet-room'});
 
+test('card skins cost 3 coins, require ownership, and charge atomically only once',async()=>{
+ clearMemory();const u=await user('CardShop');
+ assert.deepEqual(u.result.account.ownedCardSkins,['classic']);assert.equal(u.result.account.equippedCardSkin,'classic');
+ await assert.rejects(()=>auth('buyCardSkin',{skin:'neon',price:0},u.token),/chưa đủ/);
+ await assert.rejects(()=>auth('equipCardSkin',{skin:'neon'},u.token),/chưa sở hữu/);
+ await assert.rejects(()=>auth('buyCardSkin',{skin:'invalid'},u.token),/không hợp lệ/);
+ const {raw,value}=await accountDocument(u.identity);value.coins=3;await writeRecord(u.identity.key,raw,value);
+ await Promise.all(Array.from({length:4},()=>auth('buyCardSkin',{skin:'neon',price:0},u.token)));
+ let a=(await auth('account',{},u.token)).account;assert.equal(a.coins,0);assert.deepEqual(a.ownedCardSkins,['classic','neon']);
+ await assert.rejects(()=>auth('buyCardSkin',{skin:'ruby'},u.token),/chưa đủ/);
+ await auth('equipCardSkin',{skin:'neon'},u.token);a=(await auth('account',{},u.token)).account;assert.equal(a.equippedCardSkin,'neon');
+ await auth('equipCardSkin',{skin:'classic'},u.token);assert.equal((await auth('account',{},u.token)).account.coins,0);
+ const {CARD_SKINS}=await import('../public/card-skin-catalog.js');assert.equal(CARD_SKINS.find(c=>c.id==='classic').price,0);assert.equal(CARD_SKINS.filter(c=>c.price===3).length,6);
+});
+
 test('registration, password verification, session restoration, case uniqueness and revocable logout',async()=>{
  clearMemory();const u=await user('Player One');assert.equal(u.result.account.coins,0);assert.equal(u.result.account.equippedSkin,DEFAULT_CHARACTER);assert.deepEqual(u.result.account.ownedSkins,[DEFAULT_CHARACTER]);
  const stored=(await accountDocument(u.identity)).value;assert.notEqual(stored.passwordHash,'test password');assert.equal(stored.passwordHash.length,128);assert.ok(!JSON.stringify(u.result.account).includes('password'));

@@ -1,4 +1,4 @@
-import '/card-skins.js';
+import {configureCardSkins} from '/card-skins.js';
 import {animatedCharacter} from '/character-motion.js';
 import {equityInputs,winningSelection,showdownHighlights} from '/poker-insights.js';
 import {circularSeats as portraitSeats,turnFraction,seatMetrics} from '/table-layout.js';
@@ -27,7 +27,7 @@ async function request(body,code=session?.code,token=session?.token){
  const response=await fetch(body?'/api':`/api?code=${encodeURIComponent(code||'health')}`,{method:body?'POST':'GET',headers:{...(body?{'Content-Type':'application/json'}:{}),...(token?{Authorization:`Bearer ${token}`}:{})},body:body?JSON.stringify({...body,requestId:body.requestId||crypto.randomUUID()}):undefined,credentials:'same-origin',cache:'no-store',signal:AbortSignal.timeout(12000)});
  let data;try{data=await response.json();}catch{throw new Error('Không kết nối được máy chủ.');}if(code!=='health'&&generation!==accountGeneration)throw new Error('Phiên tài khoản đã thay đổi.');if(!response.ok)throw new Error(data.error||'Không thực hiện được yêu cầu.');return data;
 }
-function applyAccount(value){if(account?.id===value.id&&(value.version||0)<(account.version||0))return;const changed=account?.id!==value.id;account=value;selectedCharacter=value.equippedSkin;unlockedCharacters=value.ownedSkins;profile=value.username;if(changed){accountGeneration++;sessions=read('bella.sessions.'+value.id,{});session=null;room=null;page='home';}}
+function applyAccount(value){if(account?.id===value.id&&(value.version||0)<(account.version||0))return;const changed=account?.id!==value.id;account=value;if(document.documentElement)document.documentElement.dataset.cardSkin=value.equippedCardSkin||'classic';selectedCharacter=value.equippedSkin;unlockedCharacters=value.ownedSkins;profile=value.username;if(changed){accountGeneration++;sessions=read('bella.sessions.'+value.id,{});session=null;room=null;page='home';}}
 async function refreshWallet(){const data=await request(null,'account',null);applyAccount(data.account);render();}
 function accept(data){if(data.account)applyAccount(data.account);if(data.token){session={code:data.room.code,token:data.token};sessions[session.code]=session;save();}const previous=room?.version;queueTableEffects(room,data.room);room=data.room;clockOffset=room.serverNow-Date.now();online=true;if(previous!==room.version||page==='home')render();updateClocks();const reward=room.coinReward,key=room.code+':'+room.hand?.id;if(reward?.amount&&room.players.find(p=>p.id===reward.playerId)?.accountId===account?.id&&lastWalletTour!==key){lastWalletTour=key;refreshWallet().then(()=>toast('Thắng tour với bot: +1 coin!')).catch(()=>{});}}
 
@@ -49,7 +49,7 @@ function authScreen(){return `<main class="auth-shell"><div class="auth-brand"><
 function accountToolbar(){return `<section class="account-toolbar"><div>${characterImage(selectedCharacter)}<span>${esc(account.username)}<small>TÀI KHOẢN BELLA</small></span></div><strong>🪙 ${number(account.coins)} <small>coin</small></strong><button data-shop>Đổi skin</button><button data-card-skins>Skin bài ♠</button><button data-logout aria-label="Đăng xuất">↗</button></section>`;}
 function showLoginGift(amount){const modal=$('#modal');modal.classList.remove('character-modal');modal.classList.add('gift-modal');modal.innerHTML='<div class="gift-icon">🎁</div><div class="eyebrow">QUÀ ĐĂNG NHẬP</div><h2>Bạn nhận được</h2><strong class="gift-amount">+'+amount+' coin</strong><p>Coin đã được cộng vào ví của bạn.</p><button class="primary" data-close-gift>Tuyệt vời!</button>';modal.querySelector('[data-close-gift]').onclick=()=>modal.close();modal.onclose=()=>modal.classList.remove('gift-modal');modal.showModal();}
 async function submitAuth(form){if(authBusy)return;authBusy=true;const b=form.querySelector('button.primary');b.disabled=true;try{const fields=Object.fromEntries(new FormData(form)),data=await request({op:authMode,...fields},null,null);applyAccount(data.account);authReady=true;render();if(data.gift)showLoginGift(data.gift);if(urlCode&&sessions[urlCode])await resume(urlCode);}catch(e){$('#auth-error').textContent=e.message;b.disabled=false;}finally{authBusy=false;}}
-async function logoutAccount(){try{await request({op:'logout'},null,null);$('#modal').close();accountGeneration++;authMode='login';account=null;session=null;room=null;sessions={};unlockedCharacters=[];selectedCharacter=DEFAULT_CHARACTER;page='home';render();}catch(e){toast(e.message);}}
+async function logoutAccount(){try{await request({op:'logout'},null,null);$('#modal').close();accountGeneration++;authMode='login';account=null;if(document.documentElement)document.documentElement.dataset.cardSkin='classic';session=null;room=null;sessions={};unlockedCharacters=[];selectedCharacter=DEFAULT_CHARACTER;page='home';render();}catch(e){toast(e.message);}}
 
 
 
@@ -165,3 +165,5 @@ window.addEventListener('pointerup',()=>{if(peek){peek=false;render();}});
 window.addEventListener('blur',()=>{if(peek){peek=false;render();}});
 window.addEventListener('keydown',e=>{if(e.key==='Escape'&&(gamePanel||raiseOpen)){gamePanel=null;raiseOpen=false;render();}});
 
+
+configureCardSkins({getAccount:()=>account,request:async body=>{const data=await request(body,null,null);applyAccount(data.account);render();return data;}});
