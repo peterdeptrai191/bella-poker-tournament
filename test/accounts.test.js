@@ -7,6 +7,17 @@ const auth=(op,extra={},token)=>accountRequest({body:{op,requestId:randomUUID(),
 async function user(username){const result=await auth('register',{username,password:'test password'});return {result,identity:await authenticateAccount(result.cookieToken),token:result.cookieToken};}
 const roomCall=(account,body,token,code)=>service({account,method:body?'POST':'GET',body:body?{requestId:randomUUID(),...body}:undefined,token,code,ip:'wallet-room'});
 
+test('Sydney Sweeney is the highest priced skin and purchases charge exactly 50 once',async()=>{
+ clearMemory();const u=await user('HeartRoyale'),skin=CHARACTERS.find(c=>c.id==='sydney-sweeney');
+ assert.equal(skin.name,'Sydney Sweeney');assert.equal(skin.price,50);assert.equal(skin.effect,'hearts');assert.ok(CHARACTERS.filter(c=>c.id!==skin.id).every(c=>c.price<skin.price));
+ let doc=await accountDocument(u.identity);doc.value.coins=49;await writeRecord(u.identity.key,doc.raw,doc.value);
+ await assert.rejects(()=>auth('buySkin',{character:skin.id,price:0},u.token),/chưa đủ/);
+ doc=await accountDocument(u.identity);doc.value.coins=50;await writeRecord(u.identity.key,doc.raw,doc.value);
+ await Promise.all(Array.from({length:4},()=>auth('buySkin',{character:skin.id,price:0},u.token)));
+ const a=(await auth('account',{},u.token)).account;assert.equal(a.coins,0);assert.equal(a.ownedSkins.filter(id=>id===skin.id).length,1);
+ await auth('equipSkin',{character:skin.id},u.token);assert.equal((await auth('account',{},u.token)).account.equippedSkin,skin.id);
+});
+
 test('card skins cost 3 coins, require ownership, and charge atomically only once',async()=>{
  clearMemory();const u=await user('CardShop');
  assert.deepEqual(u.result.account.ownedCardSkins,['classic']);assert.equal(u.result.account.equippedCardSkin,'classic');
@@ -66,5 +77,5 @@ test('a bot tournament credits its human champion only once across concurrent re
  await Promise.all(Array.from({length:5},()=>rewardFinishedTournament(code)));assert.equal((await auth('account',{},u.token)).account.coins,1);
  const final=await rewardFinishedTournament(code);assert.equal(final.coinReward.amount,1);assert.ok(!JSON.stringify((await roomCall(u.identity,null,created.token,code)).room).includes('accountKey'));
  const second=await roomCall(u.identity,{op:'create'}),record=await readRoom(second.room.code);record.room.status='finished';record.room.players[0].rank=1;await writeRoom(second.room.code,record.raw,record.room);await rewardFinishedTournament(second.room.code);assert.equal((await auth('account',{},u.token)).account.coins,1);
- assert.equal(CHARACTERS.find(c=>c.id==='bella-mu').price,6);assert.ok(CHARACTERS.filter(c=>c.locked&&c.id!=='bella-spider').every(c=>c.price>=4&&c.price<=6));assert.equal(CHARACTERS.find(c=>c.id==='bella-spider').price,10);assert.ok(CHARACTERS.slice(0,6).every(c=>c.price===1));
+ assert.equal(CHARACTERS.find(c=>c.id==='bella-mu').price,6);assert.ok(CHARACTERS.filter(c=>c.locked&&c.id!=='bella-spider'&&c.id!=='sydney-sweeney').every(c=>c.price>=4&&c.price<=6));assert.equal(CHARACTERS.find(c=>c.id==='bella-spider').price,10);assert.ok(CHARACTERS.slice(0,6).every(c=>c.price===1));
 });

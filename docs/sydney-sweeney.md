@@ -1,0 +1,7 @@
+# Sydney Sweeney · Heart Royale
+
+`sydney-sweeney` costs 50 coins, the highest price in the character catalog. It uses `public/assets/characters/sydney-sweeney.webp`, a resized-format encoding of the transparent cartoon illustration. The PNG source is saved alongside the project in `outputs/sydney-sweeney-transparent.png`.
+
+Artwork was made with the built-in imagegen tool. Background-removal prompt: “Remove ONLY the entire orange and yellow backdrop, producing actual transparent alpha around the woman. Preserve the woman exactly as illustrated: same face and smile, long golden blonde hair, white cape-sleeved dress, silver circular belt buckle, clasped hands, jewelry, pose, proportions and original cropped portrait composition. Keep white fabric and white eyes opaque. Clean precise edges around hair and sleeves. No background, no cast shadow, no added hearts or effects, no text, no redesign.”
+
+The native SVG/CSS effect adds four rear orbiting hearts, two counter-rotating foreground hearts, rising heart particles, champagne sparkles, two moving ribbon rings and a softly pulsing rose aura. All effects stay in the shared avatar viewport, preserve the portrait/seat geometry and respect reduced-motion preferences. The skin shop has a legendary frame and label. Server-owned pricing, existing purchase CAS and admin gifts all use the shared character catalog; clients cannot buy it for a lower price.
