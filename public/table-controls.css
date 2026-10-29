@@ -1,0 +1,43 @@
+/* Raise drawer: the slider is shorter and an exact-amount box sits beside it. */
+.raise-row{display:flex;align-items:center;gap:10px}
+.game-dock .raise-row .raise-slider{flex:1 1 auto;min-width:0;width:auto;margin:0}
+.raise-amount{flex:0 0 92px;width:92px;height:36px;margin:0;padding:0 10px;border-radius:10px;border:1px solid #4e6a80;background:#0c1724;color:#fff0c9;font:800 15px/1 Inter,'Segoe UI',sans-serif;font-variant-numeric:tabular-nums;text-align:right;-moz-appearance:textfield;appearance:textfield}
+.raise-amount::-webkit-inner-spin-button,.raise-amount::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+.raise-amount:focus{outline:2px solid #ffd66e;outline-offset:1px;border-color:#ffd66e}
+.raise-amount.invalid{border-color:#ef8b91;color:#ffb3b8}
+.raise-amount:disabled{opacity:.5}
+
+/* Reaction button under the rules and board-count buttons (top right), with its menu of five moods. */
+.emote-dock{position:absolute;z-index:30;top:calc(max(20px,env(safe-area-inset-top)) + 51px);right:19px;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.game-shell:has(.emote-dock) .game-room-info{right:74px}
+.emote-toggle.glass-button{width:43px;height:43px;min-width:43px;padding:4px}
+.emote-toggle svg{width:32px;height:32px;display:block}
+.emote-toggle:disabled{opacity:.45}
+.emote-toggle[aria-expanded="true"]{border-color:#ffd66e;box-shadow:0 0 0 2px #ffd66e55}
+.emote-menu{display:grid;grid-template-columns:repeat(5,52px);gap:4px;padding:6px;border-radius:16px;border:1px solid #ffffff30;background:#141c27f2;box-shadow:0 12px 30px #000a;animation:emote-in .2s cubic-bezier(.2,.9,.3,1.2) both}
+.emote-menu button{display:flex;flex-direction:column;align-items:center;gap:2px;padding:5px 2px 4px;border-radius:12px;border:1px solid transparent;background:#fff6e6;color:#20263a;font-size:9px;font-weight:800;line-height:1.1}
+.emote-menu button svg{width:34px;height:34px;display:block}
+.emote-menu button:hover{transform:translateY(-2px);border-color:var(--mood-color);box-shadow:0 0 10px var(--mood-color)}
+.emote-menu button:focus-visible{outline:2px solid #ffd66e;outline-offset:2px}
+.emote-menu span{white-space:nowrap}
+@keyframes emote-in{from{opacity:0;translate:0 -6px;scale:.95}}
+@media(max-width:375px){.emote-dock{right:13px}.game-shell:has(.emote-dock) .game-room-info{right:66px}.emote-menu{grid-template-columns:repeat(5,48px)}}
+@media(max-height:740px) and (min-height:601px),(max-height:740px) and (orientation:portrait){.emote-dock{top:63px}}
+@media(orientation:landscape) and (max-height:600px){.emote-dock{top:53px;right:16px}.emote-toggle.glass-button{width:35px;height:35px;min-width:35px}.emote-toggle svg{width:26px;height:26px}}
+@media(prefers-reduced-motion:reduce){.emote-menu{animation:none}}
+
+/* Settings dialog (settings.js) */
+.settings-dialog{width:min(460px,calc(100vw - 24px))}
+.settings-list{display:flex;flex-direction:column;gap:2px}
+.setting-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 2px;border-bottom:1px solid #ffffff12}
+.setting-row:last-child{border-bottom:0}
+.setting-row strong{display:block;font-size:14px}.setting-row small{display:block;margin-top:2px;font-size:11px;color:#8f9bb0}
+.setting-row input[type=range]{width:160px;accent-color:#e6be7b}
+.switch{position:relative;flex:none;width:48px;height:28px;padding:0;border-radius:99px;border:1px solid #ffffff30;background:#2a3443;cursor:pointer;transition:background .2s}
+.switch i{position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#cfd6e0;transition:transform .2s,background .2s}
+.switch[aria-checked="true"]{background:#c99a3e;border-color:#e6be7b}.switch[aria-checked="true"] i{transform:translateX(20px);background:#fff8e6}
+.switch:focus-visible,.segmented button:focus-visible{outline:2px solid #ffd66e;outline-offset:2px}
+.segmented{display:flex;border:1px solid #ffffff26;border-radius:10px;overflow:hidden}
+.segmented button{padding:7px 14px;border:0;background:transparent;color:#c9d2df;font-weight:700;cursor:pointer}
+.segmented button[aria-pressed="true"]{background:#e6be7b;color:#1b1406}
+.game-top-actions .settings-button{font-size:20px}

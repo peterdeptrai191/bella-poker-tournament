@@ -74,3 +74,22 @@ test('amounts split into readable chip stacks',()=>{
  assert.equal(show(25275),'5x5000 2x100 3x25');
  assert.equal(show(10),'1x25');assert.equal(show(0),'');
 });
+
+test('players can change the name others see, never to a name someone else has',async()=>{
+ clearMemory();const a=await user('Anna');const b=await user('Binh');
+ const r=await auth('renameAccount',{name:'  Anna   Pro '},a.token);assert.equal(r.account.name,'Anna Pro');assert.equal(r.account.username,'Anna');
+ await assert.rejects(()=>auth('renameAccount',{name:'anna pro'},b.token),/đã có người dùng/);
+ await assert.rejects(()=>auth('renameAccount',{name:'ANNA'},b.token),/đã có người dùng/);   // someone's login name
+ await assert.rejects(()=>auth('renameAccount',{name:'x'},b.token),/2–22/);
+ await assert.rejects(()=>auth('register',{username:'Anna Pro',password:'p'}),/sử dụng/);  // display names block new logins too
+ // the old name is freed when Anna changes again, and she can go back to her login name
+ await auth('renameAccount',{name:'Anna Queen'},a.token);
+ assert.equal((await auth('renameAccount',{name:'Anna Pro'},b.token)).account.name,'Anna Pro');
+ assert.equal((await auth('renameAccount',{name:'Anna'},a.token)).account.name,'Anna');
+});
+
+test('two players grabbing the same new name at once: only one gets it',async()=>{
+ clearMemory();const a=await user('Racer A');const b=await user('Racer B');
+ const res=await Promise.allSettled([auth('renameAccount',{name:'Speedy'},a.token),auth('renameAccount',{name:'Speedy'},b.token)]);
+ assert.equal(res.filter(x=>x.status==='fulfilled').length,1);
+});

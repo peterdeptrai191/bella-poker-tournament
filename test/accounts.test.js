@@ -13,7 +13,7 @@ test('display names persist separately from login identity and synchronize exist
  const changed=await auth('setDisplayName',{displayName:'  Sơn Tùng  ',username:'spoof',role:'admin'},u.token);
  assert.equal(changed.account.displayName,'Sơn Tùng');assert.equal(changed.account.username,'DisplayLogin');assert.equal(changed.account.isAdmin,false);
  const updated=await roomCall(u.identity,null,created.token,code);assert.equal(updated.room.players.find(p=>p.id===created.room.me).name,'Sơn Tùng');assert.equal(updated.room.leaderboard.find(p=>p.id===created.room.me).name,'Sơn Tùng');
- await auth('setDisplayName',{displayName:'Sơn Tùng'},v.token);const joined=await roomCall(v.identity,{op:'join',code});assert.equal(joined.room.players.filter(p=>p.name==='Sơn Tùng').length,2);assert.notEqual(created.room.me,joined.room.me);
+ await assert.rejects(()=>auth('setDisplayName',{displayName:'Sơn Tùng'},v.token),/đã có/);await auth('setDisplayName',{displayName:'Sơn Tùng 2'},v.token);const joined=await roomCall(v.identity,{op:'join',code});assert.notEqual(created.room.me,joined.room.me);
  for(const displayName of ['', '   ', 'a'.repeat(23), 'bad\nname', 'bad\u202ename'])await assert.rejects(()=>auth('setDisplayName',{displayName},u.token),/Tên hiển thị/);
  const login=await auth('login',{username:'DisplayLogin',password:'test password'});assert.equal(login.account.displayName,'Sơn Tùng');assert.equal(login.account.id,changed.account.id);
 });

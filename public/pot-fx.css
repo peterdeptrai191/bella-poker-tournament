@@ -20,6 +20,11 @@
 .draft-stack.updated{animation:none}
 .draft-amount{padding:2px 7px;border-radius:99px;border:1px dashed #ffd66e;background:#0b1520eb;color:#ffd66e;font-size:10px;font-weight:850;font-variant-numeric:tabular-nums;animation:draft-pulse 1.1s ease-in-out infinite}
 .raise-heading .draft-stack{position:static;animation:none;flex-direction:row}
+/* "+300" / "−200" when the dragged amount changes */
+.draft-delta{position:absolute;bottom:100%;left:50%;translate:-50% 0;padding:1px 7px;border-radius:99px;font-size:11px;font-weight:900;white-space:nowrap;pointer-events:none;animation:draft-delta 1.3s ease-out both}
+.draft-delta.up{background:#163d2c;border:1px solid #71d5ac;color:#9ff0c9}.draft-delta.down{background:#3d1a1f;border:1px solid #ef8b91;color:#ffb3b8}
+@keyframes draft-delta{0%{opacity:0;translate:-50% 6px}15%{opacity:1;translate:-50% 0}75%{opacity:1}100%{opacity:0;translate:-50% -14px}}
+.draft-amount{font-size:11px}
 @keyframes draft-in{from{opacity:0;translate:0 6px}}
 @keyframes draft-pulse{50%{box-shadow:0 0 10px #ffd66e88}}
 

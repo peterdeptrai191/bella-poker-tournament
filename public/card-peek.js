@@ -3,6 +3,7 @@
 // appear above the cards. The stage lives outside #app, so the table re-rendering on every
 // server update never interrupts a drag.
 import {MOODS,moodIcon} from '/reactions.js';
+import {sfxEnabled} from '/settings.js';
 import {CARD_SKINS} from '/card-skin-catalog.js';
 
 const suits={c:'♣',d:'♦',h:'♥',s:'♠'},ranks={11:'J',12:'Q',13:'K',14:'A'};
@@ -17,7 +18,7 @@ function face(c){
 export function createCardPeek({onReact,soundUrl}){
  let el=null,handId=null,until=0,total=1,revealed=[false,false],chosen=null,frame=null,closing=null;
  const base=typeof Audio==='undefined'?null:new Audio(soundUrl);if(base)base.preload='auto';
- const playSound=()=>{if(!base)return;try{const a=base.cloneNode();a.volume=.9;a.play().catch(()=>{});}catch{}};
+ const playSound=()=>{if(!base||!sfxEnabled())return;try{const a=base.cloneNode();a.volume=.9;a.play().catch(()=>{});}catch{}};
 
  function close(){
   if(!el||closing)return;cancelAnimationFrame(frame);const node=el;closing=node;node.classList.add('closing');document.body.classList.remove('peek-open');

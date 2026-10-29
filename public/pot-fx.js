@@ -3,6 +3,7 @@
 // Chips are plain HTML + CSS (no images), coloured by value and by the chip skin the viewer has on
 // (see pot-fx.css), and animated with the Web Animations API. Sounds are five short recordings of real chips.
 import {chipBreakdown,CHIP_VALUES} from '/chip-skin-catalog.js';
+import {sfxEnabled} from '/settings.js';
 
 const reduced=()=>window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 const rand=(a,b)=>a+Math.random()*(b-a);
@@ -62,7 +63,7 @@ function load(){loading??=Promise.all(Object.entries(SOUNDS).map(async([name,url
 function unlock(){try{audio??=new (window.AudioContext||window.webkitAudioContext)();if(audio.state==='suspended')audio.resume();load();}catch{}}
 if(typeof window!=='undefined'){for(const type of ['pointerdown','keydown'])window.addEventListener(type,unlock,{capture:true,passive:true});}
 export function playSound(name,{delay=0,volume=1}={}){
- if(!audio||audio.state!=='running'||!buffers[name]||volume<=0)return;
+ if(!audio||audio.state!=='running'||!buffers[name]||volume<=0||!sfxEnabled())return;
  const source=audio.createBufferSource(),gain=audio.createGain();source.buffer=buffers[name];gain.gain.value=volume;source.connect(gain).connect(audio.destination);source.start(audio.currentTime+delay/1000);
 }
 // The bigger the bet, the bigger the sound: one chip for blinds and small calls, a short stack for an
