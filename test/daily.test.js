@@ -55,11 +55,11 @@ test('the login coin box opens only once per day however often you log in',async
  const tomorrow=await auth('login',{username:'Box Farmer',password:'test password'});assert.ok(tomorrow.gift>=1);
 });
 
-test('the M10 skin is given to its owner on register, and costs 5 coins for everyone else',async()=>{
+test('the M10 skin is given to its owner on register, and costs 15 coins for everyone else',async()=>{
  clearMemory();GRANTS[0].users.push(createHash('sha256').update('m10 tester').digest('hex'));
  const owner=await auth('register',{username:'M10 Tester',password:'test password'});assert.ok(owner.account.ownedSkins.includes('bella-m10'));
  const other=await auth('register',{username:'Someone Else',password:'test password'});assert.ok(!other.account.ownedSkins.includes('bella-m10'));
- const {CHARACTERS}=await import('../public/characters.js');assert.equal(CHARACTERS.find(c=>c.id==='bella-m10').price,5);assert.equal(CHARACTERS.find(c=>c.id==='bella-portugal-7').price,5);
+ const {CHARACTERS}=await import('../public/characters.js');assert.equal(CHARACTERS.find(c=>c.id==='bella-m10').price,15);assert.equal(CHARACTERS.find(c=>c.id==='bella-portugal-7').price,15);
 });
 
 test('calendar has seven days and the three gift chips sit on days 3, 5 and 7',()=>{

@@ -6,6 +6,11 @@ import {service} from '../lib/service.js';import {CHARACTERS,DEFAULT_CHARACTER} 
 const auth=(op,extra={},token)=>accountRequest({body:{op,requestId:randomUUID(),...extra},token,ip:'auth-tests'});
 async function user(username){const result=await auth('register',{username,password:'test password'});return {result,identity:await authenticateAccount(result.cookieToken),token:result.cookieToken};}
 const roomCall=(account,body,token,code)=>service({account,method:body?'POST':'GET',body:body?{requestId:randomUUID(),...body}:undefined,token,code,ip:'wallet-room'});
+test('random packs charge once for duplicate requests and disclose owned outcomes without rerolling',async()=>{
+ clearMemory();const u=await user('PackPlayer');let d=await accountDocument(u.identity);d.value.coins=20;await writeRecord(u.identity.key,d.raw,d.value);
+ const requestId=randomUUID(),results=await Promise.all(Array.from({length:4},()=>auth('buyRandomSkin',{requestId},u.token)));assert.ok(results.every(r=>r.result.skin===results[0].result.skin));assert.equal((await auth('account',{},u.token)).account.coins,10);assert.ok([3,10,15,20].includes(results[0].result.tier));
+ d=await accountDocument(u.identity);d.value.ownedSkins=CHARACTERS.map(c=>c.id);await writeRecord(u.identity.key,d.raw,d.value);const pack=await auth('buyRandomSkin',{},u.token);assert.equal(pack.result.duplicate,true);assert.equal(pack.account.coins,0);await assert.rejects(()=>auth('buyRandomSkin',{},u.token),/10 coin/);
+});
 
 test('display names persist separately from login identity and synchronize existing room seats',async()=>{
  clearMemory();const u=await user('DisplayLogin'),v=await user('OtherLogin');
@@ -32,23 +37,23 @@ test('human tournament rewards pay one coin per entrant from 2 to 9, exactly onc
  }
 });
 
-test('Iron Man costs 10 coins while existing owners keep access without repurchase',async()=>{
- clearMemory();const u=await user('ArcOwner'),skin=CHARACTERS.find(c=>c.id==='bella-iron');assert.equal(skin.price,10);assert.equal(skin.effect,'electric');
- let doc=await accountDocument(u.identity);doc.value.coins=9;await writeRecord(u.identity.key,doc.raw,doc.value);
+test('Iron Man costs 20 coins while existing owners keep access without repurchase',async()=>{
+ clearMemory();const u=await user('ArcOwner'),skin=CHARACTERS.find(c=>c.id==='bella-iron');assert.equal(skin.price,20);assert.equal(skin.effect,'electric');
+ let doc=await accountDocument(u.identity);doc.value.coins=19;await writeRecord(u.identity.key,doc.raw,doc.value);
  await assert.rejects(()=>auth('buySkin',{character:skin.id,price:5},u.token),/chưa đủ/);
- doc=await accountDocument(u.identity);doc.value.coins=10;await writeRecord(u.identity.key,doc.raw,doc.value);
+ doc=await accountDocument(u.identity);doc.value.coins=20;await writeRecord(u.identity.key,doc.raw,doc.value);
  await Promise.all(Array.from({length:3},()=>auth('buySkin',{character:skin.id},u.token)));
  assert.equal((await auth('account',{},u.token)).account.coins,0);
  await auth('buySkin',{character:skin.id},u.token);await auth('equipSkin',{character:skin.id},u.token);
  const a=(await auth('account',{},u.token)).account;assert.equal(a.equippedSkin,skin.id);assert.equal(a.coins,0);assert.equal(a.ownedSkins.filter(id=>id===skin.id).length,1);
 });
 
-test('Sydney Sweeney is the highest priced skin and purchases charge exactly 50 once',async()=>{
+test('Sydney Sweeney is the highest priced skin and purchases charge exactly 20 once',async()=>{
  clearMemory();const u=await user('HeartRoyale'),skin=CHARACTERS.find(c=>c.id==='sydney-sweeney');
- assert.equal(skin.name,'Sydney Sweeney');assert.equal(skin.price,50);assert.equal(skin.effect,'hearts');assert.ok(CHARACTERS.filter(c=>c.id!==skin.id).every(c=>c.price<skin.price));
- let doc=await accountDocument(u.identity);doc.value.coins=49;await writeRecord(u.identity.key,doc.raw,doc.value);
+ assert.equal(skin.name,'Sydney Sweeney');assert.equal(skin.price,20);assert.equal(skin.effect,'hearts');assert.ok(CHARACTERS.filter(c=>c.id!==skin.id).every(c=>c.price<=skin.price));
+ let doc=await accountDocument(u.identity);doc.value.coins=19;await writeRecord(u.identity.key,doc.raw,doc.value);
  await assert.rejects(()=>auth('buySkin',{character:skin.id,price:0},u.token),/chưa đủ/);
- doc=await accountDocument(u.identity);doc.value.coins=50;await writeRecord(u.identity.key,doc.raw,doc.value);
+ doc=await accountDocument(u.identity);doc.value.coins=20;await writeRecord(u.identity.key,doc.raw,doc.value);
  await Promise.all(Array.from({length:4},()=>auth('buySkin',{character:skin.id,price:0},u.token)));
  const a=(await auth('account',{},u.token)).account;assert.equal(a.coins,0);assert.equal(a.ownedSkins.filter(id=>id===skin.id).length,1);
  await auth('equipSkin',{character:skin.id},u.token);assert.equal((await auth('account',{},u.token)).account.equippedSkin,skin.id);
@@ -94,7 +99,7 @@ test('registration, password verification, session restoration, case uniqueness 
 });
 
 test('coin purchases are atomic, owned skins never charge twice, and local unlock lists cannot bypass ownership',async()=>{
- clearMemory();const u=await user('Shopper');const {raw,value}=await accountDocument(u.identity);value.coins=1;await writeRecord(u.identity.key,raw,value);
+ clearMemory();const u=await user('Shopper');const {raw,value}=await accountDocument(u.identity);value.coins=3;await writeRecord(u.identity.key,raw,value);
  await assert.rejects(()=>auth('buySkin',{character:'bella-mu'},u.token),/chưa đủ/);
  const purchases=await Promise.allSettled([auth('buySkin',{character:'doctor'},u.token),auth('buySkin',{character:'chef'},u.token)]);assert.equal(purchases.filter(x=>x.status==='fulfilled').length,1);
  const account=(await auth('account',{},u.token)).account,skin=account.ownedSkins.find(id=>id!==DEFAULT_CHARACTER);assert.equal(account.coins,0);await auth('buySkin',{character:skin},u.token);assert.equal((await auth('account',{},u.token)).account.coins,0);
@@ -113,5 +118,5 @@ test('a bot tournament credits its human champion only once across concurrent re
  await Promise.all(Array.from({length:5},()=>rewardFinishedTournament(code)));assert.equal((await auth('account',{},u.token)).account.coins,1);
  const final=await rewardFinishedTournament(code);assert.equal(final.coinReward.amount,1);assert.ok(!JSON.stringify((await roomCall(u.identity,null,created.token,code)).room).includes('accountKey'));
  const second=await roomCall(u.identity,{op:'create'}),record=await readRoom(second.room.code);record.room.status='finished';record.room.players[0].rank=1;await writeRoom(second.room.code,record.raw,record.room);await rewardFinishedTournament(second.room.code);assert.equal((await auth('account',{},u.token)).account.coins,1);
- assert.equal(CHARACTERS.find(c=>c.id==='bella-mu').price,6);assert.ok(CHARACTERS.filter(c=>c.locked&&c.id!=='bella-spider'&&c.id!=='sydney-sweeney'&&c.id!=='bella-iron'&&c.id!=='son-tung-mtp').every(c=>c.price>=4&&c.price<=6));assert.equal(CHARACTERS.find(c=>c.id==='bella-spider').price,10);assert.equal(CHARACTERS.find(c=>c.id==='son-tung-mtp').price,10);assert.ok(CHARACTERS.slice(0,6).every(c=>c.price===1));
+ assert.equal(CHARACTERS.find(c=>c.id==='bella-mu').price,10);assert.equal(CHARACTERS.find(c=>c.id==='son-tung-mtp').price,20);assert.ok(CHARACTERS.slice(0,6).every(c=>c.price===3));
 });
