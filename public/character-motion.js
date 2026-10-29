@@ -1,3 +1,4 @@
+import {heroCharacter} from './hero-motion.js';
 // Eyelids are registered in the artwork's original pixel coordinates.
 // Keeping the effects in the same SVG viewport preserves every existing seat box.
 const motion = {
@@ -12,6 +13,7 @@ const motion = {
 const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 export function animatedCharacter(character,cls='character-avatar'){
+ const hero=heroCharacter(character,cls);if(hero)return hero;
  const m=motion[character.id];
  if(!m)return `<img class="${escape(cls)}" src="/assets/characters/${character.id}.webp" alt="Bella · ${escape(character.name)}" style="--character-color:${character.color}">`;
  const cx=m.width/2,cy=353,rx=m.width*.45,ry=218;
