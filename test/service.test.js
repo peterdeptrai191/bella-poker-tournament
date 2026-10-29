@@ -40,3 +40,11 @@ test('character selection persists for all players without exposing private card
  assert.equal(updated.players.filter(p=>p.hole).length,1);
  await assert.rejects(()=>call({op:'create',name:'Bad',character:'<script>'}),/Nhân vật không hợp lệ/);
 });
+
+test('card peek is a room option and reactions reach every player',async()=>{
+ clearMemory();const off=await call({op:'create',name:'Host',levelMinutes:3});assert.equal(off.room.config.peek,false);
+ clearMemory();const h=await call({op:'create',name:'Host',levelMinutes:3,peek:'on',withBot:true});const code=h.room.code;assert.equal(h.room.config.peek,true);assert.equal(h.room.config.peekSeconds,5);
+ await call({op:'ready',ready:true,code},h.token);const started=await call({op:'start',code},h.token);const hand=started.room.hand;assert.ok(hand.peekUntil>Date.now());
+ const reacted=await call({op:'react',mood:3,handId:hand.id,code},h.token);assert.equal(reacted.room.hand.moods[h.room.me],3);
+ await assert.rejects(()=>call({op:'react',mood:9,handId:hand.id,code},h.token),/không hợp lệ/);
+});
