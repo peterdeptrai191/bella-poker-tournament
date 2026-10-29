@@ -9,6 +9,11 @@
 
 .chip-stacks{display:flex;align-items:flex-end;gap:2px;filter:drop-shadow(0 3px 3px #0008)}
 /* Chip shapes and colours per skin live in chip-skins-art.css. */
+/* A big pot is a pile: back row of taller stacks (a touch darker, further away), front row overlapping it. */
+.chip-pile{flex-direction:column;align-items:center;gap:0}
+.pile-row{display:flex;align-items:flex-end;gap:2px}
+.pile-row.back{filter:brightness(.8) saturate(.9)}
+.pile-row.front{position:relative;z-index:1;margin-top:-13px;translate:11px 0}
 .chip.drop{animation:chip-drop .34s cubic-bezier(.3,1.5,.5,1) var(--d,0ms) both}
 @keyframes chip-drop{from{translate:0 -18px;opacity:0}to{translate:0 0;opacity:1}}
 .pot-stage.settled .chip-stacks{animation:pot-empty .3s ease-in .55s both}
