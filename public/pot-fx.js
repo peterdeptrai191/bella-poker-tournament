@@ -10,13 +10,22 @@ const rand=(a,b)=>a+Math.random()*(b-a);
 const pick=list=>list[Math.floor(Math.random()*list.length)];
 
 // ---------- Chip stacks (side view) ----------
-// An amount becomes one stack per chip value (see chipBreakdown), biggest value on the left.
-export const chipTotal=amount=>chipBreakdown(amount).reduce((n,c)=>n+c.count,0);
-// `from` is how many chips were already shown last time: chips from that index on drop in, `delay` ms after this render.
-export function chipStacks(amount,{from=Infinity,delay=0,perColumn=10}={}){
- const columns=[];for(const {value,count} of chipBreakdown(amount))for(let i=0;i<count;i+=perColumn)columns.push({value,n:Math.min(perColumn,count-i)});
+// An amount becomes one stack per chip value (see chipBreakdown), biggest value first. The table sets the big
+// blind with setChipScale(), so a bigger pot shows more chips; pass bb:null for the plain dealer split.
+let chipScale=null;
+export const setChipScale=bb=>{chipScale=bb||null;};
+export const chipTotal=(amount,bb=chipScale)=>chipBreakdown(amount,bb).reduce((n,c)=>n+c.count,0);
+// `from` is how many chips were already shown last time: chips from that index on drop in, `delay` ms after
+// this render. More than four stacks are piled in two rows like real chips on felt: the taller stacks stand
+// at the back, the shorter ones in front and half a chip to the side, tallest in the middle of each row.
+export function chipStacks(amount,{from=Infinity,delay=0,perColumn=10,bb=chipScale}={}){
+ const columns=[];for(const {value,count} of chipBreakdown(amount,bb))for(let i=0;i<count;i+=perColumn)columns.push({value,n:Math.min(perColumn,count-i)});
  let index=0;
- return `<div class="chip-stacks" aria-hidden="true">${columns.map(col=>`<div class="chip-column" data-chip="${col.value}" style="--h:${col.n}">${Array.from({length:col.n},(_,i)=>{const fresh=index>=from,html=`<i class="chip${i===col.n-1?' top':''}${fresh?' drop':''}" style="--i:${i}${fresh?`;--d:${delay+(index-from)*40}ms`:''}"></i>`;index++;return html;}).join('')}</div>`).join('')}</div>`;
+ for(const col of columns)col.html=`<div class="chip-column" data-chip="${col.value}" style="--h:${col.n}">${Array.from({length:col.n},(_,i)=>{const fresh=index>=from,html=`<i class="chip${i===col.n-1?' top':''}${fresh?' drop':''}" style="--i:${i}${fresh?`;--d:${delay+(index-from)*40}ms`:''}"></i>`;index++;return html;}).join('')}</div>`;
+ if(columns.length<=4)return `<div class="chip-stacks" aria-hidden="true">${columns.map(c=>c.html).join('')}</div>`;
+ const byHeight=[...columns].sort((a,b)=>b.n-a.n),centred=list=>list.reduce((row,c,i)=>i%2?[...row,c]:[c,...row],[]);
+ const back=centred(byHeight.filter((_,i)=>i%2===0)),front=centred(byHeight.filter((_,i)=>i%2===1));
+ return `<div class="chip-stacks chip-pile" aria-hidden="true"><div class="pile-row back">${back.map(c=>c.html).join('')}</div><div class="pile-row front">${front.map(c=>c.html).join('')}</div></div>`;
 }
 // One chip seen from above, for flying chips, the shower and the skin picker.
 export const chipFace=(value,size=40)=>`<span class="tc" data-chip="${value}" data-label="${value>=1000?value/1000+'K':value}" style="--s:${size}px" aria-hidden="true"></span>`;
@@ -31,7 +40,7 @@ function flyingChip(value,size){const holder=document.createElement('div');holde
 // the bet itself. The layer lives outside #app, so the table re-rendering mid-flight never cuts the animation.
 export function flyChips(fromEl,toEl,{count=4,delay=0,duration=520,amount=0}={}){
  if(!fromEl||!toEl||reduced())return 0;const a=center(fromEl),b=center(toEl);if(!a.r.width||!b.r.width)return 0;
- const values=chipBreakdown(amount).map(c=>c.value);if(!values.length)values.push(...CHIP_VALUES.slice(2));
+ const values=chipBreakdown(amount,chipScale).map(c=>c.value);if(!values.length)values.push(...CHIP_VALUES.slice(2));
  for(let i=0;i<count;i++){
   const chip=flyingChip(values[i%values.length],16);
   const jx=rand(-10,10),jy=rand(-6,6),lift=Math.min(70,Math.hypot(b.x-a.x,b.y-a.y)*.25);

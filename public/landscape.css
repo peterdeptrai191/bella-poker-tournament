@@ -1,8 +1,9 @@
 /* Landscape mode (chosen by the player, screen wider than tall).
-   The table is a stadium (straight long sides, round ends) on the left; the action panel is a column on the right.
+   The table is a tilted stadium (straight long sides, round ends) in the middle of the background. Your cards and
+   chip card sit at the bottom middle; the turn hint and action buttons are a compact card at the bottom right.
    --tl/--tt/--tw/--th describe the table area; seats and the board are placed inside it. */
 .table-oval{display:none}
-.game-shell.landscape{--dock-w:clamp(240px,27vw,340px);--tl:5%;--tt:22%;--tw:calc(100% - var(--dock-w) - 10%);--th:58%;max-width:none;width:100%;height:100svh;min-height:0;margin:0}
+.game-shell.landscape{--dock-w:clamp(300px,27vw,380px);--tl:14%;--tt:17%;--tw:72%;--th:55%;max-width:none;width:100%;height:100svh;min-height:0;margin:0}
 .game-shell.landscape .perspective-table,.game-shell.landscape .table-branding{display:none}
 .game-shell.landscape .table-oval{display:block;position:absolute;z-index:0;left:var(--tl);top:var(--tt);width:var(--tw);height:var(--th);border-radius:9999px;border:clamp(9px,1.6vh,16px) solid transparent;background:radial-gradient(ellipse at 50% 35%,#2b6a64,#123f3d 72%) padding-box,linear-gradient(160deg,#efd3a3,#af7a42 30%,#f8dfac 55%,#8b5e34) border-box;box-shadow:0 24px 50px #000a,inset 0 0 0 2px #152f2f,inset 0 0 40px #0008}
 /* tilted away from you, like the portrait table (matches TILT/DEPTH in app.js) */
@@ -16,31 +17,41 @@
 /* Board and pot in the middle of the table */
 .game-shell.landscape .game-board{left:calc(var(--tl) + var(--tw) / 2);top:calc(var(--tt) + var(--th) * .6);bottom:auto;width:auto;transform:translate(-50%,-50%)}
 
-/* Your cards and chip card at the bottom edge of the table, side by side */
-.game-shell.landscape .hero-hand{left:calc(var(--tl) + var(--tw) / 2);top:auto;bottom:10px;width:auto;height:auto;transform:translateX(-50%);flex-direction:row;align-items:flex-end;gap:8px}
-.game-shell.landscape .hero-plaque{width:clamp(150px,16vw,200px);margin:0 0 4px}
+/* Your cards and chip card: bottom middle, a little above the screen edge; your character stands on top of the card */
+.game-shell.landscape .hero-hand{left:50%;top:auto;bottom:22px;width:auto;height:auto;transform:translateX(-50%);flex-direction:row;align-items:flex-end;gap:12px;z-index:7}
+.game-shell.landscape .hero-hand .hole-slot{--hole-w:72px;--hole-h:104px}
+.game-shell.landscape .hero-hand .card{width:72px;height:104px;font-size:34px}
+.game-shell.landscape .hero-hand .card span{font-size:38px}
+.game-shell.landscape .hero-plaque{width:clamp(210px,18vw,250px);margin:0 0 4px;padding:10px 14px 11px}
+.game-shell.landscape .hero-plaque>strong{font-size:12px}
+.game-shell.landscape .hero-plaque .hero-chips b{font-size:24px}
+.game-shell.landscape .hero-plaque .hero-chips small{font-size:11px}
+.game-shell.landscape .hero-character{left:auto;right:10px;bottom:calc(100% - 10px);width:62px;height:80px;z-index:2}
 .game-shell.landscape .hero-hand .holecards{transform:none}
 
-/* Action panel on the right */
-.game-shell.landscape .game-dock{position:absolute;left:auto;right:0;top:0;bottom:0;width:var(--dock-w);height:auto;max-height:none;transform:none;border-radius:0;border-left:1px solid #ffffff14;display:flex;flex-direction:column;justify-content:flex-end;padding:12px 14px 10px;overflow-y:auto}
+/* Turn hint + actions: a floating card at the bottom right (no side column any more) */
+.game-shell.landscape .game-dock{position:absolute;left:auto;right:16px;top:auto;bottom:16px;width:var(--dock-w);height:auto;max-height:calc(100% - 140px);transform:none;border-radius:18px;border:1px solid #ffffff1f;background:#0f1722e6;backdrop-filter:blur(10px);box-shadow:0 14px 40px #000a;display:flex;flex-direction:column;justify-content:flex-end;padding:10px 12px 10px;overflow-y:auto;z-index:20}
 .game-shell.landscape .dock-handle{display:none}
 .game-shell.landscape .game-actions{gap:6px}
 .game-shell.landscape .game-actions button{min-height:44px;font-size:14px;padding-left:4px;padding-right:4px}
-.game-shell.landscape .game-room-info{right:calc(var(--dock-w) + 12px)}
+.game-shell.landscape .game-room-info{right:74px}
 .game-shell.landscape .game-level{right:auto;left:18px;top:104px;bottom:auto}
 .game-shell.landscape .game-rank-shortcut{left:16px;bottom:14px}
 
 /* Phone held sideways: very little height, so everything gets tighter */
 @media(max-height:500px){
- .game-shell.landscape{--dock-w:clamp(230px,31vw,290px);--tt:26%;--th:56%;--tl:4%;--tw:calc(100% - var(--dock-w) - 8%)}
+ .game-shell.landscape{--dock-w:clamp(250px,32vw,300px);--tt:24%;--th:50%;--tl:13%;--tw:74%}
  .game-shell.landscape .game-topbar{top:8px}
  .game-shell.landscape .game-room-info{top:52px}
- .game-shell.landscape .game-level{top:auto;bottom:14px;left:72px}
- .game-shell.landscape .hero-hand{bottom:4px}
- .game-shell.landscape .hero-hand .card{width:40px;height:56px;font-size:20px}
- .game-shell.landscape .hero-hand .hole-slot{--hole-w:40px;--hole-h:56px}
- .game-shell.landscape .hero-plaque{width:150px}
- .game-shell.landscape .game-dock{padding:8px 10px 6px}
+ .game-shell.landscape .game-level{top:12px;bottom:auto;left:50%;transform:translateX(-50%)}
+ .game-shell.landscape .hero-hand{left:76px;transform:none;bottom:10px;gap:8px}
+ .game-shell.landscape .hero-hand .card{width:46px;height:66px;font-size:22px}
+ .game-shell.landscape .hero-hand .card span{font-size:24px}
+ .game-shell.landscape .hero-hand .hole-slot{--hole-w:46px;--hole-h:66px}
+ .game-shell.landscape .hero-plaque{width:170px;padding:6px 10px 7px}
+ .game-shell.landscape .hero-plaque .hero-chips b{font-size:18px}
+ .game-shell.landscape .hero-character{width:44px;height:56px}
+ .game-shell.landscape .game-dock{right:10px;bottom:8px;padding:7px 9px 7px;max-height:calc(100% - 64px)}
  .game-shell.landscape .game-hint{margin-bottom:6px;min-height:0;padding:5px 8px}
  .game-shell.landscape .game-actions button{min-height:38px;font-size:13px}
  .game-shell.landscape .dock-footnote{display:none}
@@ -77,11 +88,13 @@
 .game-shell.landscape:has(.pot-stage) .table-oval::after{opacity:0}
 @media(max-height:500px){.game-shell.landscape.raising .game-hint{display:none}.game-shell.landscape .raise-drawer .raise-controls{padding:6px 10px}}
 
-/* Landscape on a big screen: the top of the action panel shows the live leaderboard. */
-.dock-board{display:none}
-.game-shell.landscape .dock-board{display:flex;flex-direction:column;gap:8px;margin:96px 0 auto;min-height:0;overflow:auto}
-.dock-board header{display:flex;flex-direction:column;gap:2px}.dock-board header span{font-size:9px;letter-spacing:.16em;color:#d8c08d}.dock-board header small{font-size:11px;color:#8f9bb0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.dock-board .rank-list{display:flex;flex-direction:column;gap:4px}
-.dock-board .rank-row{padding:6px 8px;font-size:12px}
-.dock-board .rank-row .character-avatar,.dock-board .rank-row .character-motion{width:26px;height:32px}
-@media(max-height:620px){.game-shell.landscape .dock-board{display:none}}
+
+/* Landscape: your area is 35% bigger and sits higher. The gold turn ring runs around the chip card, so the
+   character stands fully above it and the SB/BB badge sits inside the card's corner, both drawn over the ring. */
+.game-shell.landscape .hero-hand{bottom:44px;transform:translateX(-50%) scale(1.35);transform-origin:50% 100%}
+.game-shell.landscape .hero-character{bottom:calc(100% + 6px);right:14px;z-index:6}
+.game-shell.landscape .hero-plaque .position-badge{top:8px;right:10px;left:auto;z-index:6;width:21px;height:21px;font-size:8px}
+.game-shell.landscape .hero-plaque .hero-chips{padding-right:30px}
+.game-shell.landscape .hero-plaque>strong{padding-right:30px}
+@media(max-height:820px){.game-shell.landscape .hero-hand{transform:translateX(-50%) scale(1.2);bottom:34px}}
+@media(max-height:500px){.game-shell.landscape .hero-hand{transform:scale(1.08);transform-origin:0 100%;bottom:12px}}

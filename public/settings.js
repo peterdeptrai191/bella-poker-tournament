@@ -1,6 +1,6 @@
 // Player settings, remembered on this device: background music (on/off + volume) and sound effects.
 // The music is one jazz file played on a loop. Browsers only allow sound after the player has touched the
-// page, so it starts on the first tap; it pauses while the tab is hidden and streams instead of downloading
+// page, so it starts on the first tap; it keeps playing in a background tab and streams instead of downloading
 // everything first.
 const read=(key,fallback)=>{try{const v=localStorage.getItem(key);return v===null?fallback:JSON.parse(v);}catch{return fallback;}};
 const write=(key,value)=>{try{localStorage.setItem(key,JSON.stringify(value));}catch{}};
@@ -15,12 +15,14 @@ function player(){
 }
 function sync(){
  if(!unlocked)return;
- if(state.music&&state.volume>0&&!document.hidden)player().play().catch(()=>{});else track?.pause();
+ if(state.music&&state.volume>0)player().play().catch(()=>{});else track?.pause();
 }
 if(typeof window!=='undefined'){
  const start=()=>{unlocked=true;sync();};
  for(const type of ['pointerdown','keydown'])window.addEventListener(type,start,{capture:true,passive:true,once:true});
- document.addEventListener('visibilitychange',sync);
+ // Music keeps playing while you look at another tab. If the phone stopped it in the background, start it again
+ // when the player comes back.
+ document.addEventListener('visibilitychange',()=>{if(!document.hidden)sync();});
 }
 
 export function openSettings({layout,onLayout}={}){

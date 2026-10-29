@@ -93,3 +93,13 @@ test('two players grabbing the same new name at once: only one gets it',async()=
  const res=await Promise.allSettled([auth('renameAccount',{name:'Speedy'},a.token),auth('renameAccount',{name:'Speedy'},b.token)]);
  assert.equal(res.filter(x=>x.status==='fulfilled').length,1);
 });
+
+test('with the big blind given, bigger pots show more chips, the total always matches, at most 60 chips',async()=>{
+ const {chipBreakdown,MAX_PILE}=await import('../public/chip-skin-catalog.js');
+ const sum=parts=>parts.reduce((n,c)=>n+c.value*c.count,0),count=parts=>parts.reduce((n,c)=>n+c.count,0);
+ let last=0;
+ for(const pot of [150,500,1200,2500,5000,12450,25000]){const p=chipBreakdown(pot,50);
+  assert.equal(sum(p),Math.round(pot/25)*25);assert.ok(count(p)<=MAX_PILE);assert.ok(count(p)>=last,`pot ${pot} shows fewer chips than a smaller pot`);last=count(p);}
+ assert.ok(count(chipBreakdown(5000,50))>=8*count(chipBreakdown(5000)));     // far more than the plain dealer split
+ assert.ok(chipBreakdown(12450,50).length>=4);                               // several colours, not one
+});
