@@ -61,3 +61,15 @@ test('a skipped snapshot can show card reveals, actual chip deductions and elimi
  assert.deepEqual(events.find(e=>e.type==='elimination').players,[{id:'b',name:'Bob',rank:2}]);
  assert.deepEqual(diffTableEffects(after,structuredClone(after)),[]);
 });
+
+
+test('all-in runout pauses between flop, turn and river without replay on polling',()=>{
+ const before=snapshot(),after=structuredClone(before);after.hand.board=[1,2,3,4,5];after.hand.runoutFrom=0;
+ assert.deepEqual(diffTableEffects(before,after).filter(e=>e.type==='board').map(e=>e.delay),[0,190,380,1200,2400]);
+ const flop=structuredClone(before);flop.hand.board=[1,2,3];after.hand.runoutFrom=3;
+ assert.deepEqual(diffTableEffects(flop,after).filter(e=>e.type==='board').map(e=>e.delay),[0,1200]);assert.deepEqual(diffTableEffects(after,after),[]);
+});
+test('two newly dealt local cards flip once and do not animate unknown opponents',()=>{
+ const before=snapshot(),after=structuredClone(before);after.me='a';after.players[0].hole=[1,2];
+ const e=diffTableEffects(before,after).filter(e=>e.type==='hole');assert.equal(e.length,2);assert.deepEqual(e.map(x=>x.delay),[0,220]);assert.ok(e.every(x=>x.playerId==='a'));assert.deepEqual(diffTableEffects(after,after),[]);
+});

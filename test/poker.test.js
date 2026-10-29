@@ -48,11 +48,11 @@ test('short all-in action exposes actual paid amount and total without private c
  assert.equal(a.kind,'raise');assert.equal(a.paid,75);assert.equal(a.total,75);assert.equal(a.allIn,true);
  assert.deepEqual(Object.keys(a).sort(),['allIn','at','kind','paid','playerId','stage','total'].sort());
 });
-test('completed showdown reveals every dealt hand, including folded humans and bots; next hand is private',()=>{
+test('showdown reveals live hands; folded cards remain private until voluntarily shown',()=>{
  const r=fixture(3);r.players[1].isBot=true;startTournament(r);const folded=r.hand.turn;move(r,folded,'fold');
  for(const player of r.players){const view=publicRoom(r,player.id);assert.equal(view.players.filter(p=>p.hole).length,1);}
  while(r.hand.stage!=='complete')move(r,r.hand.turn,'allin');assert.equal(r.hand.showdown,true);
- for(const player of r.players){const view=publicRoom(r,player.id);assert.equal(view.players.filter(p=>p.hole?.length===2).length,3);assert.equal(view.players.find(p=>p.id===folded).folded,true);assert.equal(view.players.find(p=>p.isBot).hole.length,2);assert.ok(!JSON.stringify(view).includes('"deck"'));}
+ for(const player of r.players){const view=publicRoom(r,player.id);assert.equal(view.players.filter(p=>p.hole?.length===2).length,player.id===folded?3:2);assert.equal(view.players.find(p=>p.id===folded).folded,true);assert.equal(!!view.players.find(p=>p.id===folded).hole,player.id===folded);assert.ok(!JSON.stringify(view).includes('"deck"'));}
  startHand(r);for(const player of r.players){const view=publicRoom(r,player.id);assert.ok(view.players.every(p=>p.id===player.id||p.hole===null));}
 });
 test('winning by folds without showdown does not reveal other players cards',()=>{

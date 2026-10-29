@@ -7,7 +7,9 @@ export function diffTableEffects(before,after){
  const oldBlinds=before.hand?.blinds,blinds=hand.blinds;
  if(before.status==='running'&&after.status==='running'&&oldBlinds&&blinds&&(blinds.sb>oldBlinds.sb||blinds.bb>oldBlinds.bb))events.push({key:`${after.code}:blind:${blinds.level}:${blinds.sb}:${blinds.bb}`,type:'blind',from:{sb:oldBlinds.sb,bb:oldBlinds.bb},to:{sb:blinds.sb,bb:blinds.bb},duration:4500,delay:0});
  const count=sameHand?before.hand.board.length:0;
- for(let i=count;i<hand.board.length;i++)events.push({key:`${after.code}:${hand.id}:board:${i}`,type:'board',index:i,delay:(i-count)*190,duration:540+(i-count)*190});
+ for(let i=count;i<hand.board.length;i++){const delay=hand.runoutFrom!=null&&hand.board.length===5?(i<3?(i-count)*190:i===3?(count<3?1200:0):(count<3?2400:count===3?1200:0)):(i-count)*190;events.push({key:`${after.code}:${hand.id}:board:${i}`,type:'board',index:i,delay,duration:540+delay});}
+ const mine=after.players.find(p=>p.id===after.me),oldMine=before.players.find(p=>p.id===after.me);
+ if(mine?.hole?.length===2&&(!sameHand||!oldMine?.hole))for(let i=0;i<2;i++)events.push({key:`${after.code}:${hand.id}:hole:${mine.id}:${i}`,type:'hole',playerId:mine.id,index:i,delay:i*220,duration:650+i*220});
  for(const p of after.players){
   const old=before.players.find(x=>x.id===p.id);if(!old)continue;
   const a=p.lastAction,oldAction=sameHand?old.lastAction:null;
