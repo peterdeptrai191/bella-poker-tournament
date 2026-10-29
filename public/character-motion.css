@@ -1,0 +1,19 @@
+/* The SVG remains the same size as the old image: no particles outside its box. */
+.character-motion{display:block;overflow:hidden;isolation:isolate;flex-shrink:0}
+.character-summary>.character-motion{width:84px;height:100px}
+.mascot-avatar>.character-motion,.hero-character>.character-motion{width:100%;height:100%}
+.fire-orbit-back,.fire-orbit-front,.bella-eyelids{pointer-events:none}
+.fire-orbit-halo,.fire-front-halo{fill:none;stroke:var(--fire-color);stroke-width:20;opacity:.13}
+.fire-orbit-trail,.fire-front-trail{fill:none;stroke:var(--fire-color);stroke-width:9;stroke-linecap:round;stroke-dasharray:17 4 3 7 8 11;animation:bella-fire-travel 3.8s linear infinite}
+.fire-orbit-trail{opacity:.8}.fire-front-halo{stroke-width:13;opacity:.14}.fire-front-trail{stroke:#ffe5a0;stroke-width:5;stroke-dasharray:6 5 2 15 3 19;opacity:.8;animation-duration:3.8s}
+.fire-embers{animation:bella-embers 9s linear infinite;opacity:.85}
+.bella-eyelids{opacity:0;animation:bella-blink var(--blink-period,5.7s) linear var(--blink-offset,0s) infinite}
+@keyframes bella-fire-travel{to{stroke-dashoffset:-100}}
+@keyframes bella-embers{to{transform:rotate(360deg)}}
+@keyframes bella-blink{0%,89%,93%,100%{opacity:0}90%,92%{opacity:1}}
+/* A locked thumbnail stays muted; the larger preview still shows its animation. */
+.character-option.locked .character-motion{filter:grayscale(.8);opacity:.65}
+@media(max-width:600px){.character-summary>.character-motion{width:65px;height:80px}}
+@media(prefers-reduced-motion:reduce){.fire-orbit-trail,.fire-front-trail,.fire-embers,.bella-eyelids{animation:none}.bella-eyelids{opacity:0}.fire-embers{opacity:.45}}
+
+.character-animate{display:block;flex-shrink:0;padding:0;border:0;background:none;border-radius:14px;line-height:0}.character-animate:hover:enabled{background:none;transform:none}.character-animate:focus-visible{outline:2px solid var(--character-color);outline-offset:3px}
