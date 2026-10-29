@@ -56,7 +56,7 @@ Bot là chiến lược luyện tập dựa trên độ mạnh bài, pot odds v�
 - Main pot / side pots / hoàn cược không được theo. So 5 lá tốt nhất từ 7 lá, wheel A–5, hòa pot và chia chip lẻ từ trái button.
 - Khi showdown kết thúc, lật bài người còn đấu ngay trên bàn; bộ thắng màu vàng, lá còn lại màu xám. Bài đã fold chỉ công khai khi chủ bài bấm Khoe bài sau khi ván kết thúc.
 - Người bị loại được chọn một người còn thi đấu để xem bài riêng; cả bàn thấy công khai tên người xem và người được xem. Người còn thi đấu không được dùng quyền này.
-- Tài khoản mới dùng Bella nông dân miễn phí. 6 skin thường giá 1 coin; 6 skin hiệu ứng giá 4–6 coin, MU cao nhất 6 coin. Coin và skin thuộc tài khoản trên server, không dùng điều kiện nhắn group.
+- Tài khoản mới dùng Bella nông dân miễn phí. 6 skin thường giá 1 coin; skin hiệu ứng giá 4–6 coin, MU cao nhất 6 coin. Coin và skin thuộc tài khoản trên server, không dùng điều kiện nhắn group.
 - Hai lá riêng có hiệu ứng chia/lật. All-in chạy hiệu ứng flop 3 lá, dừng, turn, dừng, river.
 - Timeout 25 giây: check nếu được phép, nếu không fold. Mất kết nối không dừng giải hoặc miễn blinds. Quay lại bằng token lưu trong trình duyệt.
 - Hết chip bị loại. Loại cùng ván so stack đầu ván; bằng stack thì đồng hạng. Người cuối còn chip xếp #1. BXH hiện tại theo stack; chip đã cược nằm trong pot cho đến khi quyết toán.

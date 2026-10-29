@@ -1,0 +1,14 @@
+[
+  {
+    "id": "bella-iron",
+    "prompt": "Create one ORIGINAL Bella game mascot character illustration from this text description only. No image references. Bella is an anthropomorphic bright yellow and orange teardrop-shaped flame creature: tall curling flame tips form the head, expressive playful eyes, mischievous broad white grin, compact cartoon body and limbs, thick dark navy outlines, bold clean cel shading. Dress the mascot in an ORIGINAL red and yellow metal armor outfit: chunky crimson shoulder plates, yellow elbow and knee joints, layered red chest panels with a small hexagonal mint energy inset, articulated gauntlets, red boots with yellow soles. Keep its entire flame head visible and uncovered. Proud planted stance, hands resting at sides. This is a new original costume design for a casual multiplayer mobile game. Full body, centered, three-quarter front view, all limbs and flame tips entirely within frame, 10 percent empty margin. Cohesive collectible character art, crisp polished 2D illustration, attractive readable silhouette. One character only. Transparent alpha background. No scenery, no pedestal, no text, no logo wordmark, no watermark, no orbiting props or extra effects; those will be animated separately in game code.",
+    "mode": "built-in imagegen",
+    "transparent_background": true
+  },
+  {
+    "id": "bella-captain",
+    "prompt": "Create one ORIGINAL Bella game mascot character illustration from this text description only. No image references. Bella is an anthropomorphic bright yellow and orange teardrop-shaped flame creature: tall curling flame tips form the head, expressive playful eyes, mischievous broad white grin, compact cartoon body and limbs, thick dark navy outlines, bold clean cel shading. Dress the mascot in an ORIGINAL blue military uniform: cobalt jacket with red-and-white stripe bands on the upper sleeves and waist, navy cargo trousers, brown utility belt, brown gloves and rugged brown boots. Simple small blue field cap sitting beneath the flame tips, with a plain geometric hexagon badge. Friendly confident standing salute pose. No star emblem and no letter markings. This is a new original costume design for a casual multiplayer mobile game. Full body, centered, three-quarter front view, all limbs and flame tips entirely within frame, 10 percent empty margin. Cohesive collectible character art, crisp polished 2D illustration, attractive readable silhouette. One character only. Transparent alpha background. No scenery, no pedestal, no text, no logo wordmark, no watermark, no orbiting props or extra effects; those will be animated separately in game code.",
+    "mode": "built-in imagegen",
+    "transparent_background": true
+  }
+]
