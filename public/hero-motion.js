@@ -1,5 +1,6 @@
+import {musicEffects} from './music-motion.js';
 const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-export const HERO_EFFECTS=new Set(['missiles','shield','web','hearts','electric']);
+export const HERO_EFFECTS=new Set(['missiles','shield','web','hearts','electric','music']);
 const arcPaths=[
  'M149 114 116 159 139 177 86 229 112 247 57 313 88 341 58 395 104 426 83 486 129 540',
  'M483 98 511 150 486 173 550 218 524 248 589 298 555 327 596 377 548 412 571 469 521 514',
@@ -20,6 +21,7 @@ const rocket=`<path d="M-21-10H14L32 0 14 10H-21Z" fill="#e4edf2" stroke="#25364
 const shield=`<circle r="43" fill="#c92b3d" stroke="#182a40" stroke-width="4"/><circle r="33" fill="#e9f0f3"/><circle r="24" fill="#c92b3d"/><circle r="16" fill="#246aab"/><path d="M0-14 12-7 12 7 0 14-12 7-12-7Z" fill="#fff"/>`;
 
 export function heroEffects(type){
+ if(type==='music')return musicEffects();
  if(type==='electric')return electricEffects();
  if(type==='hearts')return heartEffects();
  if(type==='missiles')return `<g class="hero-effects" aria-hidden="true"><circle class="missile-trail" cx="320" cy="338" r="260"/><g transform="translate(320 338)"><g class="hero-orbiter"><g transform="translate(0 -260)">${rocket}</g></g><g class="hero-orbiter orbit-second"><g transform="translate(0 -260)">${rocket}</g></g></g></g>`;
@@ -33,5 +35,5 @@ export function heroCharacter(character,cls){
  if(!HERO_EFFECTS.has(character.effect))return null;
  const asset=`/assets/characters/${escape(character.asset||character.id+'.webp')}`;
  const artwork=character.artBox?`<svg x="90" y="25" width="460" height="626" viewBox="${escape(character.artBox)}" preserveAspectRatio="xMidYMid meet"><image href="${asset}" width="${character.artWidth}" height="${character.artHeight}"/></svg>`:`<image href="${asset}" x="90" y="25" width="460" height="626" preserveAspectRatio="xMidYMid meet"/>`;
- return `<svg class="${escape(cls)} character-motion hero-motion hero-${character.effect}" viewBox="0 0 640 676" role="img" aria-label="${escape(character.name)}" style="--character-color:${character.color}">${heroEffects(character.effect)}${artwork}${character.effect==='hearts'?heartEffects(true):character.effect==='electric'?electricEffects(true):''}</svg>`;
+ return `<svg class="${escape(cls)} character-motion hero-motion hero-${character.effect}" viewBox="0 0 640 676" role="img" aria-label="${escape(character.name)}" style="--character-color:${character.color}">${heroEffects(character.effect)}${artwork}${character.effect==='hearts'?heartEffects(true):character.effect==='electric'?electricEffects(true):character.effect==='music'?musicEffects(true):''}</svg>`;
 }
