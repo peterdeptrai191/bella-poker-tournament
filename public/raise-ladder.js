@@ -1,7 +1,8 @@
-// Raise sizing helpers: turn the legal raise range into a short ladder of round,
-// blind-based amounts so players drag between sensible stops instead of typing chips.
+// Raise sizing helpers. Quick-pick buttons offer familiar sizes (blinds, pot fractions);
+// the slider moves in round chip notches sized from the player's own stack, so players
+// never have to type or land on odd amounts.
 
-const BB_STOPS=[2,2.5,3,3.5,4,5,6,7,8,9,10,12,15,18,20,25,30,35,40,50,60,70,80,90,100,120,150,200,250,300,400,500,600,800,1000];
+const SLIDER_NOTCHES=30;
 const POT_FRACTIONS=[{fraction:1/3,label:'⅓ Pot'},{fraction:1/2,label:'½ Pot'},{fraction:3/4,label:'¾ Pot'},{fraction:1,label:'Pot'}];
 
 const roundTo=(value,unit)=>Math.round(value/unit)*unit;
@@ -22,25 +23,29 @@ export function raisePresets({min,max,sb,bb,pot=0,currentBet=0,toCall=0}){
  return out;
 }
 
-// Ordered stops for the slider: min, round big-blind multiples, pot-sized presets, all-in.
-export function raiseLadder(options){
- const {min,max,bb}=options,stops=new Set([min,max]);
- if(bb>0)for(const m of BB_STOPS){const v=m*bb;if(v>min&&v<max)stops.add(v);}
- for(const p of raisePresets(options))stops.add(p.value);
- const ladder=[...stops].filter(v=>inRange(v,min,max)).sort((a,b)=>a-b);
- return fillGaps(ladder,options);
+// Smallest "round" step (1, 2, 2.5 or 5 × 10^k, whole chips only) that is at least `raw`.
+export function roundStep(raw){
+ if(!(raw>1))return 1;
+ for(let k=Math.floor(Math.log10(raw))-1;;k++){const base=10**k;for(const m of [1,2,2.5,5]){const step=m*base;if(Number.isInteger(step)&&step>=raw)return step;}}
 }
 
-// Between far-apart stops (e.g. 100 BB → 120 BB late in a tournament) add round
-// in-between values so one notch never jumps more than ~25% of the bet.
-function fillGaps(ladder,{sb,bb}){
- const unit=Math.max(1,bb||sb||1),out=[];
- for(let i=0;i<ladder.length;i++){
-  out.push(ladder[i]);const next=ladder[i+1];if(next===undefined)continue;
-  let v=ladder[i];
-  while(next/v>1.25){const step=Math.max(unit,roundTo(v*0.2,unit));v=roundTo(v+step,unit);if(v>=next)break;out.push(v);}
- }
- return [...new Set(out)];
+// Slider stops: the legal minimum, every multiple of one round step in between, then all-in.
+// The step is sized from the player's own chips (max = everything they can put in), so a
+// deep stack moves in bigger round notches and a short stack in smaller ones.
+// A notch is never smaller than the small blind, so short stacks don't get 1-chip steps.
+export function raiseLadder({min,max,sb=1,notches=SLIDER_NOTCHES}){
+ if(!(max>min))return [min];
+ const step=roundStep(Math.max((max-min)/notches,sb)),stops=[min];
+ for(let v=Math.floor(min/step)*step+step;v<max;v+=step)stops.push(v);
+ stops.push(max);
+ return stops;
+}
+
+// Next stop above (direction 1) or below (direction -1) a chip amount, for the -/+ buttons.
+export function stepStop(ladder,value,direction){
+ if(direction>0)return ladder.find(v=>v>value)??ladder.at(-1);
+ for(let i=ladder.length-1;i>=0;i--)if(ladder[i]<value)return ladder[i];
+ return ladder[0];
 }
 
 // Index of the ladder stop closest to a chip amount.
