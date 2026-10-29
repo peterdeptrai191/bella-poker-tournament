@@ -14,6 +14,18 @@
 /* A locked thumbnail stays muted; the larger preview still shows its animation. */
 .character-option.locked .character-motion{filter:grayscale(.8);opacity:.65}
 @media(max-width:600px){.character-summary>.character-motion{width:65px;height:80px}}
-@media(prefers-reduced-motion:reduce){.fire-orbit-trail,.fire-front-trail,.fire-embers,.bella-eyelids{animation:none}.bella-eyelids{opacity:0}.fire-embers{opacity:.45}}
+.bella-sparkles{pointer-events:none;filter:drop-shadow(0 0 6px #fff6c8) drop-shadow(0 0 12px #9fd3ff)}
+.bella-sparkle{fill:#fffbea;stroke:#ffffff;stroke-width:2;transform-box:fill-box;transform-origin:center;opacity:0;animation:bella-twinkle 2.6s ease-in-out var(--d,0s) infinite}
+.bella-sparkle.gold{fill:#ffe27a;stroke:#fff4c2}
+.bella-glory{pointer-events:none}
+.bella-glow{transform-box:fill-box;transform-origin:center;animation:bella-pulse 2.8s ease-in-out infinite}
+.bella-rays{animation:bella-embers 28s linear infinite;opacity:.55}
+.bella-rays .ray-sky{fill:#9fd3ff;opacity:.35}.bella-rays .ray-gold{fill:#ffe08a;opacity:.4}
+.bella-glitter{pointer-events:none;filter:drop-shadow(0 0 5px #ffe9a0)}
+.bella-glitter circle{fill:#ffe27a;transform-box:fill-box;transform-origin:center;opacity:0;animation:bella-rise 3.2s ease-out var(--d,0s) infinite}
+@keyframes bella-pulse{50%{opacity:.6;scale:.94}}
+@keyframes bella-rise{0%{opacity:0;translate:0 0;scale:.4}15%{opacity:1;scale:1}80%{opacity:.8}100%{opacity:0;translate:0 -420px;scale:.6}}
+@keyframes bella-twinkle{0%,100%{opacity:0;scale:.2;rotate:0deg}45%{opacity:1;scale:1;rotate:45deg}60%{opacity:.9;scale:.85}}
+@media(prefers-reduced-motion:reduce){.bella-glow,.bella-rays,.bella-glitter circle{animation:none}.bella-sparkle{animation:none;opacity:.7}.fire-orbit-trail,.fire-front-trail,.fire-embers,.bella-eyelids{animation:none}.bella-eyelids{opacity:0}.fire-embers{opacity:.45}}
 
 .character-animate{display:block;flex-shrink:0;padding:0;border:0;background:none;border-radius:14px;line-height:0}.character-animate:hover:enabled{background:none;transform:none}.character-animate:focus-visible{outline:2px solid var(--character-color);outline-offset:3px}

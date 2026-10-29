@@ -1,0 +1,57 @@
+/* Pot in the middle of the table: chip stacks seen from the side, amount underneath. */
+.pot-stage{position:absolute;left:50%;bottom:calc(100% + 12px);translate:-50% 0;z-index:4;display:flex;align-items:flex-end;gap:14px;pointer-events:none;white-space:nowrap}
+.pot-group{display:flex;flex-direction:column;align-items:center;gap:4px}
+.pot-amount{display:flex;flex-direction:column;align-items:center;padding:3px 10px 4px;border-radius:10px;background:#0b1a18d9;border:1px solid #e3c78380;box-shadow:0 3px 10px #0006;line-height:1}
+.pot-amount span{font-size:7px;letter-spacing:.16em;color:#dfd3ac}
+.pot-amount strong{margin-top:2px;font-size:15px;font-weight:850;color:#ffe7a5;font-variant-numeric:tabular-nums}
+.pot-group.side .pot-amount strong{font-size:12px}
+.pot-group.side .chip-stacks{scale:.8;transform-origin:bottom center}
+
+.chip-stacks{display:flex;align-items:flex-end;gap:2px;filter:drop-shadow(0 3px 3px #0008)}
+/* Chip shapes and colours per skin live in chip-skins-art.css. */
+.chip.drop{animation:chip-drop .34s cubic-bezier(.3,1.5,.5,1) var(--d,0ms) both}
+@keyframes chip-drop{from{translate:0 -18px;opacity:0}to{translate:0 0;opacity:1}}
+.pot-stage.settled .chip-stacks{animation:pot-empty .3s ease-in .55s both}
+@keyframes pot-empty{to{opacity:0;scale:.5}}
+
+/* The raise a player is still dragging, shown at their seat on the side facing the pot. */
+.draft-stack{position:absolute;z-index:9;top:calc(var(--portrait-size, 80px) * .42);display:flex;flex-direction:column;align-items:center;gap:3px;pointer-events:none;animation:draft-in .25s ease-out both}
+.draft-stack.to-right{left:calc(100% - 6px)}.draft-stack.to-left{right:calc(100% - 6px)}
+.draft-stack.updated{animation:none}
+.draft-amount{padding:2px 7px;border-radius:99px;border:1px dashed #ffd66e;background:#0b1520eb;color:#ffd66e;font-size:10px;font-weight:850;font-variant-numeric:tabular-nums;animation:draft-pulse 1.1s ease-in-out infinite}
+.raise-heading .draft-stack{position:static;animation:none;flex-direction:row}
+@keyframes draft-in{from{opacity:0;translate:0 6px}}
+@keyframes draft-pulse{50%{box-shadow:0 0 10px #ffd66e88}}
+
+/* Chips that fly or fall are .tc chips seen from above. */
+.fx-layer{position:fixed;inset:0;z-index:70;pointer-events:none;overflow:hidden}
+.fly-chip,.rain-chip{position:absolute;left:0;top:0;will-change:transform}
+.fly-chip{margin:-8px 0 0 -8px}
+
+/* Seats of players who are out of the tournament go dark. */
+.opponent.is-busted .opponent-portrait,.opponent.is-busted .opponent-plaque{filter:grayscale(1) brightness(.6);transition:filter .6s}
+.hero-plaque.is-busted{filter:grayscale(1) brightness(.65)}
+
+/* Bust screen. */
+body.busted .game-shell{filter:grayscale(1) brightness(.45);transition:filter .5s}
+.bust-quote{position:fixed;inset:0;z-index:80;display:grid;place-items:center;padding:24px;background:radial-gradient(ellipse at 50% 40%,#0b0f15b3,#000000e6);animation:bust-in .45s ease-out both}
+.bust-quote.leaving{animation:bust-out .26s ease-in both}
+.bust-card{position:relative;width:min(100%,360px);padding:24px 22px 18px;border-radius:18px;border:1px solid #e3c78366;background:linear-gradient(160deg,#1a2230f2,#0d131cf7);box-shadow:0 20px 50px #000c;color:#f5f1e8;text-align:center;animation:bust-rise .5s cubic-bezier(.2,.9,.3,1.1) .1s both}
+.bust-card>small{font-size:10px;letter-spacing:.18em;color:#ef8b91;font-weight:800}
+.bust-mark{display:block;height:36px;margin-top:4px;font:900 64px/1 Georgia,serif;color:#e3c783}
+.bust-card blockquote{margin:6px 0 0}
+.bust-card blockquote p{margin:0;font:italic 600 17px/1.45 Georgia,'Times New Roman',serif}
+.bust-card .bust-vi{margin-top:10px;font:500 13px/1.5 Inter,'Segoe UI',sans-serif;font-style:normal;color:#c9bfa8}
+.bust-card cite{display:block;margin-top:12px;font-size:12px;font-style:normal;color:#e3c783;font-weight:700}
+.bust-bar{height:3px;margin:16px 0 12px;border-radius:9px;background:#ffffff1a;overflow:hidden}
+.bust-bar i{display:block;height:100%;background:#e3c783;transform-origin:left;animation:bust-bar linear both}
+.bust-skip{padding:9px 22px;border-radius:99px;border:1px solid #e3c783;background:transparent;color:#ffe7a5;font-weight:800;cursor:pointer}
+.bust-skip:hover{background:#e3c78322}.bust-skip:focus-visible{outline:3px solid #ffd66e;outline-offset:2px}
+.bust-note{margin:10px 0 0;font-size:11px;color:#8f9bb0}
+@keyframes bust-in{from{opacity:0}}@keyframes bust-out{to{opacity:0}}
+@keyframes bust-rise{from{opacity:0;translate:0 24px;scale:.94}}
+@keyframes bust-bar{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+
+@media(orientation:landscape) and (max-height:600px){.pot-stage{bottom:calc(100% + 6px);scale:.8;transform-origin:bottom center}}
+@media(prefers-reduced-motion:reduce){.chip.drop,.draft-stack,.draft-amount,.bust-quote,.bust-card,.pot-stage.settled .chip-stacks{animation:none}}
+.game-shell:has(.pot-stage) .table-branding{opacity:0;transition:opacity .3s}

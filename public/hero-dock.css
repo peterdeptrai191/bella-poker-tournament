@@ -1,0 +1,21 @@
+/* Your own area: the chip card sits right under your two cards, next to the action buttons,
+   and the top pot box is gone (the pot now lives in the middle of the table), so the table moves up. */
+.game-shell .perspective-table{inset:auto 0;top:-8%;height:108%}
+.game-shell .table-branding{top:43%}
+.game-shell{--hero-height:142px}
+
+.game-shell .hero-hand{width:168px;justify-content:flex-start}
+.game-shell .hero-plaque.is-turn{--turn-scale:1.04}
+.game-shell .hero-hand .holecards{transform:none}
+.game-shell .hero-plaque{position:relative;inset:auto;margin-top:-8px;width:100%;min-height:0;padding:6px 9px 7px 28px;display:flex;flex-direction:column;align-items:stretch;gap:2px;text-align:left}
+.game-shell .hero-plaque>strong{max-width:none;font-size:10px}
+.hero-chips{display:flex;align-items:baseline;justify-content:space-between;gap:6px}
+.game-shell .hero-plaque .hero-chips b{margin:0;font-size:18px;line-height:1.1;color:#fff0c9;font-variant-numeric:tabular-nums}
+.hero-chips small{font-size:9px;color:#ffd66e;white-space:nowrap}
+.game-shell .hero-plaque .equity-panel{margin-top:1px}
+.game-shell .hero-character{left:-14px;bottom:4px}
+.game-shell .hero-plaque .chip-delta{top:-16px;bottom:auto}
+
+@media(max-width:375px){.game-shell{--hero-height:138px}.game-shell .hero-hand{width:160px}}
+@media(max-height:740px) and (min-height:601px),(max-height:740px) and (orientation:portrait){.game-shell{--hero-height:128px}.game-shell .hero-plaque{padding-top:4px;padding-bottom:5px}.game-shell .hero-plaque .hero-chips b{font-size:16px}}
+@media(orientation:landscape) and (max-height:600px){.game-shell{--hero-height:104px}.game-shell .hero-hand{width:150px}.game-shell .hero-plaque{padding:3px 6px 4px 22px}.game-shell .hero-plaque .hero-chips b{font-size:13px}.game-shell .perspective-table{top:-16%;height:130%;inset:auto 20%}}
