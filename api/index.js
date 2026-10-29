@@ -7,7 +7,7 @@ export default async function handler(req,res){
   let body=req.body||{};if(typeof body==='string'){if(Buffer.byteLength(body)>8192)throw Object.assign(new Error('Yêu cầu quá lớn.'),{status:413});body=JSON.parse(body);}if(Buffer.byteLength(JSON.stringify(body))>8192)throw Object.assign(new Error('Yêu cầu quá lớn.'),{status:413});
   const url=new URL(req.url,`http://${req.headers.host}`);const code=url.searchParams.get('code');const token=String(req.headers.authorization||'').replace(/^Bearer /,'');const ip=String(req.headers['x-forwarded-for']||'local').split(',')[0].trim();
   const accountToken=cookieToken(req.headers.cookie);let result;
-  if(['register','login','logout','buySkin','equipSkin','buyCardSkin','equipCardSkin'].includes(body.op)||req.method==='GET'&&code==='account'){
+  if(['register','login','logout','buySkin','equipSkin','buyCardSkin','equipCardSkin','claimDaily','equipChipSkin'].includes(body.op)||req.method==='GET'&&code==='account'){
    if(req.method==='GET')body={op:'account'};
    result=await accountRequest({body,token:accountToken,ip});
    if(Object.hasOwn(result,'cookieToken')){res.setHeader('Set-Cookie',cookieHeader(result.cookieToken,process.env.VERCEL==='1'||req.headers['x-forwarded-proto']==='https'));delete result.cookieToken;}

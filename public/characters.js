@@ -10,6 +10,7 @@ export const CHARACTERS = [
  {id:'bella-chelsea',name:'Chần đè',color:'#32b9ff',tag:'Chelsea · Xanh dương',locked:true,price:5},
  {id:'bella-lakers',name:'Lê bống',color:'#ffcf44',tag:'Lakers · Vàng tím',locked:true,price:5},
  {id:'bella-portugal-7',name:'Goat CR7',color:'#ed394b',tag:'Bồ Đào Nha · Số 7',locked:true,price:5},
+ {id:'bella-m10',name:'Goat M10',color:'#75b2e6',tag:'Argentina · Số 10 · Lấp lánh',locked:true,price:5},
  {id:'bella-tennis',name:'Djokovic',color:'#b5ec3b',tag:'Tennis · Xanh lá',locked:true,price:4},
  {id:'bella-tech',name:'Steve Dóp',color:'#badfff',tag:'Công nghệ · Bạc xanh',locked:true,price:4},
  {id:'farmer',name:'Bella nông dân',color:'#d7a852',tag:'Nông dân · Miễn phí',price:0},
