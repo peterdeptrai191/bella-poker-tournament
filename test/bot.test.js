@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {randomUUID} from 'node:crypto';
-import {chooseBotAction} from '../lib/bot.js';import {service} from '../lib/service.js';import {clearMemory} from '../lib/store.js';
+import {chooseBotAction} from '../lib/bot.js';import {service} from './account-fixture.js';import {clearMemory} from '../lib/store.js';
 import {startTournament,startHand,publicRoom,legalActions,act,tick} from '../lib/poker.js';
 const call=(body,token,code)=>service({method:body?'POST':'GET',body:body?{...body,requestId:body.requestId||randomUUID()}:undefined,token,code,ip:'bot-tests'});
 function fixture(n=3){return {code:'BOTS23',title:'Bots test',ownerId:'p0',status:'waiting',version:1,config:{startingStack:1500,levelMinutes:3,maxPlayers:9,actionSeconds:25},players:Array.from({length:n},(_,i)=>({id:'p'+i,name:i?'Bot '+i:'Human',tokenHash:'private-'+i,isBot:i>0,stack:0,ready:true,seat:i,rank:null})),receipts:[]};}

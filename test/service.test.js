@@ -1,4 +1,4 @@
-import test from 'node:test';import assert from 'node:assert/strict';import {service} from '../lib/service.js';import {clearMemory} from '../lib/store.js';
+import test from 'node:test';import assert from 'node:assert/strict';import {service} from './account-fixture.js';import {clearMemory} from '../lib/store.js';
 import {randomUUID} from 'node:crypto';
 const call=(body,token,code)=>service({method:body?'POST':'GET',body:body?{...body,requestId:body.requestId||randomUUID()}:undefined,token,code,ip:'integration'});
 test('real multiplayer service lifecycle: concurrent join, authorization, ready/start, idempotency, private cards',async()=>{

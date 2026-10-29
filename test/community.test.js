@@ -1,22 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {randomUUID} from 'node:crypto';
-import {service} from '../lib/service.js';
+import {service} from './account-fixture.js';
 import {readRoom,writeRoom,clearMemory} from '../lib/store.js';
 const call=(body,token,code)=>service({method:body?'POST':'GET',body:body?{...body,requestId:body.requestId||randomUUID()}:undefined,token,code,ip:'community'});
 async function table(n=3){clearMemory();const host=await call({op:'create',name:'Host'}),code=host.room.code,users=[host];for(let i=1;i<n;i++)users.push(await call({op:'join',name:'Guest '+i,code}));for(const u of users)await call({op:'ready',ready:true,code},u.token);await call({op:'start',code},host.token);return {users,code};}
-
-test('new characters require confirmation before selection and unlocked choices survive a new room',async()=>{
- clearMemory();await assert.rejects(()=>call({op:'create',name:'Host',character:'bella-mu'}),/mở khóa/);
- const h=await call({op:'create',name:'Host'}),code=h.room.code;
- await assert.rejects(()=>call({op:'character',character:'bella-mu',code},h.token),/mở khóa/);
- await assert.rejects(()=>call({op:'unlock',character:'bella-mu',confirmed:false,code},h.token),/xác nhận/);
- const unlock={op:'unlock',character:'bella-mu',confirmed:true,code,requestId:randomUUID()};
- await call(unlock,h.token);await call(unlock,h.token);
- const updated=await call({op:'character',character:'bella-mu',code},h.token);
- assert.equal(updated.room.players[0].character,'bella-mu');assert.deepEqual(updated.room.players[0].unlockedCharacters,['bella-mu']);
- assert.equal((await call({op:'create',name:'Host',character:'bella-mu',unlockedCharacters:['bella-mu']})).room.players[0].character,'bella-mu');
-});
 
 test('only eliminated viewers can see a selected live hand and every client sees who watches whom',async()=>{
  const {users,code}=await table(4),[out,target,other]=users;

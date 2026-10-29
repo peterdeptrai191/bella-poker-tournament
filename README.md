@@ -1,6 +1,6 @@
 # Bella Poker · Private tournaments
 
-Ứng dụng web responsive cho tournament poker một bàn, 2–9 người, mang nhận diện Bella. Chỉ tạo/tham gia phòng và thi đấu giải; không cash game, tiền thật, nạp/rút, rebuy hoặc re-entry.
+Ứng dụng web responsive cho tournament poker một bàn, 2–9 người, mang nhận diện Bella, có tài khoản, ví coin và cửa hàng skin. Chỉ tạo/tham gia phòng và thi đấu giải; không cash game, tiền thật, nạp/rút, rebuy hoặc re-entry.
 
 ## Chạy cục bộ
 
@@ -31,11 +31,15 @@ Git dùng nhánh `main`. Vercel tự deploy các lần push tiếp theo sau khi 
 
 ## Luồng sử dụng
 
-Tên hiển thị → tạo phòng (stack / thời gian level) → chia sẻ mã 6 ký tự hoặc link → mọi người sẵn sàng → chủ phòng bắt đầu. Người chơi được xếp ghế ngẫu nhiên. Chỉ có góc nhìn FPP; giữ vào bài để hé, thả để úp. Phòng tự đếm người tham gia, không cần chọn số ghế. Chủ phòng bắt đầu với số người thực tế khi mọi người sẵn sàng (2–9 người). Xem vị trí trong bảng xếp hạng ngay tại bàn hoặc mục riêng.
+Đăng ký / đăng nhập bằng tên tài khoản và mật khẩu → tạo phòng (stack / thời gian level) → chia sẻ mã 6 ký tự hoặc link → mọi người sẵn sàng → chủ phòng bắt đầu. Người chơi được xếp ghế ngẫu nhiên. Chỉ có góc nhìn FPP; giữ vào bài để hé, thả để úp. Phòng tự đếm người tham gia, không cần chọn số ghế. Chủ phòng bắt đầu với số người thực tế khi mọi người sẵn sàng (2–9 người). Xem vị trí trong bảng xếp hạng ngay tại bàn hoặc mục riêng.
 
 ## Giao diện mobile dọc
 
-Màn chơi sử dụng góc nhìn thứ nhất theo chiều dọc, nền lounge ấm, bàn nỉ phối cảnh và nhân vật ngồi quanh bàn. Ba thao tác chính nằm trong thanh kính mờ ở đáy: Bỏ bài, Theo/Check, Tăng cược. Bấm Tăng cược để mở thanh kéo và ô nhập chip đồng bộ, rồi xác nhận tăng hoặc chọn Tất tay. Nhấn biểu tượng Bella / thứ hạng để mở bảng xếp hạng nổi. Khi showdown kết thúc, bài của mọi người được mở tại ghế và trong bảng kết quả; các ván mới vẫn giữ kín bài riêng. Bài của chính mình hiển thị ở tiền cảnh, giữ vào bài để nâng lên.
+Màn chơi sử dụng góc nhìn thứ nhất theo chiều dọc, nền lounge ấm, bàn nỉ phối cảnh và nhân vật ngồi quanh bàn. Ba thao tác chính nằm trong thanh kính mờ ở đáy: Bỏ bài, Theo/Check, Tăng cược. Bấm Tăng cược để mở thanh kéo và ô nhập chip đồng bộ, rồi xác nhận tăng hoặc chọn Tất tay. Nhấn biểu tượng Bella / thứ hạng để mở bảng xếp hạng nổi. Khi showdown kết thúc, bài của người còn đấu được mở ngay tại ghế; người đã fold tự chọn khoe bài sau khi kết thúc ván. Các ván mới vẫn giữ kín bài riêng. Bài của chính mình hiển thị ở tiền cảnh, giữ vào bài để nâng lên.
+
+## Tài khoản và coin
+
+Đăng ký chỉ cần tên đăng nhập và mật khẩu. Đăng nhập lại bằng mật khẩu nhận hộp quà 1–5 coin; khôi phục phiên hoặc tải lại trang không nhận thêm quà. Thắng một tour có bot được 1 coin, chỉ cấp một lần cho nhà vô địch. Chi tiết lưu trữ, quyền sở hữu, bảng giá và chống cấp/trừ lặp trong [accounts-and-coins.md](docs/accounts-and-coins.md).
 
 ## Chơi cùng bot
 
@@ -52,7 +56,7 @@ Bot là chiến lược luyện tập dựa trên độ mạnh bài, pot odds v�
 - Main pot / side pots / hoàn cược không được theo. So 5 lá tốt nhất từ 7 lá, wheel A–5, hòa pot và chia chip lẻ từ trái button.
 - Khi showdown kết thúc, lật bài người còn đấu ngay trên bàn; bộ thắng màu vàng, lá còn lại màu xám. Bài đã fold chỉ công khai khi chủ bài bấm Khoe bài sau khi ván kết thúc.
 - Người bị loại được chọn một người còn thi đấu để xem bài riêng; cả bàn thấy công khai tên người xem và người được xem. Người còn thi đấu không được dùng quyền này.
-- 6 nhân vật mới mặc định khóa. Unlock hiển thị yêu cầu nhắn group, người chơi tự xác nhận Đã thực hiện; app không gửi tin hoặc kiểm chứng group. Lưu mở khóa trên trình duyệt và phiên phòng.
+- Tài khoản mới dùng Bella nông dân miễn phí. 6 skin thường giá 1 coin; 6 skin hiệu ứng giá 4–6 coin, MU cao nhất 6 coin. Coin và skin thuộc tài khoản trên server, không dùng điều kiện nhắn group.
 - Hai lá riêng có hiệu ứng chia/lật. All-in chạy hiệu ứng flop 3 lá, dừng, turn, dừng, river.
 - Timeout 25 giây: check nếu được phép, nếu không fold. Mất kết nối không dừng giải hoặc miễn blinds. Quay lại bằng token lưu trong trình duyệt.
 - Hết chip bị loại. Loại cùng ván so stack đầu ván; bằng stack thì đồng hạng. Người cuối còn chip xếp #1. BXH hiện tại theo stack; chip đã cược nằm trong pot cho đến khi quyết toán.
