@@ -29,3 +29,21 @@
 .account-toolbar [data-daily-gift] i{position:absolute;top:4px;right:4px;width:8px;height:8px;border-radius:50%;background:#ff6a4d;box-shadow:0 0 0 2px #141f30}
 @media(max-width:700px){.daily-days{grid-template-columns:repeat(4,minmax(0,1fr))}.chip-options{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(prefers-reduced-motion:reduce){.daily-claim,.daily-result{animation:none}}
+
+/* Rename dialog (account-name.js) */
+.rename-dialog{width:min(440px,calc(100vw - 24px))}
+.rename-form{display:flex;flex-direction:column;gap:8px}
+.rename-form label{font-size:12px;color:#c9d2df}
+.rename-form input{height:44px;padding:0 12px;border-radius:10px;border:1px solid #4e6a80;background:#0c1724;color:#fff;font:600 16px Inter,'Segoe UI',sans-serif}
+.rename-form input:focus{outline:2px solid #ffd66e;border-color:#ffd66e}
+.rename-hint{margin:0;font-size:12px;color:#8f9bb0}.rename-error{margin:0;min-height:18px;font-size:13px;color:#ff9aa2}
+.rename-actions{display:flex;justify-content:flex-end;gap:8px}
+.rename-button{margin-left:6px;padding:1px 7px;border-radius:99px;border:1px solid #e6be7b66;background:transparent;color:#e6be7b;font-size:9px;letter-spacing:.04em;cursor:pointer}
+.rename-button:hover{background:#e6be7b1f}
+/* Phone: the account bar has two rows, name + coins on top and the buttons underneath, so the name never disappears. */
+@media(max-width:600px){
+ .account-toolbar{flex-wrap:wrap;row-gap:8px}
+ .account-toolbar>div{flex:1 1 calc(100% - 130px);min-width:0}
+ .account-toolbar>strong{margin-left:auto}
+ .account-toolbar>button,.account-toolbar>a{flex:1 1 auto}
+}

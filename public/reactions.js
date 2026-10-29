@@ -10,6 +10,8 @@ export const MOODS=[
 ];
 // How long a dropped mood stays on the seat after the peek window closes.
 export const MOOD_LINGER_MS=3000;
+// How long a reaction dropped during the match stays on the seat (matches REACTION_SHOW_MS on the server).
+export const MOOD_SHOW_MS=3500;
 
 const N='#1b2340';
 const S=(w=3.5)=>`stroke="${N}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"`;

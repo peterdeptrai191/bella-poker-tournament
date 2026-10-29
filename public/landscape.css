@@ -1,0 +1,87 @@
+/* Landscape mode (chosen by the player, screen wider than tall).
+   The table is a stadium (straight long sides, round ends) on the left; the action panel is a column on the right.
+   --tl/--tt/--tw/--th describe the table area; seats and the board are placed inside it. */
+.table-oval{display:none}
+.game-shell.landscape{--dock-w:clamp(240px,27vw,340px);--tl:5%;--tt:22%;--tw:calc(100% - var(--dock-w) - 10%);--th:58%;max-width:none;width:100%;height:100svh;min-height:0;margin:0}
+.game-shell.landscape .perspective-table,.game-shell.landscape .table-branding{display:none}
+.game-shell.landscape .table-oval{display:block;position:absolute;z-index:0;left:var(--tl);top:var(--tt);width:var(--tw);height:var(--th);border-radius:9999px;border:clamp(9px,1.6vh,16px) solid transparent;background:radial-gradient(ellipse at 50% 35%,#2b6a64,#123f3d 72%) padding-box,linear-gradient(160deg,#efd3a3,#af7a42 30%,#f8dfac 55%,#8b5e34) border-box;box-shadow:0 24px 50px #000a,inset 0 0 0 2px #152f2f,inset 0 0 40px #0008}
+/* tilted away from you, like the portrait table (matches TILT/DEPTH in app.js) */
+.game-shell.landscape .table-oval{transform:perspective(var(--table-depth,1100px)) rotateX(16deg);transform-origin:50% 100%}
+.game-shell.landscape .table-oval::before{content:'';position:absolute;inset:9% 5%;border-radius:9999px;border:2px solid #ffffff1c;box-shadow:inset 0 0 0 1px #0000002e}
+.game-shell.landscape .table-oval::after{content:'♠ BELLA TOURNAMENT';position:absolute;left:0;right:0;top:30%;text-align:center;color:#d2dcbd25;font-size:10px;font-weight:650;letter-spacing:.22em}
+
+/* Opponents around the table */
+.game-shell.landscape .opponent,.game-shell.landscape .opponent.rail-seat{left:calc(var(--tl) + var(--tw) * var(--lx) / 100);top:calc(var(--tt) + var(--th) * var(--ly) / 100);width:var(--seat-width);height:var(--seat-height);--portrait-size:var(--seat-portrait);transform:translate(-50%,-62%)}
+
+/* Board and pot in the middle of the table */
+.game-shell.landscape .game-board{left:calc(var(--tl) + var(--tw) / 2);top:calc(var(--tt) + var(--th) * .6);bottom:auto;width:auto;transform:translate(-50%,-50%)}
+
+/* Your cards and chip card at the bottom edge of the table, side by side */
+.game-shell.landscape .hero-hand{left:calc(var(--tl) + var(--tw) / 2);top:auto;bottom:10px;width:auto;height:auto;transform:translateX(-50%);flex-direction:row;align-items:flex-end;gap:8px}
+.game-shell.landscape .hero-plaque{width:clamp(150px,16vw,200px);margin:0 0 4px}
+.game-shell.landscape .hero-hand .holecards{transform:none}
+
+/* Action panel on the right */
+.game-shell.landscape .game-dock{position:absolute;left:auto;right:0;top:0;bottom:0;width:var(--dock-w);height:auto;max-height:none;transform:none;border-radius:0;border-left:1px solid #ffffff14;display:flex;flex-direction:column;justify-content:flex-end;padding:12px 14px 10px;overflow-y:auto}
+.game-shell.landscape .dock-handle{display:none}
+.game-shell.landscape .game-actions{gap:6px}
+.game-shell.landscape .game-actions button{min-height:44px;font-size:14px;padding-left:4px;padding-right:4px}
+.game-shell.landscape .game-room-info{right:calc(var(--dock-w) + 12px)}
+.game-shell.landscape .game-level{right:auto;left:18px;top:104px;bottom:auto}
+.game-shell.landscape .game-rank-shortcut{left:16px;bottom:14px}
+
+/* Phone held sideways: very little height, so everything gets tighter */
+@media(max-height:500px){
+ .game-shell.landscape{--dock-w:clamp(230px,31vw,290px);--tt:26%;--th:56%;--tl:4%;--tw:calc(100% - var(--dock-w) - 8%)}
+ .game-shell.landscape .game-topbar{top:8px}
+ .game-shell.landscape .game-room-info{top:52px}
+ .game-shell.landscape .game-level{top:auto;bottom:14px;left:72px}
+ .game-shell.landscape .hero-hand{bottom:4px}
+ .game-shell.landscape .hero-hand .card{width:40px;height:56px;font-size:20px}
+ .game-shell.landscape .hero-hand .hole-slot{--hole-w:40px;--hole-h:56px}
+ .game-shell.landscape .hero-plaque{width:150px}
+ .game-shell.landscape .game-dock{padding:8px 10px 6px}
+ .game-shell.landscape .game-hint{margin-bottom:6px;min-height:0;padding:5px 8px}
+ .game-shell.landscape .game-actions button{min-height:38px;font-size:13px}
+ .game-shell.landscape .dock-footnote{display:none}
+ .game-shell.landscape .emote-dock{top:52px}
+}
+
+/* Chose landscape but the phone is upright */
+.rotate-hint{position:fixed;inset:0;z-index:90;display:grid;place-content:center;justify-items:center;gap:14px;padding:24px;text-align:center;background:#0b0f15f2;color:#f5f1e8}
+.rotate-hint span{font-size:54px;line-height:1;animation:rotate-nudge 2s ease-in-out infinite}
+.rotate-hint strong{max-width:260px;font-size:16px;line-height:1.4}
+.rotate-hint button{padding:10px 22px;border-radius:99px;border:1px solid #e6be7b;background:transparent;color:#ffe7a5;font-weight:800}
+@keyframes rotate-nudge{40%,60%{rotate:90deg}}
+@media(prefers-reduced-motion:reduce){.rotate-hint span{animation:none}}
+
+/* First-visit choice */
+.layout-dialog{width:min(520px,calc(100vw - 24px))}
+.layout-options{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.layout-options button{display:flex;flex-direction:column;align-items:center;gap:8px;padding:18px 12px;border-radius:16px;border:1px solid #ffffff1f;background:#ffffff06;color:#f1f5fb}
+.layout-options button.suggested{border-color:#e6be7b;background:#e6be7b12}
+.layout-options button:focus-visible{outline:2px solid #ffd66e;outline-offset:2px}
+.layout-options strong{font-size:18px}.layout-options small{font-size:12px;color:#aab6c6;text-align:center}
+.layout-art{display:grid;place-items:center;width:84px;height:84px}
+.layout-art i{display:block;border:3px solid #e6be7b;border-radius:10px;background:radial-gradient(ellipse,#2b6a64 0 45%,transparent 47%)}
+.layout-art.portrait i{width:42px;height:74px}.layout-art.landscape i{width:78px;height:44px}
+.layout-note{margin:14px 0 0;font-size:12px;color:#8f9bb0;text-align:center}
+
+/* Undo the old phone-landscape arrangement of the dock (it put the hint and buttons side by side). */
+.game-shell.landscape .game-hint{position:static;left:auto;right:auto;top:auto;margin:0 0 8px}
+.game-shell.landscape .game-hint>div,.game-shell.landscape .game-hint strong,.game-shell.landscape .game-hint>div>span{display:block;max-width:none}
+.game-shell.landscape .game-actions{margin:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+.game-shell.landscape .game-actions button{white-space:nowrap}
+.game-shell.landscape .raise-drawer{margin:0 0 8px}
+.game-shell.landscape.raising .game-dock{min-height:0}
+.game-shell.landscape:has(.pot-stage) .table-oval::after{opacity:0}
+@media(max-height:500px){.game-shell.landscape.raising .game-hint{display:none}.game-shell.landscape .raise-drawer .raise-controls{padding:6px 10px}}
+
+/* Landscape on a big screen: the top of the action panel shows the live leaderboard. */
+.dock-board{display:none}
+.game-shell.landscape .dock-board{display:flex;flex-direction:column;gap:8px;margin:96px 0 auto;min-height:0;overflow:auto}
+.dock-board header{display:flex;flex-direction:column;gap:2px}.dock-board header span{font-size:9px;letter-spacing:.16em;color:#d8c08d}.dock-board header small{font-size:11px;color:#8f9bb0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dock-board .rank-list{display:flex;flex-direction:column;gap:4px}
+.dock-board .rank-row{padding:6px 8px;font-size:12px}
+.dock-board .rank-row .character-avatar,.dock-board .rank-row .character-motion{width:26px;height:32px}
+@media(max-height:620px){.game-shell.landscape .dock-board{display:none}}

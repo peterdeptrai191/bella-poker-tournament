@@ -41,15 +41,17 @@ body.peek-open .hero-hand .holecards{visibility:hidden}
 @keyframes peek-shrink{to{opacity:0;transform:translateY(32vh) scale(.4)}}
 
 /* Mood shown on every seat: icon at the avatar's top-right corner, word just under the avatar. */
-.mood-badge{position:absolute;z-index:7;width:30px;height:30px;border-radius:50%;background:#fff6e6;border:2px solid #fff;box-shadow:0 2px 6px #0008;display:grid;place-items:center;overflow:hidden;animation:mood-pop .42s cubic-bezier(.2,.9,.3,1.4) both;pointer-events:none}
+.mood-badge{position:absolute;z-index:7;width:30px;height:30px;border-radius:50%;background:#fff6e6;border:2px solid #fff;box-shadow:0 2px 6px #0008;display:grid;place-items:center;overflow:hidden;pointer-events:none}
 .mood-badge svg{width:28px;height:28px;display:block}
-.mood-label{position:absolute;z-index:7;left:50%;translate:-50% 0;padding:3px 8px;border-radius:99px;background:#0b1520ee;border:1px solid var(--mood-color);color:var(--mood-color);font-size:11px;font-weight:800;font-style:italic;letter-spacing:.05em;text-transform:uppercase;line-height:1;white-space:nowrap;animation:mood-pop .42s cubic-bezier(.2,.9,.3,1.4) both;pointer-events:none}
+.mood-label{position:absolute;z-index:7;left:50%;translate:-50% 0;padding:3px 8px;border-radius:99px;background:#0b1520ee;border:1px solid var(--mood-color);color:var(--mood-color);font-size:11px;font-weight:800;font-style:italic;letter-spacing:.05em;text-transform:uppercase;line-height:1;white-space:nowrap;pointer-events:none}
 .opponent .mood-badge{top:0;right:-6px}
 .opponent .mood-label{top:calc(var(--portrait-size) - 36px)}
 .many-seats .opponent .mood-badge{width:24px;height:24px}.many-seats .opponent .mood-badge svg{width:22px;height:22px}
 .many-seats .opponent .mood-label{font-size:9px;padding:2px 6px;top:calc(var(--portrait-size) - 30px)}
 .hero-character .mood-badge{top:-18px;right:-20px;width:26px;height:26px}.hero-character .mood-badge svg{width:24px;height:24px}
 .hero-character .mood-label{bottom:-6px;font-size:9px;padding:2px 6px}
+/* Only a mood that was just dropped pops in; redraws of the same mood stay still. */
+.mood-badge.fresh,.mood-label.fresh{animation:mood-pop .42s cubic-bezier(.2,.9,.3,1.4) both}
 @keyframes mood-pop{0%{scale:.3;opacity:0}60%{scale:1.2;opacity:1}100%{scale:1}}
 
 @media(orientation:landscape) and (max-height:600px){.peek-stage{--pw:min(18vh,110px)}.peek-panel{gap:8px}}
