@@ -1,0 +1,9 @@
+/* Whoever is on the clock grows a little and lifts above their neighbours.
+   Uses the independent `scale` property so the seats' translate(-50%,-50%) positioning is untouched. */
+.opponent.is-turn{--turn-scale:1.14;z-index:5;scale:var(--turn-scale);transform-origin:50% 55%;animation:turn-pop .42s cubic-bezier(.2,.9,.3,1.25) both}
+.many-seats .opponent.is-turn{--turn-scale:1.09}
+.opponent.is-turn .opponent-portrait{filter:drop-shadow(0 0 9px #ffd66ecc) drop-shadow(0 5px 3px #0005)}
+.game-shell .hero-plaque.is-turn{--turn-scale:1.1;scale:var(--turn-scale);transform-origin:50% 100%;animation:turn-pop .42s cubic-bezier(.2,.9,.3,1.25) both}
+.hero-plaque.is-turn .hero-character{filter:drop-shadow(0 0 8px #ffd66ecc)}
+@keyframes turn-pop{0%{scale:1}60%{scale:calc(var(--turn-scale) + .05)}100%{scale:var(--turn-scale)}}
+@media(prefers-reduced-motion:reduce){.opponent.is-turn,.game-shell .hero-plaque.is-turn{animation:none}}
