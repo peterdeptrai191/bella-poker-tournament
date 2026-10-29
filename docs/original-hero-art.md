@@ -2,8 +2,8 @@
 
 The built-in imagegen tool generated two original costumes from text alone, without image references. Both source illustrations are kept unchanged after approval; the web assets only resize and encode their alpha channels to WebP.
 
-- `public/assets/characters/bella-iron.webp`: Bella Giáp Lửa, original red/yellow armor. Two illustrated rockets orbit the character in SVG/CSS.
-- `public/assets/characters/bella-captain.webp`: Bella Chiến Binh, original blue military uniform with red/white stripe bands. A geometric round shield orbits and rotates in SVG/CSS.
+- `public/assets/characters/bella-iron.webp`: Iron Man, original red/yellow armor. Two illustrated rockets orbit the character in SVG/CSS.
+- `public/assets/characters/bella-captain.webp`: Captain America, original blue military uniform with red/white stripe bands. A geometric round shield orbits and rotates in SVG/CSS.
 
 Both cost 5 coins in the account-owned catalog. Motion is contained inside each avatar's existing box, uses no API polling, and respects reduced-motion preferences.
 

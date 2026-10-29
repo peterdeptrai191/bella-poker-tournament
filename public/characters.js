@@ -13,7 +13,7 @@ export const CHARACTERS = [
  {id:'bella-tennis',name:'Djokovic',color:'#b5ec3b',tag:'Tennis · Xanh lá',locked:true,price:4},
  {id:'bella-tech',name:'Steve Dóp',color:'#badfff',tag:'Công nghệ · Bạc xanh',locked:true,price:4},
  {id:'farmer',name:'Bella nông dân',color:'#d7a852',tag:'Nông dân · Miễn phí',price:0},
- {id:'bella-iron',name:'Bella Giáp Lửa',color:'#ffb43f',tag:'Giáp đỏ vàng · Tên lửa',locked:true,price:5,effect:'missiles'},
- {id:'bella-captain',name:'Bella Chiến Binh',color:'#67b5f2',tag:'Quân phục xanh · Khiên',locked:true,price:5,effect:'shield'}
+ {id:'bella-iron',name:'Iron Man',color:'#ffb43f',tag:'Giáp đỏ vàng · Tên lửa',locked:true,price:5,effect:'missiles'},
+ {id:'bella-captain',name:'Captain America',color:'#67b5f2',tag:'Quân phục xanh · Khiên',locked:true,price:5,effect:'shield'}
 ];
 export const characterById = id => CHARACTERS.find(c=>c.id===id)||CHARACTERS.find(c=>c.id===DEFAULT_CHARACTER);
