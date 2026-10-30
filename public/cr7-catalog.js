@@ -45,3 +45,6 @@ export function goatPick(groupRoll,inner){
  if(groupRoll<GROUP_ODDS.red){const w=RED.map((id,i)=>g.red.includes(id)?RED_WEIGHT[i]:0),total=w.reduce((a,b)=>a+b,0);let r=inner%total;for(let i=0;i<RED.length;i++){if(r<w[i])return RED[i];r-=w[i];}}
  const pool=groupRoll<GROUP_ODDS.red+GROUP_ODDS.box?g.box:g.shop;return pool[inner%pool.length];
 }
+
+// Keep sampling exactly uniform as the purchasable catalog grows.
+export function goatInnerSize(){const g=goatGroups(),gcd=(a,b)=>b?gcd(b,a%b):a;const total=RED_WEIGHT.reduce((n,w,i)=>n+(g.red.includes(RED[i])?w:0),0);return [total,g.box.length,g.shop.length].reduce((a,b)=>a*b/gcd(a,b),1);}
