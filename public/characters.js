@@ -18,6 +18,7 @@ export const CHARACTERS = [
  {id:'bella-captain',name:'Captain America',color:'#67b5f2',tag:'Quân phục xanh · Khiên',locked:true,price:3,effect:'shield'},
  {id:'bella-spider',name:'Spider-Man',color:'#77d7f8',tag:'Bella nhện · Tơ chuyển động',locked:true,price:10,effect:'web',asset:'bella-spider-transparent.png'},
  {id:'sydney-sweeney',name:'Sydney Sweeney',color:'#ff9fce',tag:'Huyền thoại · Heart Royale',locked:true,price:20,effect:'hearts',rarity:'legendary'},
- {id:'son-tung-mtp',name:'Sơn Tùng MTP',color:'#c7bbff',tag:'Spotlight · Sân khấu ánh sao',locked:true,price:20,effect:'music'}
+ {id:'son-tung-mtp',name:'Sơn Tùng MTP',color:'#c7bbff',tag:'Spotlight · Sân khấu ánh sao',locked:true,price:20,effect:'music'},
+ ...[['mu','CR7 MU','#ff443d'],['sporting','CR7 Sporting','#55ef99'],['real','CR7 Real','#b3dfff'],['al-nassr','CR7 Al Nassr','#ffd64d']].map(([id,name,color])=>({id:'cr7-'+id,name,color,tag:'B.O.A.T · Độc quyền pack',price:null,locked:true,event:'cr7-boat-v1',effect:'football'}))
 ];
 export const characterById = id => CHARACTERS.find(c=>c.id===id)||CHARACTERS.find(c=>c.id===DEFAULT_CHARACTER);

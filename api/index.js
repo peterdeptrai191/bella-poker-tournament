@@ -11,7 +11,7 @@ export default async function handler(req,res){
   if(typeof body.op==='string'&&body.op.startsWith('admin')){
    if(req.method!=='POST')throw Object.assign(new Error('Dùng POST cho quản trị.'),{status:405});
    result=await adminRequest({body,identity:await authenticateAccount(accountToken)});
-  }else if(['register','login','logout','buySkin','buyRandomSkin','equipSkin','buyCardSkin','equipCardSkin','claimDaily','equipChipSkin','renameAccount','setDisplayName'].includes(body.op)||req.method==='GET'&&code==='account'){
+  }else if(['register','login','logout','buySkin','buyRandomSkin','openCr7Pack','seeCr7Event','equipSkin','buyCardSkin','equipCardSkin','claimDaily','equipChipSkin','renameAccount','setDisplayName'].includes(body.op)||req.method==='GET'&&code==='account'){
    if(req.method==='GET')body={op:'account'};
    result=await accountRequest({body,token:accountToken,ip});
    if(Object.hasOwn(result,'cookieToken')){res.setHeader('Set-Cookie',cookieHeader(result.cookieToken,process.env.VERCEL==='1'||req.headers['x-forwarded-proto']==='https'));delete result.cookieToken;}
