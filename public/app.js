@@ -128,8 +128,8 @@ const storageNotice=()=>storage==='local'?'<div class="local-banner">Đang chạ
 // `full` slides use a wide picture; the others show artwork on the right.
 const GIFT_ART='<span class="gift-mini promo-gift" aria-hidden="true"><span class="gift-lid"><i class="rib-v"></i><span class="bow"><i></i><i></i></span></span><span class="gift-body"><i class="rib-v"></i><i class="rib-h"></i><b class="gift-q">?</b></span></span>';
 const SLIDES=[
- {k:'goat',tag:'SỰ KIỆN',title:'G.O.A.T or B.O.A.T',text:'Vòng quay 19 thẻ đặc biệt: M10, CR7, Neymar. Mở thẻ trong đường hầm sân vận động.',cta:'Quay ngay',full:'/assets/events/cr7-boat/goat-or-boat-poster.webp',pos:'70% 30%',tone:'navy'},
- {k:'create',tag:'TRÒ CHƠI',title:'Texas Hold’em Tournament',text:'Tạo phòng riêng, mời hội bạn, đấu đến người cuối cùng. 2–9 người, có bot luyện tập.',cta:'Tạo phòng',full:'/assets/room.jpg',pos:'60% 50%',tone:'green'},
+ {k:'goat',tag:'SỰ KIỆN',title:'G.O.A.T or B.O.A.T',text:'Vòng quay 19 thẻ đặc biệt: M10, CR7, Neymar. Mở thẻ trong đường hầm sân vận động.',cta:'Quay ngay',full:'/assets/promo/goat-or-boat.webp',pos:'72% 18%',tone:'navy'},
+ {k:'create',tag:'TRÒ CHƠI',title:'Texas Hold’em Tournament',text:'Tạo phòng riêng, mời hội bạn, đấu đến người cuối cùng. 2–9 người, có bot luyện tập.',cta:'Tạo phòng',full:'/assets/promo/texas-holdem.webp',pos:'76% 30%',tone:'green'},
  {k:'mystery',tag:'PACK MỚI',title:'Hộp quà bí ẩn',text:'10 coin một hộp. Chạm vài lần để mở và nhận một skin ngẫu nhiên.',cta:'Mở hộp quà',art:GIFT_ART,tone:'red'},
  {k:'tickets',tag:'CHƠI CÙNG NHAU',title:'Vé quay & nhiệm vụ nhóm',text:'Mỗi ván chơi với bạn bè nhận coin và mảnh vé. Gom 5 mảnh đổi 1 lượt quay.',cta:'Xem nhiệm vụ',art:'<img class="promo-char" src="/assets/characters/bella-m10.webp" alt="">',tone:'navy'},
  {k:null,tag:'SẮP RA MẮT',title:'Tiến lên · Imposter',text:'Thêm trò cho hội bạn. Coin và vé dùng chung cho mọi trò của Bella.',cta:null,art:'<span class="promo-wip"><img class="promo-char" src="/assets/characters/engineer.webp" alt=""><img class="promo-logo" src="/assets/bella.png" alt=""></span>',tone:'black'}];

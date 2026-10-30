@@ -200,3 +200,4 @@ button.primary:hover:enabled,.cr7-gold:hover:enabled{background:linear-gradient(
  .promo-slide:not(.full) .promo-copy{padding-top:170px}
 }
 @media(max-width:760px){.promo-slide{grid-template-columns:1fr!important}.promo-copy{padding-inline:22px}.promo-copy .primary{white-space:nowrap}}
+@media(min-width:761px){.promo-slide{min-height:360px}}
