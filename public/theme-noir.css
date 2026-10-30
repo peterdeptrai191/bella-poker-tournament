@@ -219,3 +219,16 @@ button.primary:hover:enabled,.cr7-gold:hover:enabled{background:linear-gradient(
  .promo-art{inset:4cqi 4cqi auto auto!important}.promo-char{max-height:44cqi!important}.promo-gift{width:34cqi!important}.promo-wip .promo-char{max-height:36cqi!important}.promo-wip .promo-logo{max-height:20cqi!important}
  .promo-dots{bottom:4cqi}
 }
+/* one landscape shape at every width (phones included): 12:5; text keeps a readable minimum size */
+.promo-slide{aspect-ratio:12/5!important;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr)!important}
+.promo-copy{padding:0 0 0 4.2cqi!important;gap:1.2cqi!important;align-self:center!important}
+.promo-tag{font-size:max(9px,1.2cqi)!important}
+.promo-copy h2{font-size:max(18px,4.4cqi)!important}
+.promo-copy p{font-size:max(11px,1.4cqi)!important;max-width:42cqi}
+.promo-copy .primary,.promo-soon{font-size:max(11px,1.35cqi)!important;padding:max(7px,1cqi) max(12px,2cqi)!important}
+.promo-art{position:relative!important;inset:auto!important;padding:2cqi!important}
+.promo-char{max-height:34cqi!important}.promo-gift{width:24cqi!important}.promo-wip .promo-char{max-height:30cqi!important}.promo-wip .promo-logo{max-height:15cqi!important}
+.promo-slide.full .promo-veil{mask-image:linear-gradient(90deg,#000 0,#000 30%,transparent 62%)!important;-webkit-mask-image:linear-gradient(90deg,#000 0,#000 30%,transparent 62%)!important;background:linear-gradient(90deg,#010313f0 0,#010313c8 32%,#01031366 52%,transparent 68%)!important}
+.tone-green.promo-slide.full .promo-veil{background:linear-gradient(90deg,#03140cf2 0,#03140cc8 32%,#03140c66 52%,transparent 68%)!important}
+.promo-dots{bottom:2cqi!important}
+@media(max-width:560px){.promo-copy p{display:none}.promo-copy{gap:6px!important}}
