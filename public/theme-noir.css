@@ -1,0 +1,18 @@
+/* Black – red – white look (loaded last). Dark surfaces are warm blacks, main actions are raised red buttons,
+   secondary actions white, gold only for coins and stars; the table felt is deep green. */
+:root{--bg:#0a0a0c;--panel:#151417;--line:#2d2a2e;--muted:#a49e97;--white:#f6f3ee;--noir-red:#d6152f;--noir-red-hi:#ff3049;--noir-red-lo:#6e0612}
+body{background:radial-gradient(ellipse at 80% -10%,#3a070f 0,transparent 55%),radial-gradient(ellipse at 0 110%,#1c0408 0,transparent 50%),var(--bg)}
+button.primary,.cr7-gold,.lobby-cta{background:linear-gradient(#ff2a45,#b40d24)!important;border-color:#ff5a6e!important;color:#fff!important;box-shadow:inset 0 1px 0 #ff8a99,0 3px 0 var(--noir-red-lo),0 8px 18px #d6152f33!important;text-shadow:0 1px 0 #0005}
+button.primary:hover:enabled,.cr7-gold:hover:enabled{background:linear-gradient(#ff4058,#c81029)!important}
+button.primary:active:enabled,.cr7-gold:active:enabled{transform:translateY(2px);box-shadow:inset 0 1px 0 #ff8a99,0 1px 0 var(--noir-red-lo)!important}
+.header{border-bottom:2px solid var(--noir-red)}
+.header nav button.current,.eyebrow{color:var(--noir-red-hi)}
+button.active{border-color:var(--noir-red);color:#fff}
+button:focus-visible,a:focus-visible{outline-color:#fff}
+dialog{background:#141316;border-color:#2d2a2e}
+.panel{background:linear-gradient(150deg,#1d1a1e,#111013)}
+/* table action buttons: fold dark, check/call white, raise and all-in red */
+.game-actions button{border:1px solid #ffffff2a!important;background:linear-gradient(#2a272c,#151417)!important;color:#f6f3ee!important;box-shadow:0 3px 0 #000,0 5px 8px #0006,inset 0 1px 0 #ffffff22!important}
+.game-actions button:not([data-action="fold"]):not([data-raise-toggle]):not([data-action="allin"]){background:linear-gradient(#ffffff,#dcd7cf)!important;color:#141316!important;border-color:#fff!important;box-shadow:0 3px 0 #8f8a83,0 5px 8px #0006,inset 0 1px 0 #fff!important}
+.game-actions [data-raise-toggle],.game-actions [data-action="allin"],.game-actions [data-action="raise"]{background:linear-gradient(#ff2a45,#b40d24)!important;color:#fff!important;border-color:#ff5a6e!important;box-shadow:0 3px 0 #6e0612,0 5px 8px #0006,inset 0 1px 0 #ff8a99!important}
+.game-actions button:hover:enabled{filter:brightness(1.08)}

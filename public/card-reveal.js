@@ -11,6 +11,7 @@
 import {animatedCharacter} from './character-motion.js';
 import {playSound,playShaped,gateSound,whoosh} from './pot-fx.js';
 import {potwCard} from './spin-wheel.js';
+import {cardFace} from './card-face.js';
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const reduced=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
 const lerp=(a,b,t)=>a+(b-a)*t;
@@ -34,6 +35,12 @@ function sparks(canvas){
  requestAnimationFrame(loop);
  return {
   // golden sparks shooting up from two points for `ms`
+  // rockets fired from the bottom left and right corners: a smoky trail up, then a burst that falls and fades
+  rockets(ms){const end=performance.now()+ms;let next=0,side=1;jobs.push(t=>{if(t>end||t<next)return;next=t+260+Math.random()*200;side=-side;
+   const x=side<0?W*(.02+Math.random()*.08):W*(.9+Math.random()*.08),y=H*1.02,tx=side<0?W*(.12+Math.random()*.3):W*(.58+Math.random()*.3),ty=H*(.08+Math.random()*.3),steps=48;
+   let k=0;const fly=()=>{k++;const px=lerp(x,tx,k/steps),py=lerp(y,ty,1-Math.pow(1-k/steps,2));add(px,py,(Math.random()-.5)*.6*dpr,.6*dpr,'#ffe2a8',.55,1.4*dpr,.96,.02);add(px,py,0,0,'#7a6a66',.35,2.6*dpr,.9,-.01);
+    if(k<steps)requestAnimationFrame(fly);else{const c=COLORS[Math.floor(Math.random()*COLORS.length)];for(let i=0;i<95;i++){const a=Math.random()*Math.PI*2,v=(1+Math.random()*4.2)*dpr;add(px,py,Math.cos(a)*v,Math.sin(a)*v,i%4?c:'#fff',1,2*dpr,.975,.05);}}};
+   requestAnimationFrame(fly);});},
   fountains(points,ms){const end=performance.now()+ms;jobs.push(t=>{if(t>end)return;for(const [x,y] of points)for(let k=0;k<2;k++)add(x*dpr,y*dpr,(Math.random()-.5)*1.6*dpr,-(3.5+Math.random()*3.5)*dpr,Math.random()<.2?'#ffffff':'#ffc94a',.75,1.4*dpr,.99,.08);});},
   // big fireworks all over the top of the screen for `ms`
   fireworks(ms){const end=performance.now()+ms;let next=0;jobs.push(t=>{if(t>end||t<next)return;next=t+300+Math.random()*250;burst(W*(.1+Math.random()*.8),H*(.06+Math.random()*.3),100,1.05);});burst(W*.25,H*.2,140,1.25);burst(W*.75,H*.18,140,1.25);},
@@ -50,6 +57,15 @@ function carpetScene(){
  const edge=(y,side,off=0)=>`${(cx+side*(halfAt(y)+off)).toFixed(1)},${y.toFixed(1)}`;
  const trimL=`${edge(y0,-1)} ${edge(y0,-1,-trimAt(y0))} ${edge(H,-1,-trimAt(H))} ${edge(H,-1)}`,trimR=`${edge(y0,1)} ${edge(y0,1,-trimAt(y0))} ${edge(H,1,-trimAt(H))} ${edge(H,1)}`;
  const velvet=`${edge(y0,-1,-trimAt(y0))} ${edge(y0,1,-trimAt(y0))} ${edge(H,1,-trimAt(H))} ${edge(H,-1,-trimAt(H))}`;
+ // people behind the ropes: mostly fans (some arms up with phone lights), every third one a photographer
+ let seed=7;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;const people=[];
+ for(const side of [-1,1])for(let row=2;row>=0;row--)for(let i=0;i<11;i++){const t=.02+i*.085+row*.012+rnd()*.02;if(t>.95)continue;const y=lerp(y0,H*1.02,t),s=scaleAt(y);
+  people.push({y,s,x:cx+side*(halfAt(y)+(46+row*30+rnd()*10)*s),h:H*(.16+rnd()*.03)*s,side,row,kind:(i+row+(side>0?1:0))%3===0?'press':'fan',arm:rnd()<.45,phone:rnd()<.6,d:(rnd()*3).toFixed(2)});}
+ people.sort((a,b)=>a.y-b.y||b.row-a.row);
+ const person=p=>{const {x,y,h,s}=p,hy=y-h*.84,bob=`style="--d:-${p.d}s"`;let extra='';
+  if(p.kind==='fan'&&p.arm){const ax=x-p.side*h*.14,top=y-h*1.12;extra=`<path d="M${x-p.side*h*.1} ${y-h*.56} L${ax} ${top}" stroke="#050506" stroke-width="${h*.07}" stroke-linecap="round"/>`+(p.phone?`<rect class="cp-phone" ${bob} x="${ax-h*.04}" y="${top-h*.1}" width="${h*.08}" height="${h*.12}" rx="${h*.015}"/>`:'');}
+  if(p.kind==='press')extra=`<rect x="${x-p.side*h*.18-h*.12}" y="${hy-h*.04}" width="${h*.24}" height="${h*.15}" rx="${h*.02}" fill="#050506"/><circle cx="${x-p.side*h*.32}" cy="${hy+h*.03}" r="${h*.055}" fill="#16161a"/><circle class="cp-flash" ${bob} cx="${x-p.side*h*.2}" cy="${hy-h*.08}" r="${h*.5}" fill="url(#cp-flashg)"/>`;
+  return `<g class="cp-person" data-y="${y}"><path d="M${x-h*.25} ${y}Q${x-h*.27} ${y-h*.6} ${x} ${y-h*.64}Q${x+h*.27} ${y-h*.6} ${x+h*.25} ${y}Z" fill="#050506" stroke="#ff6a7c40" stroke-width="1"/><ellipse cx="${x}" cy="${hy}" rx="${h*.11}" ry="${h*.13}" fill="#050506" stroke="#ff6a7c40" stroke-width="1"/>${extra}</g>`;};
  const posts=[.06,.2,.42,.78].map(t=>{const y=lerp(y0,H*1.02,t),s=scaleAt(y);return {y,s,h:H*.2*s,side:[-1,1].map(side=>cx+side*(halfAt(y)+22*s))};});
  const post=(x,p)=>{const {y,s,h}=p,w=7*s;return `<ellipse cx="${x}" cy="${y+2*s}" rx="${16*s}" ry="${4.5*s}" fill="#000" opacity=".55" filter="url(#cp-blur)"/><ellipse cx="${x}" cy="${y}" rx="${11*s}" ry="${3.6*s}" fill="url(#cp-goldH)"/><rect x="${x-w/2}" y="${y-h}" width="${w}" height="${h}" fill="url(#cp-goldH)"/><ellipse cx="${x}" cy="${y-h*.55}" rx="${w*.75}" ry="${1.6*s}" fill="url(#cp-goldH)"/><circle cx="${x}" cy="${y-h-4*s}" r="${6.5*s}" fill="url(#cp-knob)"/>`;};
  const rope=(a,b,side)=>{const xa=a.side[side],xb=b.side[side],ya=a.y-a.h+2*a.s,yb=b.y-b.h+2*b.s,s=(a.s+b.s)/2,mx=(xa+xb)/2,my=(ya+yb)/2+H*.05*s;
@@ -64,16 +80,16 @@ function carpetScene(){
   <radialGradient id="cp-knob" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#fff6d6"/><stop offset=".35" stop-color="#e9c060"/><stop offset="1" stop-color="#6b4c12"/></radialGradient>
   <linearGradient id="cp-rope" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c41a33"/><stop offset="1" stop-color="#5a0612"/></linearGradient>
   <linearGradient id="cp-roll" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff7a8c"/><stop offset=".25" stop-color="#b3132b"/><stop offset=".7" stop-color="#5a0612"/><stop offset="1" stop-color="#2a0207"/></linearGradient>
-  <clipPath id="cp-clip"><rect class="cp-clip" x="0" y="0" width="${W}" height="${y0}"/></clipPath></defs>
+  <radialGradient id="cp-flashg"><stop offset="0" stop-color="#fff"/><stop offset=".18" stop-color="#fff" stop-opacity=".85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient><clipPath id="cp-clip"><rect class="cp-clip" x="0" y="0" width="${W}" height="${y0}"/></clipPath></defs>
   <g clip-path="url(#cp-clip)"><polygon points="${edge(y0,-1,4)} ${edge(y0,1,4)} ${edge(H,1,20)} ${edge(H,-1,20)}" fill="#000" opacity=".6" filter="url(#cp-blur)"/>
   <polygon points="${trimL}" fill="url(#cp-trim)"/><polygon points="${trimR}" fill="url(#cp-trim)"/><polygon points="${velvet}" fill="url(#cp-velvet)"/><polygon points="${velvet}" fill="url(#cp-sheen)"/><polygon points="${velvet}" fill="#fff" filter="url(#cp-nap)"/></g>
-  <g class="cp-roll"></g><g class="cp-posts">${posts.map((p,i)=>`<g class="cp-post" data-y="${p.y}">${i?[0,1].map(side=>rope(posts[i-1],p,side)).join(''):''}${p.side.map(x=>post(x,p)).join('')}</g>`).join('')}</g></svg>`;
+  <g class="cp-people">${people.map(person).join('')}</g><g class="cp-roll"></g><g class="cp-posts">${posts.map((p,i)=>`<g class="cp-post" data-y="${p.y}">${i?[0,1].map(side=>rope(posts[i-1],p,side)).join(''):''}${p.side.map(x=>post(x,p)).join('')}</g>`).join('')}</g></svg>`;
  // the carpet unrolls: what is past the roll is visible, the roll moves toward you and grows with distance
  const unroll=(root,ms)=>{const clip=root.querySelector('.cp-clip'),roll=root.querySelector('.cp-roll');const start=performance.now();
   const frame=t=>{const k=Math.min(1,(t-start)/ms),p=Math.pow(k,1.7),y=lerp(y0,H+40,p),s=scaleAt(Math.min(y,H)),hw=halfAt(Math.min(y,H))+2,r=9*s+3;
-   clip.setAttribute('height',y);root.querySelectorAll('.cp-post').forEach(g=>g.classList.toggle('on',y>=+g.dataset.y-4));roll.innerHTML=k<1?`<rect x="${cx-hw}" y="${y-r}" width="${hw*2}" height="${r*2}" rx="${r}" fill="url(#cp-roll)"/><rect x="${cx-hw}" y="${y-r}" width="${trimAt(Math.min(y,H))}" height="${r*2}" rx="${r*.5}" fill="url(#cp-goldH)"/><rect x="${cx+hw-trimAt(Math.min(y,H))}" y="${y-r}" width="${trimAt(Math.min(y,H))}" height="${r*2}" rx="${r*.5}" fill="url(#cp-goldH)"/>`:'';
+   clip.setAttribute('height',y);root.querySelectorAll('.cp-post,.cp-person').forEach(g=>g.classList.toggle('on',y>=+g.dataset.y-4));roll.innerHTML=k<1?`<rect x="${cx-hw}" y="${y-r}" width="${hw*2}" height="${r*2}" rx="${r}" fill="url(#cp-roll)"/><rect x="${cx-hw}" y="${y-r}" width="${trimAt(Math.min(y,H))}" height="${r*2}" rx="${r*.5}" fill="url(#cp-goldH)"/><rect x="${cx+hw-trimAt(Math.min(y,H))}" y="${y-r}" width="${trimAt(Math.min(y,H))}" height="${r*2}" rx="${r*.5}" fill="url(#cp-goldH)"/>`:'';
    if(k<1)requestAnimationFrame(frame);};requestAnimationFrame(frame);};
- const finish=root=>{root.querySelector('.cp-clip').setAttribute('height',H+40);root.querySelectorAll('.cp-post').forEach(g=>g.classList.add('on'));root.querySelector('.cp-roll').innerHTML='';};
+ const finish=root=>{root.querySelector('.cp-clip').setAttribute('height',H+40);root.querySelectorAll('.cp-post,.cp-person').forEach(g=>g.classList.add('on'));root.querySelector('.cp-roll').innerHTML='';};
  return {svg,unroll,finish,gate:[[W*.35+6,H*.65],[W*.65-6,H*.65]]};
 }
 const EDGE_STARS=Array.from({length:44},(_,i)=>{const side=i%4,t=((i*37)%100)/100;const [x,y]=side===0?[t*100,1.5]:side===1?[98.5,t*100]:side===2?[t*100,98.5]:[1.5,t*100];return `<i style="left:${x}%;top:${y}%;--d:${-(i*.13)%1.2}s;--s:${.6+((i*7)%5)/6}"></i>`;}).join('');
@@ -86,7 +102,7 @@ export function revealCard(host,c,tier,{duplicate=false}={}){
    <div class="tn-ribs">${Array.from({length:7},(_,i)=>`<i style="--d:${-i*.3}s"></i>`).join('')}</div>
    <div class="tn-exit"><div class="tn-light"></div><i class="tn-gate l"></i><i class="tn-gate r"></i></div>${scene.svg}<div class="tn-haze"></div></div>
   <canvas class="rv-fire"></canvas>
-  <div class="rv-card" data-tier="${tier}"><div class="rv-face rv-back">${potwCard(tier)}</div><div class="rv-face rv-front">${animatedCharacter(c,'rv-art')}</div><div class="rv-white"></div></div>
+  <div class="rv-card" data-tier="${tier}"><div class="rv-face rv-back">${potwCard(tier)}</div><div class="rv-face rv-front">${cardFace(c,animatedCharacter(c,'rv-art'))}</div><div class="rv-white"></div></div>
   <div class="rv-flash"></div><div class="rv-edge" aria-hidden="true">${EDGE_STARS}</div>
   <div class="rv-info"><strong>${esc(c.name)}</strong><span>${duplicate?'Bạn đã có skin này rồi (không hoàn coin).':'Skin mới đã vào bộ sưu tập!'}</span><button type="button" class="cr7-gold rv-ok">Nhận thẻ</button></div>`;
   host.append(el);
@@ -95,7 +111,7 @@ export function revealCard(host,c,tier,{duplicate=false}={}){
   const timers=[],crowd=[];
   const apply=name=>{el.classList.add(name);
    if(name==='s-gate'){gateSound(5000,1);whoosh({volume:1.6,ms:5200});}
-   if(name==='s-carpet'){scene.unroll(el,3000);fx.fountains(scene.gate,3600);whoosh({volume:.7,ms:2600});}
+   if(name==='s-carpet'){scene.unroll(el,3000);fx.rockets(3600);whoosh({volume:.7,ms:2600});}
    if(name==='s-approach')whoosh({volume:.6,ms:3800});
    if(name==='s-glow')whoosh({volume:.9,ms:900});
    if(name==='s-flip'){playSound('win',{volume:1});fx.fireworks(3600);}};

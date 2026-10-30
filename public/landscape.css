@@ -5,7 +5,7 @@
 .table-oval{display:none}
 .game-shell.landscape{--dock-w:clamp(300px,27vw,380px);--tl:14%;--tt:17%;--tw:72%;--th:55%;max-width:none;width:100%;height:100svh;min-height:0;margin:0}
 .game-shell.landscape .perspective-table,.game-shell.landscape .table-branding{display:none}
-.game-shell.landscape .table-oval{display:block;position:absolute;z-index:0;left:var(--tl);top:var(--tt);width:var(--tw);height:var(--th);border-radius:9999px;border:clamp(9px,1.6vh,16px) solid transparent;background:radial-gradient(ellipse at 50% 35%,#2b6a64,#123f3d 72%) padding-box,linear-gradient(160deg,#efd3a3,#af7a42 30%,#f8dfac 55%,#8b5e34) border-box;box-shadow:0 24px 50px #000a,inset 0 0 0 2px #152f2f,inset 0 0 40px #0008}
+.game-shell.landscape .table-oval{display:block;position:absolute;z-index:0;left:var(--tl);top:var(--tt);width:var(--tw);height:var(--th);border-radius:9999px;border:clamp(9px,1.6vh,16px) solid transparent;background:radial-gradient(ellipse at 50% 35%,#1b5136,#0b2f1d 72%) padding-box,linear-gradient(160deg,#efd3a3,#af7a42 30%,#f8dfac 55%,#8b5e34) border-box;box-shadow:0 24px 50px #000a,inset 0 0 0 2px #0d2418,inset 0 0 40px #0008}
 /* tilted away from you, like the portrait table (matches TILT/DEPTH in app.js) */
 .game-shell.landscape .table-oval{transform:perspective(var(--table-depth,1100px)) rotateX(16deg);transform-origin:50% 100%}
 .game-shell.landscape .table-oval::before{content:'';position:absolute;inset:9% 5%;border-radius:9999px;border:2px solid #ffffff1c;box-shadow:inset 0 0 0 1px #0000002e}
@@ -30,7 +30,7 @@
 .game-shell.landscape .hero-hand .holecards{transform:none}
 
 /* Turn hint + actions: a floating card at the bottom right (no side column any more) */
-.game-shell.landscape .game-dock{position:absolute;left:auto;right:16px;top:auto;bottom:16px;width:var(--dock-w);height:auto;max-height:calc(100% - 140px);transform:none;border-radius:18px;border:1px solid #ffffff1f;background:#0f1722e6;backdrop-filter:blur(10px);box-shadow:0 14px 40px #000a;display:flex;flex-direction:column;justify-content:flex-end;padding:10px 12px 10px;overflow-y:auto;z-index:20}
+.game-shell.landscape .game-dock{position:absolute;left:auto;right:16px;top:auto;bottom:16px;width:var(--dock-w);height:auto;max-height:calc(100% - 140px);transform:none;border-radius:18px;border:1px solid #ffffff1f;background:#151313e6;backdrop-filter:blur(10px);box-shadow:0 14px 40px #000a;display:flex;flex-direction:column;justify-content:flex-end;padding:10px 12px 10px;overflow-y:auto;z-index:20}
 .game-shell.landscape .dock-handle{display:none}
 .game-shell.landscape .game-actions{gap:6px}
 .game-shell.landscape .game-actions button{min-height:44px;font-size:14px;padding-left:4px;padding-right:4px}
@@ -59,7 +59,7 @@
 }
 
 /* Chose landscape but the phone is upright */
-.rotate-hint{position:fixed;inset:0;z-index:90;display:grid;place-content:center;justify-items:center;gap:14px;padding:24px;text-align:center;background:#0b0f15f2;color:#f5f1e8}
+.rotate-hint{position:fixed;inset:0;z-index:90;display:grid;place-content:center;justify-items:center;gap:14px;padding:24px;text-align:center;background:#0e0c0df2;color:#f5f1e8}
 .rotate-hint span{font-size:54px;line-height:1;animation:rotate-nudge 2s ease-in-out infinite}
 .rotate-hint strong{max-width:260px;font-size:16px;line-height:1.4}
 .rotate-hint button{padding:10px 22px;border-radius:99px;border:1px solid #e6be7b;background:transparent;color:#ffe7a5;font-weight:800}
@@ -72,11 +72,11 @@
 .layout-options button{display:flex;flex-direction:column;align-items:center;gap:8px;padding:18px 12px;border-radius:16px;border:1px solid #ffffff1f;background:#ffffff06;color:#f1f5fb}
 .layout-options button.suggested{border-color:#e6be7b;background:#e6be7b12}
 .layout-options button:focus-visible{outline:2px solid #ffd66e;outline-offset:2px}
-.layout-options strong{font-size:18px}.layout-options small{font-size:12px;color:#aab6c6;text-align:center}
+.layout-options strong{font-size:18px}.layout-options small{font-size:12px;color:#bdb8b3;text-align:center}
 .layout-art{display:grid;place-items:center;width:84px;height:84px}
-.layout-art i{display:block;border:3px solid #e6be7b;border-radius:10px;background:radial-gradient(ellipse,#2b6a64 0 45%,transparent 47%)}
+.layout-art i{display:block;border:3px solid #e6be7b;border-radius:10px;background:radial-gradient(ellipse,#1b5136 0 45%,transparent 47%)}
 .layout-art.portrait i{width:42px;height:74px}.layout-art.landscape i{width:78px;height:44px}
-.layout-note{margin:14px 0 0;font-size:12px;color:#8f9bb0;text-align:center}
+.layout-note{margin:14px 0 0;font-size:12px;color:#a6a099;text-align:center}
 
 /* Undo the old phone-landscape arrangement of the dock (it put the hint and buttons side by side). */
 .game-shell.landscape .game-hint{position:static;left:auto;right:auto;top:auto;margin:0 0 8px}

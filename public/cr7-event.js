@@ -4,7 +4,10 @@ import {animatedCharacter} from './character-motion.js';
 import {CR7_EVENT,CR7_PRICE,BOX_NAME,DAILY_SPINS,cr7Skins,goatSkins,goatTiles,goatFrame,goatOdds,GROUP_ODDS,SPARKLE} from './cr7-catalog.js';
 import {wheelHTML,spinner,stillArt,celebrate,potwCard} from './spin-wheel.js';
 import {dimmer,revealCard} from './card-reveal.js';
-const GOAT_HEAD='<span class="g">G.O.A.T</span><small>or</small><span class="b">B.O.A.T</span>';
+import {starRow} from './card-face.js';
+// small white glints that flash on the G.O.A.T / B.O.A.T lettering
+export function addGlints(root){root.querySelectorAll('.goat-head:not(.cf-label)').forEach(h=>{if(h.querySelector('.goat-glint'))return;[[6,8,0],[44,58,.8],[66,4,1.6],[94,52,.4]].forEach(([x,y,d])=>{const g=document.createElement('i');g.className='goat-glint';g.style.left=x+'%';g.style.top=y+'%';g.style.animationDelay=d+'s';h.append(g);});});}
+const GOAT_HEAD='<span class="w g" data-t="G.O.A.T">G.O.A.T</span><small>or</small><span class="w b" data-t="B.O.A.T">B.O.A.T</span>';
 const ODDS_LINE=`Thẻ đỏ ${GROUP_ODDS.red}% · Thẻ tím ${GROUP_ODDS.purple}% · Thẻ vàng ${GROUP_ODDS.gold}%`;
 let getAccount=()=>null,performRequest,isHome=()=>false,offering=false;
 const offered=new Set();
@@ -21,11 +24,11 @@ function listRewards(){
  const odds=goatOdds(),tiles=goatTiles(),goats=goatSkins().filter(c=>c.id.startsWith('goat-m10')),special=goatSkins().filter(c=>!c.id.startsWith('goat-m10'));
  const groups=[[goats,'GOAT'],[cr7Skins(),'BOAT'],[special,'Special Skin'],[tiles.map(id=>CHARACTERS.find(c=>c.id===id)).filter(c=>!c.event),'Skin từ 10 coin trở lên']];
  const d=dialog('cr7-rewards');
- d.innerHTML=`<button class="cr7-close" aria-label="Đóng">×</button><small>${BOX_NAME.toUpperCase()}</small><h2>Có gì trong vòng quay?</h2><p><b>${ODDS_LINE}</b><br>Máy chủ bốc nhóm màu trước rồi chọn thẻ trong nhóm. Trong nhóm đỏ, M10 Barca và CR7 Real hiếm hơn (2% mỗi thẻ). GOAT, BOAT và Special Skin chỉ có trong vòng quay này.</p>`+groups.map(([skins,title])=>`<h3>${title}</h3><div class="cr7-reward-grid">${skins.map(c=>`<article data-frame="${goatFrame(c)}" style="--cr7-color:${c.color}">${boxArt(c)}<b>${esc(c.name)}</b><span>${pct(odds[c.id]||0)}${getAccount()?.ownedSkins?.includes(c.id)?' · ✓ Đã sở hữu':''}</span></article>`).join('')}</div>`).join('')+'<p>Skin trùng được giữ nguyên trong bộ sưu tập, không hoàn coin.</p>';
+ d.innerHTML=`<button class="cr7-close" aria-label="Đóng">×</button><small>${BOX_NAME.toUpperCase()}</small><h2>Có gì trong vòng quay?</h2><p><b>${ODDS_LINE}</b><br>Máy chủ bốc nhóm màu trước rồi chọn thẻ trong nhóm. Trong nhóm đỏ, M10 Barca và CR7 Real hiếm hơn (2% mỗi thẻ). GOAT, BOAT và Special Skin chỉ có trong vòng quay này.</p>`+groups.map(([skins,title])=>`<h3>${title}</h3><div class="cr7-reward-grid">${skins.map(c=>`<article data-frame="${goatFrame(c)}" style="--cr7-color:${c.color}">${boxArt(c)}<b>${esc(c.name)}</b>${starRow(c)}<span>${pct(odds[c.id]||0)}${getAccount()?.ownedSkins?.includes(c.id)?' · ✓ Đã sở hữu':''}</span></article>`).join('')}</div>`).join('')+'<p>Skin trùng được giữ nguyên trong bộ sưu tập, không hoàn coin.</p>';
  d.querySelector('button').onclick=()=>d.close();d.showModal();
 }
 
-export function offerCr7(){const a=getAccount();if(!a||!isHome()||a.cr7Event?.seen||offered.has(a.id)||offering)return;offering=true;setTimeout(()=>{offering=false;const current=getAccount();if(current?.id!==a.id||!isHome())return;const opened=document.querySelector('dialog[open]');if(opened){opened.addEventListener('close',()=>setTimeout(offerCr7,300),{once:true});return;}offered.add(a.id);const d=dialog('cr7-poster');d.innerHTML=`<button class="cr7-close" aria-label="Đóng sự kiện">×</button><div class="cr7-poster-art goat-poster"><img src="/assets/events/cr7-boat/goat-or-boat-poster.webp" alt="M10 và CR7 quay lưng vào nhau"><h2 class="goat-title goat-head">${GOAT_HEAD}</h2></div><h2>Tặng bạn 1 lượt quay</h2><p>${ODDS_LINE}<br>Lượt đầu miễn phí · Các lượt sau ${CR7_PRICE} coin</p><button class="cr7-gold" data-enter>Quay miễn phí →</button>`;d.querySelector('.cr7-close').onclick=()=>d.close();d.querySelector('[data-enter]').onclick=()=>{d.close();openCr7Pack();};d.showModal();performRequest({op:'seeCr7Event'}).catch(()=>{offered.delete(a.id);});},650);}
+export function offerCr7(){const a=getAccount();if(!a||!isHome()||a.cr7Event?.seen||offered.has(a.id)||offering)return;offering=true;setTimeout(()=>{offering=false;const current=getAccount();if(current?.id!==a.id||!isHome())return;const opened=document.querySelector('dialog[open]');if(opened){opened.addEventListener('close',()=>setTimeout(offerCr7,300),{once:true});return;}offered.add(a.id);const d=dialog('cr7-poster');d.innerHTML=`<button class="cr7-close" aria-label="Đóng sự kiện">×</button><div class="cr7-poster-art goat-poster"><img src="/assets/events/cr7-boat/goat-or-boat-poster.webp" alt="M10 và CR7 quay lưng vào nhau"><h2 class="goat-title goat-head">${GOAT_HEAD}</h2></div><h2>Tặng bạn 1 lượt quay</h2><p>${ODDS_LINE}<br>Lượt đầu miễn phí · Các lượt sau ${CR7_PRICE} coin</p><button class="cr7-gold" data-enter>Quay miễn phí →</button>`;d.querySelector('.cr7-close').onclick=()=>d.close();d.querySelector('[data-enter]').onclick=()=>{d.close();openCr7Pack();};d.showModal();addGlints(d);performRequest({op:'seeCr7Event'}).catch(()=>{offered.delete(a.id);});},650);}
 
 const idle=(label,cls='')=>`<b class="spin-logo ${cls}">${label}</b>`;
 const stepCentre=id=>{const c=characterById(id);return `<img class="spin-peek" src="${stillArt(c)}" alt="" onerror="this.remove()"><em>${esc(c.name)}</em>`;};
@@ -73,7 +76,7 @@ function wheelDialog(mode){
    if(!mode.reveal)celebrate(c);pending=false;ui();mode.onDone?.(result);
   }catch(err){sp.stop();canStop=false;stopNow=null;if(mode.resetOn?.test(err.message)){receipt=null;if(mode.storageKey)try{localStorage.removeItem(mode.storageKey(accountId));}catch{}}pending=false;ui(err.message+(receipt?' — Bấm lại để tiếp tục đúng lượt này, không trừ coin hai lần.':''));}
  };
- ui();d.showModal();
+ ui();d.showModal();addGlints(d);
 }
 
 export function openCr7Pack(){

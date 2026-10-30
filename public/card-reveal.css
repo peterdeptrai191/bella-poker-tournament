@@ -34,6 +34,11 @@
 @keyframes tn-haze{to{transform:translateX(4%) scaleY(1.2)}}
 /* red carpet (drawn in card-reveal.js) */
 .tn-carpet{position:absolute;inset:0;width:100%;height:100%}
+.cp-person{opacity:0;transition:opacity .5s}.cp-person.on{opacity:1}
+.cp-phone{fill:#fffbe0;filter:drop-shadow(0 0 4px #fff);animation:cp-phone 1.8s ease-in-out infinite var(--d)}
+@keyframes cp-phone{0%,100%{opacity:1}50%{opacity:.35}}
+.cp-flash{opacity:0;animation:cp-flash 2.4s linear infinite var(--d)}
+@keyframes cp-flash{0%,6%,100%{opacity:0}2%{opacity:1}}
 .cp-post{opacity:0;transform-box:fill-box;transform-origin:50% 100%;transform:scaleY(.2);transition:opacity .35s,transform .45s cubic-bezier(.2,1.3,.4,1)}.cp-post.on{opacity:1;transform:none}
 .rv-fire{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
 /* the card: comes from the far end face-down, glows white-hot and turns into the skin */
