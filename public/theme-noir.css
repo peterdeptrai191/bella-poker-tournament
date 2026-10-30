@@ -233,3 +233,5 @@ button.primary:hover:enabled,.cr7-gold:hover:enabled{background:linear-gradient(
 .promo-dots{bottom:2cqi!important}
 @media(max-width:560px){.promo-copy p{display:none}.promo-copy{gap:6px!important}}
 body.in-game .account-toolbar,body.in-game .acct2{display:none!important}
+/* paused while off screen or behind a dialog (perf.js) */
+.anim-off,.anim-off *,body.modal-up #app .character-motion,body.modal-up #app .character-motion *{animation-play-state:paused!important}
