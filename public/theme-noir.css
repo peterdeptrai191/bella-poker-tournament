@@ -123,3 +123,8 @@ dialog .character-preview,dialog .mystery-pack,.daily-day,.setting-row,.cr7-rewa
 
 /* Vietnamese text never uses Anton (it lacks letters like ộ, ị, ủ); Oswald has the full Vietnamese set */
 .character-summary strong,.cr7-result-name,.rv-info strong,.gift-info strong{font-family:'Barlow Condensed',Oswald,'Arial Narrow',sans-serif!important;font-weight:800!important}
+/* how-it-works steps: rounded like the other leather blocks */
+.step{border-radius:18px!important}
+/* account bar: its own block with the same gap above and below, contents centred */
+.account-toolbar{margin:22px auto 22px!important;justify-content:center;border-radius:18px!important}
+@media(max-width:760px){.account-toolbar{margin:18px 16px 18px!important}}
