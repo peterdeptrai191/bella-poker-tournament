@@ -232,3 +232,4 @@ button.primary:hover:enabled,.cr7-gold:hover:enabled{background:linear-gradient(
 .tone-green.promo-slide.full .promo-veil{background:linear-gradient(90deg,#03140cf2 0,#03140cc8 32%,#03140c66 52%,transparent 68%)!important}
 .promo-dots{bottom:2cqi!important}
 @media(max-width:560px){.promo-copy p{display:none}.promo-copy{gap:6px!important}}
+body.in-game .account-toolbar,body.in-game .acct2{display:none!important}
