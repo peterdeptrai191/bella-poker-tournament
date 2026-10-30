@@ -14,10 +14,9 @@ export function stillArt(c){
 export const rarity=c=>c.id.startsWith('goat-')?'goat':c.id.startsWith('cr7-')?'boat':c.price>=20?'gold':c.price>=15?'epic':c.price>=10?'rare':'common';
 export const isJackpot=c=>['goat','boat','gold'].includes(rarity(c));
 
-// A face-down card in the style of a "player of the week" card: tier colour, light rays, chevrons and a
-// shadow figure. Used on the GOAT or BOAT board so the board stays mysterious and clean.
-const SIL='<svg class="potw-sil" viewBox="0 0 100 140" aria-hidden="true"><path d="M50 6C57 15 67 12 64 25C73 30 71 44 61 48C56 53 44 53 39 48C29 44 30 31 36 27C34 19 42 21 42 12C46 17 48 13 50 6Z M36 52H64L69 88H31Z M62 55 79 34 87 40 70 63Z M38 56 23 72 31 79 43 66Z M33 87 28 126H41L49 91Z M51 91 59 126H72L67 87Z"/><circle cx="84" cy="33" r="7"/></svg>';
-export const potwCard=(tier,extra='')=>`<span class="potw" data-t="${tier}"><i class="potw-rays"></i><i class="potw-chev"></i>${SIL}<b class="potw-base">★★★★★</b>${extra}</span>`;
+// A face-down card: black carbon leather with diagonal foil lines, a raised gold question mark and the Bella
+// logo; the frame takes the card's colour. Used on the GOAT or BOAT board, in its middle and in the tunnel.
+export const potwCard=(tier,extra='')=>`<span class="potw back-c" data-t="${tier}"><img class="potw-logo" src="/assets/bella.png" alt=""><b class="potw-q">?</b>${extra}</span>`;
 const SPARKS='<i class="spark-star" style="--d:0s"></i><i class="spark-star" style="--d:-1.1s"></i><i class="spark-star" style="--d:-2.2s"></i>';
 // Cells of an s×s square's edge, clockwise from the top-left corner.
 function edge(s){const out=[];for(let c=0;c<s;c++)out.push([0,c]);for(let r=1;r<s;r++)out.push([r,s-1]);for(let c=s-2;c>=0;c--)out.push([s-1,c]);for(let r=s-2;r>0;r--)out.push([r,0]);return out;}
@@ -54,6 +53,8 @@ export function spinner(root,tiles,{onStep}={}){
     timer=setTimeout(next,TOP);
    });
   },
+  // puts the light on `target` straight away, silently (used once the screen has gone dark)
+  jump(target){running=false;clearTimeout(timer);pos=target;els.forEach(e=>e.classList.remove('lit'));els[target].classList.add('lit','won');root.classList.remove('spinning');},
   stop(){running=false;clearTimeout(timer);root.classList.remove('spinning');}
  };
 }

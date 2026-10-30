@@ -30,3 +30,41 @@ test('box skins cannot be bought one by one and the free spin is used once',asyn
  const login=await call('login',{username:'CR7 test',password:'pw'});assert.equal(login.account.cr7Event.freeUsed,true);
  assert.equal((await call('seeCr7Event')).account.cr7Event.seen,true);
 });
+
+test('GOAT or BOAT: at most 10 spins a day per account, the free spin included; repeats of the same spin do not count',async()=>{
+ clearMemory();const u=await accountRequest({body:{op:'register',username:'Spin limit',password:'pw'}}),token=u.cookieToken;
+ const call=(op,body={})=>accountRequest({token,body:{op,requestId:randomUUID(),...body}});
+ const identity=await authenticateAccount(token),doc=await accountDocument(identity);doc.value.coins=1000;await writeRecord(identity.key,doc.raw,doc.value);
+ const first=randomUUID();await call('openCr7Pack',{requestId:first,free:true});await call('openCr7Pack',{requestId:first,free:true});
+ for(let i=0;i<9;i++)await call('openCr7Pack',{free:false});
+ const acc=(await call('account')).account;assert.equal(acc.cr7Event.spinsToday,10);assert.equal(acc.coins,1000-9*17);
+ await assert.rejects(()=>call('openCr7Pack',{free:false}),/đủ 10 lượt/);
+ assert.equal((await call('account')).account.coins,1000-9*17);
+});
+test('logging in from two devices at the same moment opens the login coin box only once',async()=>{
+ clearMemory();await accountRequest({body:{op:'register',username:'Two devices',password:'pw'}});
+ const logins=await Promise.all(Array.from({length:4},()=>accountRequest({body:{op:'login',username:'Two devices',password:'pw',requestId:randomUUID()},ip:'device-'+Math.random()})));
+ const paid=logins.filter(r=>r.gift);assert.equal(paid.length,1);
+ const after=await accountRequest({body:{op:'login',username:'Two devices',password:'pw',requestId:randomUUID()}});assert.equal(after.gift,null);assert.equal(after.account.coins,paid[0].gift);
+});
+test('playing together: coins by number of friends, a shard each game, a ticket for the winner, missions and streak',async()=>{
+ const {rewardGroupPlay,groupStatus}=await import('../lib/accounts.js');
+ clearMemory();const ids=[];
+ for(const n of ['Grp A','Grp B','Grp C']){const r=await accountRequest({body:{op:'register',username:n,password:'pw'}});const id=await authenticateAccount(r.cookieToken);ids.push({token:r.cookieToken,...id});}
+ const room=(k,flush=false)=>({code:'R'+k,createdAt:k,highlights:flush?{flush:true}:undefined,players:[...ids.map((x,i)=>({id:'p'+i,accountId:x.id,accountKey:x.key,rank:i+1})),{id:'bot',isBot:true,rank:4}]});
+ const first=await rewardGroupPlay(room(1,true));
+ assert.deepEqual(first.p0,{coins:2,shards:2,tickets:1,missions:['flush'],streak:1});assert.equal(first.p1.tickets,0);
+ assert.deepEqual(await rewardGroupPlay(room(1,true)),first);                     // same game twice pays once
+ for(let k=2;k<=5;k++)await rewardGroupPlay(room(k));                             // 5 games: +2 shards mission
+ const acc=(await accountRequest({token:ids[1].token,body:{op:'account'}})).account;
+ // p1: 5 shards + 1 flush + 2 mission = 8 -> 1 ticket, 3 shards; coins 2 per game
+ assert.equal(acc.tickets,1);assert.equal(acc.shards,3);assert.equal(acc.coins,10);assert.equal(acc.group.gamesToday,5);assert.ok(acc.group.play5Done&&acc.group.flushDone);
+ // alone with bots: nothing
+ assert.equal(await rewardGroupPlay({code:'S',createdAt:9,players:[{id:'x',accountId:ids[0].id,accountKey:ids[0].key,rank:1},{id:'b',isBot:true,rank:2}]}),null);
+ // a ticket pays for a GOAT or BOAT spin
+ const call=(op,body={})=>accountRequest({token:ids[1].token,body:{op,requestId:randomUUID(),...body}});
+ await call('openCr7Pack',{free:true});const r=await call('openCr7Pack',{free:false,ticket:true});
+ assert.equal(r.result.ticket,true);assert.equal(r.account.tickets,0);assert.equal(r.account.coins,10);
+ await assert.rejects(()=>call('openCr7Pack',{free:false,ticket:true}),/chưa có vé/);
+ assert.equal(groupStatus({}).streak,0);
+});

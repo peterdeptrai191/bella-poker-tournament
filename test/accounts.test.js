@@ -32,7 +32,7 @@ test('human tournament rewards pay one coin per entrant from 2 to 9, exactly onc
   await writeRoom(code,record.raw,record.room);
   const started=await roomCall(host.identity,{op:'start',code,rewardAmount:99999},created.token);assert.equal(started.room.rewardPolicy.amount,count);assert.equal(started.room.rewardPolicy.entrants,count);
   record=await readRoom(code);record.room.status='finished';record.room.hand.stage='complete';record.room.players.forEach((p,i)=>p.rank=p.id===created.room.me?1:i+2);await writeRoom(code,record.raw,record.room);
-  await Promise.all(Array.from({length:4},()=>rewardFinishedTournament(code)));expected+=count;
+  await Promise.all(Array.from({length:4},()=>rewardFinishedTournament(code)));expected+=count+(count-1);   // winner coins + playing-together coins (one per other player)
   const paid=await rewardFinishedTournament(code);assert.equal(paid.coinReward.amount,count);assert.equal(paid.coinReward.mode,'human');assert.equal((await auth('account',{},host.token)).account.coins,expected);
  }
 });

@@ -2,20 +2,20 @@
 .chip-preview{display:flex;align-items:flex-end;gap:12px}
 .chip-preview-faces{display:flex;gap:5px}
 .chip-preview .chip-stacks{display:flex;align-items:flex-end;gap:2px;filter:drop-shadow(0 3px 3px #0008)}
-.chip-feature{display:flex;align-items:center;gap:24px;flex-wrap:wrap;padding:20px 22px;margin-bottom:18px;border:1px solid #ffffff18;border-radius:18px;background:radial-gradient(ellipse at 20% 50%,#1d5a5299,transparent 70%),#0a111e}
-.chip-feature h3{margin:0;font-size:22px}.chip-feature p{margin:6px 0;max-width:320px;color:#c9d2df;font-size:13px;line-height:1.5}.chip-feature small{font-size:9px;letter-spacing:.16em;color:#e6be7b}
+.chip-feature{display:flex;align-items:center;gap:24px;flex-wrap:wrap;padding:20px 22px;margin-bottom:18px;border:1px solid #ffffff18;border-radius:18px;background:radial-gradient(ellipse at 20% 50%,#11442b99,transparent 70%),#120f10}
+.chip-feature h3{margin:0;font-size:22px}.chip-feature p{margin:6px 0;max-width:320px;color:#d7d4d1;font-size:13px;line-height:1.5}.chip-feature small{font-size:9px;letter-spacing:.16em;color:#e6be7b}
 .chip-options{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
 .chip-option{display:flex;flex-direction:column;align-items:flex-start;gap:6px;min-width:0;padding:12px;border-radius:14px;border:1px solid #ffffff16;background:#ffffff05;color:#f1f5fb;text-align:left}
 .chip-option .chip-preview{gap:6px}.chip-option .chip-stacks{display:none}.chip-option .chip-preview-faces{gap:3px}
-.chip-option strong{font-size:13px}.chip-option small{font-size:11px;color:#aab6c6}
+.chip-option strong{font-size:13px}.chip-option small{font-size:11px;color:#bdb8b3}
 .chip-option.selected{border-color:#e6be7b;background:#e6be7b14}
 .chip-option.locked .chip-preview{filter:saturate(.35) brightness(.75)}
 .chip-option:focus-visible{outline:2px solid #e6be7b;outline-offset:2px}
 
 .daily-days{list-style:none;margin:0 0 16px;padding:0;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}
 .daily-day{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0;padding:12px 6px 10px;border-radius:14px;border:1px solid #ffffff16;background:#ffffff05;text-align:center}
-.daily-day b{font-size:13px;line-height:1.2}.daily-day small{font-size:10px;color:#aab6c6;line-height:1.3}
-.daily-label{font-size:9px;letter-spacing:.14em;color:#aab6c6;font-weight:700}
+.daily-day b{font-size:13px;line-height:1.2}.daily-day small{font-size:10px;color:#bdb8b3;line-height:1.3}
+.daily-label{font-size:9px;letter-spacing:.14em;color:#bdb8b3;font-weight:700}
 .daily-coin{font-size:24px;line-height:30px}
 .daily-day.chip-day{background:linear-gradient(160deg,#e6be7b1c,#ffffff05)}
 .daily-day.today{border-color:#ffd66e;box-shadow:0 0 0 2px #ffd66e33,0 0 18px #ffd66e33}.daily-day.today .daily-label{color:#ffd66e}
@@ -26,17 +26,17 @@
 @keyframes daily-pop{from{opacity:0;scale:.9}}
 @keyframes daily-pulse{50%{box-shadow:0 0 0 6px #ffd66e33}}
 .account-toolbar [data-daily-gift]{position:relative}
-.account-toolbar [data-daily-gift] i{position:absolute;top:4px;right:4px;width:8px;height:8px;border-radius:50%;background:#ff6a4d;box-shadow:0 0 0 2px #141f30}
+.account-toolbar [data-daily-gift] i{position:absolute;top:4px;right:4px;width:8px;height:8px;border-radius:50%;background:#ff6a4d;box-shadow:0 0 0 2px #1e1a1b}
 @media(max-width:700px){.daily-days{grid-template-columns:repeat(4,minmax(0,1fr))}.chip-options{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(prefers-reduced-motion:reduce){.daily-claim,.daily-result{animation:none}}
 
 /* Rename dialog (account-name.js) */
 .rename-dialog{width:min(440px,calc(100vw - 24px))}
 .rename-form{display:flex;flex-direction:column;gap:8px}
-.rename-form label{font-size:12px;color:#c9d2df}
-.rename-form input{height:44px;padding:0 12px;border-radius:10px;border:1px solid #4e6a80;background:#0c1724;color:#fff;font:600 16px Inter,'Segoe UI',sans-serif}
+.rename-form label{font-size:12px;color:#d7d4d1}
+.rename-form input{height:44px;padding:0 12px;border-radius:10px;border:1px solid #5a4f51;background:#151213;color:#fff;font:600 16px Inter,'Segoe UI',sans-serif}
 .rename-form input:focus{outline:2px solid #ffd66e;border-color:#ffd66e}
-.rename-hint{margin:0;font-size:12px;color:#8f9bb0}.rename-error{margin:0;min-height:18px;font-size:13px;color:#ff9aa2}
+.rename-hint{margin:0;font-size:12px;color:#a6a099}.rename-error{margin:0;min-height:18px;font-size:13px;color:#ff9aa2}
 .rename-actions{display:flex;justify-content:flex-end;gap:8px}
 .rename-button{margin-left:6px;padding:1px 7px;border-radius:99px;border:1px solid #e6be7b66;background:transparent;color:#e6be7b;font-size:9px;letter-spacing:.04em;cursor:pointer}
 .rename-button:hover{background:#e6be7b1f}

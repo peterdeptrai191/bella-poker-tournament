@@ -1,8 +1,8 @@
 /* GOAT or BOAT reveal: the stadium tunnel (card-reveal.js). The tunnel exit is the middle 30% of the
    screen (35%–65% both ways); walls, floor and ceiling run from the screen edges to it. */
-.reveal-dim{position:fixed;inset:0;z-index:30;background:#000;opacity:0;pointer-events:none;transition:opacity 1s ease-in}
-.reveal-dim.on{opacity:.9}
-.reveal{--tc:#ffcc33;--glow:#ffe9a0;position:fixed;inset:0;z-index:40;overflow:hidden;background:#000;color:#fff;cursor:pointer;animation:rv-in .3s ease-out both}
+.reveal-dim{position:fixed;inset:0;z-index:30;background:#000;opacity:0;pointer-events:none;transition:opacity 1s cubic-bezier(.4,0,.8,.6)}
+.reveal-dim.on{opacity:1}
+.reveal{--tc:#ffcc33;--glow:#ffe9a0;position:fixed;inset:0;z-index:40;overflow:hidden;background:#000;color:#fff;animation:rv-in .3s ease-out both}
 .reveal[data-tier=purple]{--tc:#a855ff;--glow:#e2c2ff}
 .reveal[data-tier=red]{--tc:#ff2d55;--glow:#ffc2cf}
 .reveal.s-leaving{animation:rv-out .25s ease-in both}
@@ -16,37 +16,46 @@
 .tn-wall.l{background:linear-gradient(90deg,#08090c,#2a2f38);clip-path:polygon(0 0,35% 35%,35% 65%,0 100%)}
 .tn-wall.r{background:linear-gradient(270deg,#08090c,#2a2f38);clip-path:polygon(100% 0,65% 35%,65% 65%,100% 100%)}
 /* light frames rushing toward you: walking down the tunnel */
-.tn-ribs i{position:absolute;inset:35%;border:1px solid #ffffff14;border-top:3px solid #fff7dc;box-shadow:0 -6px 18px #fff3c455;opacity:0}
+/* each light frame is lit evenly on all four sides (top, both walls and floor) */
+.tn-ribs i{position:absolute;inset:35%;border:2px solid #fff3d299;box-shadow:0 0 12px #fff3c440,inset 0 0 10px #fff3c42a;opacity:0}
 .reveal.s-walk .tn-ribs i{animation:tn-rib 2.1s linear infinite var(--d)}
-.reveal.s-carpet .tn-ribs i{border-color:color-mix(in srgb,var(--tc) 50%,transparent);border-top-color:var(--tc);box-shadow:0 -6px 22px var(--tc),inset 0 0 14px color-mix(in srgb,var(--tc) 40%,transparent);animation-duration:1.1s}
+.reveal.s-carpet .tn-ribs i{border-color:color-mix(in srgb,var(--tc) 75%,transparent);box-shadow:0 0 18px color-mix(in srgb,var(--tc) 70%,transparent),inset 0 0 14px color-mix(in srgb,var(--tc) 40%,transparent);animation-duration:1.1s}
 .reveal.s-approach .tn-ribs i{animation-play-state:paused}
 @keyframes tn-rib{0%{transform:scale(1);opacity:0}15%{opacity:.9}100%{transform:scale(3.4);opacity:0}}
 /* the exit: a gate in front of the pitch light */
 .tn-exit{position:absolute;inset:35%;overflow:hidden;background:#000}
-.tn-light{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 60%,#fff 0,var(--glow) 30%,color-mix(in srgb,var(--tc) 70%,#2fa84f) 75%,#123a1c 100%);opacity:.08;transition:opacity 3s ease-in}
+.tn-light{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 60%,#fff 0,var(--glow) 30%,color-mix(in srgb,var(--tc) 70%,#2fa84f) 75%,#123a1c 100%);opacity:.08;transition:opacity 5s ease-in}
 .reveal.s-gate .tn-light{opacity:1}
-.tn-gate{position:absolute;top:0;bottom:0;width:50%;background:repeating-linear-gradient(90deg,#3a3f48 0 3px,#15181d 3px 9px),#15181d;box-shadow:inset 0 0 0 2px #5a606b;transition:transform 3s cubic-bezier(.55,0,.35,1)}
+.tn-gate{position:absolute;top:0;bottom:0;width:50%;background:repeating-linear-gradient(90deg,#3a3f48 0 3px,#15181d 3px 9px),#15181d;box-shadow:inset 0 0 0 2px #5a606b;transition:transform 5s cubic-bezier(.55,0,.35,1)}
 .tn-gate.l{left:0}.tn-gate.r{right:0}
 .reveal.s-gate .tn-gate.l{transform:translateX(-102%)}.reveal.s-gate .tn-gate.r{transform:translateX(102%)}
-.rv-tunnel::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 45% 40% at 50% 50%,color-mix(in srgb,var(--glow) 60%,transparent),transparent 70%);opacity:0;transition:opacity 3s ease-in;pointer-events:none}
+.rv-tunnel::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 45% 40% at 50% 50%,color-mix(in srgb,var(--glow) 60%,transparent),transparent 70%);opacity:0;transition:opacity 5s ease-in;pointer-events:none}
 .reveal.s-gate .rv-tunnel::after{opacity:.8}
 .tn-haze{position:absolute;inset:0;background:radial-gradient(ellipse 60% 25% at 50% 70%,#ffffff12,transparent 70%);animation:tn-haze 6s ease-in-out infinite alternate}
 @keyframes tn-haze{to{transform:translateX(4%) scaleY(1.2)}}
-/* red carpet rolling toward you */
-.tn-carpet{position:absolute;inset:0;width:100%;height:100%;transform-origin:50% 65%;transform:scaleY(0);transition:transform 1.3s cubic-bezier(.2,.8,.2,1)}
-.reveal.s-carpet .tn-carpet{transform:scaleY(1)}
-.cp-post{stroke:#e8c25a;vector-effect:non-scaling-stroke;stroke-linecap:round}
-.cp-knob{fill:#ffe7a0}
-.cp-rope{fill:none;stroke:#8e0f22;vector-effect:non-scaling-stroke;stroke-linecap:round}
-.rv-fire{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:4}
-/* the card: comes from the far end face-down, then flips */
-.rv-card{position:absolute;z-index:3;left:50%;top:47%;width:min(62vw,300px);aspect-ratio:3/4;translate:-50% -50%;perspective:1100px;opacity:0;transform:scale(.16)}
-.reveal.s-approach .rv-card{opacity:1;transform:scale(1);transition:transform 2s cubic-bezier(.5,0,.3,1),opacity .4s}
-.rv-flip{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.3,.7,.3,1.3)}
-.reveal.s-flip .rv-flip{transform:rotateY(180deg)}
-.rv-face{position:absolute;inset:0;border-radius:18px;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden;border:3px solid var(--tc);box-shadow:0 0 30px var(--tc),0 0 80px color-mix(in srgb,var(--tc) 50%,transparent)}
+/* red carpet (drawn in card-reveal.js) */
+.tn-carpet{position:absolute;inset:0;width:100%;height:100%}
+.cp-person{opacity:0;transition:opacity .5s}.cp-person.on{opacity:1}
+.cp-phone{fill:#fffbe0;filter:drop-shadow(0 0 4px #fff);animation:cp-phone 1.8s ease-in-out infinite var(--d)}
+@keyframes cp-phone{0%,100%{opacity:1}50%{opacity:.35}}
+.cp-flash{opacity:0;animation:cp-flash 2.4s linear infinite var(--d)}
+@keyframes cp-flash{0%,6%,100%{opacity:0}2%{opacity:1}}
+.cp-post{opacity:0;transform-box:fill-box;transform-origin:50% 100%;transform:scaleY(.2);transition:opacity .35s,transform .45s cubic-bezier(.2,1.3,.4,1)}.cp-post.on{opacity:1;transform:none}
+.rv-fire{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
+/* the card: comes from the far end face-down, glows white-hot and turns into the skin */
+.rv-card{position:absolute;z-index:3;left:50%;top:47%;width:min(62vw,300px);aspect-ratio:3/4;translate:-50% -50%;opacity:0;transform:scale(.14)}
+.reveal.s-approach .rv-card{opacity:1;transform:scale(1);transition:transform 4s cubic-bezier(.45,0,.25,1),opacity .6s}
+.rv-face{position:absolute;inset:0;border-radius:18px;overflow:hidden;border:3px solid var(--tc);box-shadow:0 0 30px var(--tc),0 0 80px color-mix(in srgb,var(--tc) 50%,transparent)}
 .rv-back .potw{border-radius:15px}
-.rv-front{transform:rotateY(180deg);background:radial-gradient(ellipse at 50% 40%,color-mix(in srgb,var(--tc) 45%,#101829),#070a12 75%)}
+.rv-front{opacity:0;background:radial-gradient(ellipse at 50% 40%,color-mix(in srgb,var(--tc) 45%,#101829),#070a12 75%)}
+.rv-white{position:absolute;inset:-4px;border-radius:20px;background:radial-gradient(ellipse at 50% 45%,#fff,#fffbe8 55%,var(--glow));opacity:0;pointer-events:none}
+.reveal.s-glow .rv-card{transform:scale(1.07);transition:transform .8s ease-in}
+.reveal.s-glow .rv-back{filter:brightness(2.2) saturate(.6);transition:filter .8s ease-in}
+.reveal.s-glow .rv-white{opacity:1;transition:opacity .8s ease-in;box-shadow:0 0 60px 20px #fff,0 0 140px 50px var(--glow)}
+.reveal.s-flip .rv-card{transform:scale(1);transition:transform .5s cubic-bezier(.2,1.4,.4,1)}
+.reveal.s-flip .rv-back{opacity:0}
+.reveal.s-flip .rv-front{opacity:1}
+.reveal.s-flip .rv-white{opacity:0;box-shadow:none;transition:opacity .9s ease-out,box-shadow .9s}
 .rv-art{display:block;width:100%;height:100%}
 .rv-flash{position:absolute;inset:0;z-index:5;background:radial-gradient(circle at 50% 47%,#fff,var(--glow) 30%,transparent 70%);opacity:0;pointer-events:none}
 .reveal.s-flip .rv-flash{animation:rv-flash .7s ease-out}
@@ -59,7 +68,7 @@
 @keyframes rv-twinkle{0%,100%{opacity:.15;transform:scale(.4) rotate(0)}50%{opacity:1;transform:scale(1.15) rotate(45deg)}}
 .rv-info{position:absolute;z-index:7;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;gap:6px;padding:40px 20px max(18px,4vh);text-align:center;background:linear-gradient(transparent,#000000d9 40%);opacity:0;transition:opacity .35s;pointer-events:none}
 .reveal.s-done .rv-info{opacity:1;pointer-events:auto}
-.rv-info strong{font:400 clamp(26px,7vw,40px)/1 'Black Ops One',Impact,sans-serif;color:var(--glow);text-shadow:0 0 14px var(--tc)}
+.rv-info strong{font:900 clamp(22px,6vw,34px)/1.1 Inter,'Segoe UI',system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#fff;text-shadow:0 2px 0 #000,0 0 12px #0009}
 .rv-info span{font-size:14px;color:#dfe6f3}
 .rv-info .rv-ok{width:min(320px,80vw);margin-top:8px}
 .rv-skip{position:absolute;z-index:8;top:14px;right:16px;font-size:11px;color:#ffffff88;letter-spacing:.06em}
@@ -67,4 +76,5 @@
 .reveal.s-instant *{transition:none!important}
 .reveal.s-instant .tn-ribs i{animation:none;opacity:0}
 .reveal.s-instant .rv-flash{animation:none}
+.reveal.s-instant .rv-card{opacity:1;transform:none}
 @media(prefers-reduced-motion:reduce){.reveal *{animation:none!important;transition:none!important}}

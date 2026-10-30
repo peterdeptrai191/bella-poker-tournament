@@ -1,0 +1,122 @@
+/* Red – blue – black – white look on felt (loaded last). Dark surfaces are warm blacks, main actions are raised red buttons,
+   secondary actions white, gold only for coins and stars; the table felt is deep green. */
+:root{--bg:#010313;--panel:#0f1b30;--line:#2a3550;--muted:#b9aca8;--white:#fcebe5;--noir-red:#ff001e;--noir-red-hi:#ff3349;--noir-red-lo:#7a000e;--navy:#1e3c65;--cream:#fcebe5}
+body{background:radial-gradient(ellipse at 80% -10%,#3a070f 0,transparent 55%),radial-gradient(ellipse at 0 110%,#1c0408 0,transparent 50%),var(--bg)}
+button.primary,.cr7-gold,.lobby-cta{background:linear-gradient(#ff5c70,#f0273f 49%,#c8001a 51%,#990014)!important;border-color:#7a000e!important;color:#fff!important;box-shadow:inset 0 1px 0 #ff8a99,0 3px 0 var(--noir-red-lo),0 8px 18px #d6152f33!important;text-shadow:0 1px 0 #0005}
+button.primary:hover:enabled,.cr7-gold:hover:enabled{background:linear-gradient(#ff6c7e,#ff3249 49%,#d6001c 51%,#a60016)!important}
+button.primary:active:enabled,.cr7-gold:active:enabled{transform:translateY(2px);box-shadow:inset 0 1px 0 #ff8a99,0 1px 0 var(--noir-red-lo)!important}
+.header{border-bottom:2px solid var(--noir-red)}
+.header nav button.current,.eyebrow{color:var(--noir-red-hi)}
+button.active{border-color:var(--noir-red);color:#fff}
+button:focus-visible,a:focus-visible{outline-color:#fff}
+dialog{background:#141316;border-color:#2d2a2e}
+.panel{background:linear-gradient(150deg,#1d1a1e,#111013)}
+/* table action buttons: fold dark, check/call white, raise and all-in red */
+.game-actions button{border:1px solid #ffffff2a!important;background:linear-gradient(#2a272c,#151417)!important;color:#f6f3ee!important;box-shadow:0 3px 0 #000,0 5px 8px #0006,inset 0 1px 0 #ffffff22!important}
+.game-actions button:not([data-action="fold"]):not([data-raise-toggle]):not([data-action="allin"]){background:linear-gradient(#ffffff,#dcd7cf)!important;color:#141316!important;border-color:#fff!important;box-shadow:0 3px 0 #8f8a83,0 5px 8px #0006,inset 0 1px 0 #fff!important}
+.game-actions [data-raise-toggle],.game-actions [data-action="allin"],.game-actions [data-action="raise"]{background:linear-gradient(#ff2a45,#b40d24)!important;color:#fff!important;border-color:#ff5a6e!important;box-shadow:0 3px 0 #6e0612,0 5px 8px #0006,inset 0 1px 0 #ff8a99!important}
+.game-actions button:hover:enabled{filter:brightness(1.08)}
+
+/* ---- Felt everywhere: fabric grain, stitched edge and a raised, slightly 3D block for every frame ---- */
+:root{
+ /* iOS 6-style materials: pebbled leather (lit from above), dark linen for the page, and stitching */
+ --felt-grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='l' x='0' y='0'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.55' numOctaves='3' seed='3' stitchTiles='stitch'/%3E%3CfeDiffuseLighting lighting-color='%23fff' surfaceScale='2.2' diffuseConstant='1'%3E%3CfeDistantLight azimuth='225' elevation='52'/%3E%3C/feDiffuseLighting%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  .35 0 0 0 -.18'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23l)'/%3E%3C/svg%3E");
+ --linen:repeating-linear-gradient(0deg,#ffffff06 0 1px,transparent 1px 3px),repeating-linear-gradient(90deg,#ffffff05 0 1px,transparent 1px 3px),repeating-linear-gradient(0deg,#0000002e 0 1px,transparent 1px 2px);
+ --felt-blue:radial-gradient(ellipse at 30% 0%,#2f5a90 0,#1e3c65 45%,#10223d 100%);--felt-red:radial-gradient(ellipse at 30% 0%,#ff3349 0,#ff001e 40%,#8a0012 100%);--felt-black:radial-gradient(ellipse at 30% 0%,#1a2236 0,#0a1020 50%,#010313 100%);
+ --raised:inset 0 1px 0 #ffffff33,inset 0 -2px 0 #00000066,0 4px 0 #00020a,0 5px 0 #ffffff0a,0 14px 26px #000000c0}
+body{background:var(--linen),radial-gradient(ellipse at 85% -10%,#ff001e26 0,transparent 55%),radial-gradient(ellipse at 0 110%,#1e3c6555 0,transparent 55%),#010313}
+.panel,.character-summary,.account-toolbar,.mystery-pack,.player-slot,.config-strip,.recent,.sidebar,.step,.join-box,.create-box{background:var(--felt-grain),var(--felt-blue)!important;border:1px solid #ffffff1f!important;box-shadow:var(--raised)!important;outline:1.5px dashed #fcebe540;outline-offset:-7px}
+.hero-art{box-shadow:var(--raised)!important;border:1px solid #ffffff22!important;outline:1.5px dashed #fcebe540;outline-offset:-8px}
+.player-slot.empty{background:var(--felt-grain),var(--felt-black)!important}
+dialog,.cr7-dialog,.deck-dialog,dialog.character-modal{background:var(--felt-grain),var(--felt-black)!important;border:1px solid #ffffff22!important;box-shadow:0 0 0 1px #000,0 8px 0 #050506,0 24px 70px #000d!important}
+/* buttons: red = main action, blue = secondary, all raised like felt-covered blocks */
+:is(.account-toolbar button,.waiting-bottom button:not(.primary),.room-heading button,.form-actions button:not(.primary),.character-summary button,.cr7-list,.cr7-equip,.recent button,.section-title button){background:linear-gradient(#4a72a8,#2c5288 49%,#1e3c65 51%,#16304f)!important;border:1px solid #0b1a30!important;color:#fcebe5!important;text-shadow:0 -1px 0 #0008;box-shadow:inset 0 1px 0 #ffffff55,0 3px 0 #08142a,0 6px 12px #0008!important}
+:is(.account-toolbar button,.waiting-bottom button:not(.primary),.room-heading button,.form-actions button:not(.primary),.character-summary button,.cr7-list,.cr7-equip,.recent button,.section-title button):active:enabled{transform:translateY(2px);box-shadow:inset 0 1px 0 #ffffff55,0 1px 0 #08142a!important}
+.header nav button{background:none!important;border:0!important;box-shadow:none!important}
+.header nav button.current{color:#fff!important;box-shadow:inset 0 -3px 0 var(--noir-red)!important}
+input,select{background:#0b0a0c!important;border:1px solid #ffffff26!important;box-shadow:inset 0 2px 4px #000a}
+/* the spin board: blue felt block with a gold rim */
+.spin-wheel.potw-board{background:var(--felt-grain),var(--felt-blue)!important;box-shadow:0 0 0 2.5px #c99a3e,inset 0 2px 0 #ffffff26,inset 0 -3px 0 #0006,0 7px 0 #050506,0 18px 34px #000c!important}
+.spin-centre{background:var(--felt-grain),radial-gradient(ellipse at 50% 35%,#24477a,#0e1f38 75%)!important;box-shadow:inset 0 3px 10px #000b,inset 0 -1px 0 #ffffff1a!important;border:1px solid #ffffff22!important}
+.potw-board .spin-tile{box-shadow:inset 0 0 0 1px #0006,0 3px 0 #050506,0 5px 8px #000a!important}
+.spin-badge{box-shadow:inset 0 1px 0 #fff8,0 3px 0 #5a3e12,0 5px 8px #000a!important}
+
+/* leather blocks: a soft emboss line under the stitching and cream text */
+.panel,.character-summary,.account-toolbar,.mystery-pack,.player-slot,.config-strip,.recent,.sidebar{color:var(--cream)}
+.game-actions [data-raise-toggle],.game-actions [data-action="allin"],.game-actions [data-action="raise"]{background:linear-gradient(#ff5c70,#f0273f 49%,#c8001a 51%,#990014)!important}
+.game-actions button:not([data-action="fold"]):not([data-raise-toggle]):not([data-action="allin"]){background:linear-gradient(#ffffff,#fcebe5 49%,#f1d9d0 51%,#dcc3b9)!important}
+.game-actions [data-action="fold"]{background:linear-gradient(#3b5d8c,#25456f 49%,#1e3c65 51%,#122641)!important;border-color:#0b1a30!important}
+
+/* how-it-works steps: text kept inside the stitched leather */
+.step{align-items:center;gap:16px;padding:18px 22px!important;margin:0;color:var(--cream)}
+.step b{font:400 26px/1 Anton,Impact,sans-serif;color:#e7c063;text-shadow:0 1px 0 #6b4a17,0 2px 3px #000a;min-width:36px}
+.step strong{color:#fff}
+.steps{gap:14px}
+/* top bar: navy leather strip with stitching; nav as an iOS 6 segmented control */
+.header{position:relative;height:auto;min-height:72px;padding-block:12px;background:var(--felt-grain),linear-gradient(#26487a,#1e3c65 55%,#142a49)!important;border-bottom:0!important;box-shadow:inset 0 1px 0 #ffffff33,inset 0 -1px 0 #00000080,0 3px 0 var(--noir-red),0 10px 22px #000c;outline:1.5px dashed #fcebe540;outline-offset:-6px;max-width:none}
+.brand{color:var(--cream);text-shadow:0 -1px 0 #0008}
+.brand small{color:#fcebe5aa!important}
+.header nav{display:flex;padding:3px;border-radius:12px;background:linear-gradient(#0b1a30,#142a49);box-shadow:inset 0 2px 4px #000c,0 1px 0 #ffffff26;gap:0}
+.header nav button{white-space:nowrap;padding:9px 16px!important;border-radius:9px!important;color:#fcebe5cc!important;font-weight:700}
+.header nav button.current{background:linear-gradient(#ff5c70,#f0273f 49%,#c8001a 51%,#990014)!important;color:#fff!important;box-shadow:inset 0 1px 0 #ffffff66,0 1px 2px #000a!important;text-shadow:0 -1px 0 #0006}
+@media(max-width:760px){.header{padding-inline:14px}.header nav button{padding:8px 10px!important;font-size:11px!important}.brand small{display:none}}
+/* hero title in the new lettering */
+.hero .eyebrow{font:400 13px/1 Anton,Impact,sans-serif;letter-spacing:.22em;color:var(--noir-red-hi)}
+.hero h1{font:400 clamp(40px,6vw,72px)/1.04 Anton,Impact,'Arial Narrow',sans-serif!important;letter-spacing:.01em!important;color:var(--cream);text-shadow:0 1px 0 #c9b8b0,0 2px 0 #a8968e,0 3px 0 #85746c,0 4px 0 #5d4f49,0 8px 14px #000c}
+.hero h1 em{color:#ff2a42;text-shadow:0 1px 0 #c40017,0 2px 0 #a30013,0 3px 0 #82000f,0 4px 0 #5e000b,0 8px 14px #000c}
+/* portrait table: your character stands on top of your chip card (20% bigger), the dealer/blind badge also
+   sits above the card so the turn timer ring never covers either of them */
+.game-shell:not(.landscape) .hero-character{left:4px;bottom:calc(100% + 4px);width:38px;height:58px;z-index:6}
+.game-shell:not(.landscape) .hero-plaque{padding-left:10px}
+.game-shell:not(.landscape) .hero-plaque .position-badge{top:auto;bottom:calc(100% + 6px);right:6px;z-index:6}
+
+/* Painted-metal lettering (same material as G.O.A.T / B.O.A.T) for the page title and the biggest heading
+   of every section: cream-silver face, red face for highlighted words, a 5-step extrusion drawn with
+   stacked drop-shadows under the clipped letters. */
+:is(.hero h1,.panel h2,.section-title h2,.room-heading h1,.banner h2,.empty-state h2,.deck-head h2,.character-dialog-head h2,.cr7-dialog>h2:not(.goat-head),.cr7-rewards h2,.mystery-pack h3,.character-summary strong,.cr7-result-name,.join-box h2,.create-box h2){
+ color:transparent!important;-webkit-text-fill-color:transparent;background:linear-gradient(180deg,#ffffff 0%,#f7f8fa 30%,#dfe2e7 52%,#c3c8cf 70%,#d6dade 86%,#eef0f3 100%)!important;-webkit-background-clip:text!important;background-clip:text!important;text-shadow:none!important;
+ filter:drop-shadow(0 1px 0 #8a9099) drop-shadow(0 2px 3px #0008)}
+.hero h1 em,.hero .eyebrow{color:transparent!important;-webkit-text-fill-color:transparent;background:linear-gradient(180deg,#fff 0,#ffe0e4 20%,#ff7d8e 42%,#ff001e 60%,#8a0012 80%,#ff3349 100%)!important;-webkit-background-clip:text!important;background-clip:text!important;text-shadow:none!important}
+.hero .eyebrow{display:inline-block;filter:drop-shadow(0 1px 0 #7a000e) drop-shadow(0 2px 3px #000b)}
+/* a few headings are wider families; keep their weight bold enough for the metal to read */
+:is(.panel h2,.section-title h2,.room-heading h1,.deck-head h2,.character-dialog-head h2,.cr7-dialog>h2:not(.goat-head),.cr7-rewards h2,.mystery-pack h3,.join-box h2,.create-box h2){font-family:Anton,Impact,'Arial Narrow',sans-serif!important;font-weight:400!important;letter-spacing:.02em!important}
+.character-summary strong,.cr7-result-name{font-weight:900!important}
+.hero h1{background:none!important;filter:none!important;-webkit-text-fill-color:initial;color:inherit!important}.hero h1 .h1-line{display:block;width:max-content;max-width:100%;color:transparent;-webkit-text-fill-color:transparent;background:linear-gradient(180deg,#ffffff 0%,#f7f8fa 30%,#dfe2e7 52%,#c3c8cf 70%,#d6dade 86%,#eef0f3 100%);-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 1px 0 #8a9099) drop-shadow(0 2px 3px #0008)}
+.hero h1 em{display:inline-block}
+
+/* rename: a small glossy navy pill that matches the other buttons */
+.account-toolbar .rename-button{display:inline-flex!important;align-items:center;gap:4px;margin-left:8px;padding:5px 11px!important;border-radius:99px!important;font:700 11px/1 Inter,'Segoe UI',sans-serif!important;letter-spacing:.02em!important;white-space:nowrap;text-transform:none;vertical-align:middle}
+/* stitching on secondary dialogs too (character shop, settings, daily gift, rewards, missions...) */
+dialog,.cr7-dialog,.deck-dialog,dialog.character-modal,.auth-card{outline:1.5px dashed #fcebe540!important;outline-offset:-9px!important}
+dialog .character-preview,dialog .mystery-pack,.daily-day,.setting-row,.cr7-reward-grid article,.m-list li,.m-wallet div,.character-option{outline:1px dashed #fcebe52e;outline-offset:-5px}
+/* sign-in screen in the same leather */
+.auth-card{background:var(--felt-grain),var(--felt-blue)!important;border:1px solid #ffffff1f!important;box-shadow:var(--raised)!important;color:var(--cream)}
+.auth-card h1{font:400 clamp(30px,8vw,40px)/1.05 Anton,Impact,'Arial Narrow',sans-serif!important;letter-spacing:.02em;color:transparent;-webkit-text-fill-color:transparent;background:linear-gradient(180deg,#ffffff 0%,#f7f8fa 30%,#dfe2e7 52%,#c3c8cf 70%,#d6dade 86%,#eef0f3 100%);-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 1px 0 #8a9099) drop-shadow(0 2px 3px #0008);display:inline-block}
+.auth-card p,.auth-card label{color:#fcebe5cc}
+.auth-tabs{background:linear-gradient(#0b1a30,#142a49)!important;box-shadow:inset 0 2px 4px #000c,0 1px 0 #ffffff26}
+.auth-tabs button{border-radius:9px!important;color:#fcebe5cc!important;font-weight:700}
+.auth-tabs button.active{background:linear-gradient(#ff5c70,#f0273f 49%,#c8001a 51%,#990014)!important;color:#fff!important;box-shadow:inset 0 1px 0 #ffffff66,0 1px 2px #000a!important;text-shadow:0 -1px 0 #0006}
+.auth-starter{border-top:1px dashed #fcebe540!important}
+.auth-starter strong{color:#fff}
+.auth-brand{color:var(--cream)}
+/* the eyebrow above the home title in blue metal */
+.hero .eyebrow{background:linear-gradient(180deg,#ffffff 0,#dff0ff 22%,#7fc0ff 45%,#2d7ae6 62%,#1a4f9e 80%,#5a9cf0 100%)!important;-webkit-background-clip:text!important;background-clip:text!important;filter:drop-shadow(0 1px 0 #0d2f63) drop-shadow(0 2px 3px #000b)!important}
+/* close buttons: a brushed-metal button with a stamped ×, set a little lower and in from the corner */
+.cr7-close,.deck-head [data-close],[data-character-close],dialog [data-close]:not(.primary):not(.cr7-gold){top:16px!important;right:16px!important;width:36px!important;height:36px!important;min-height:0!important;padding:0!important;border-radius:50%!important;display:grid!important;place-items:center;font:700 19px/1 Inter,'Segoe UI',sans-serif!important;color:#3a3f47!important;text-shadow:0 1px 0 #ffffffb0!important;
+ background:radial-gradient(circle at 50% 50%,#0000 52%,#00000022 53% 55%,#0000 56%),repeating-conic-gradient(from 0deg,#ffffff1a 0 4deg,#0000001a 4deg 8deg),radial-gradient(circle at 35% 28%,#ffffff 0,#e9ecf0 25%,#b9bfc7 62%,#8c939c 100%)!important;
+ border:1px solid #5b616a!important;box-shadow:inset 0 1px 0 #fff,inset 0 -2px 3px #0004,0 2px 0 #2a2e33,0 4px 8px #000a!important;transition:transform .08s}
+.cr7-close:active,.deck-head [data-close]:active,[data-character-close]:active,dialog [data-close]:not(.primary):not(.cr7-gold):active{transform:translateY(1px);box-shadow:inset 0 2px 3px #0005,0 1px 0 #2a2e33!important}
+.cr7-close:hover,.deck-head [data-close]:hover,[data-character-close]:hover{filter:brightness(1.06)}
+.deck-head [data-close],[data-character-close]{position:relative;top:4px!important;right:0!important}
+
+/* mystery pack: no wheel, one big gift box with a question mark */
+.mystery-wheel .spin-tile,.mystery-wheel .spin-badge{display:none!important}
+.mystery-wheel .spin-wheel{background:var(--felt-grain),var(--felt-blue)!important;border:2.5px solid #c99a3e;box-shadow:inset 0 2px 0 #ffffff26,inset 0 -3px 0 #0006,0 7px 0 #00020a,0 18px 34px #000c}
+.mystery-wheel .spin-centre{grid-area:1/1/-1/-1!important;margin:0}
+.gift-mini{position:relative;display:block;width:min(52vw,230px);aspect-ratio:1/1.05;animation:gift-idle 2.6s ease-in-out infinite}
+.gift-mini .gift-body{position:absolute;left:6%;right:6%;bottom:0;height:68%;border-radius:10px;background:var(--felt-grain,none),linear-gradient(90deg,#10223d,#2f5a90 30%,#1e3c65 60%,#0c1a30);box-shadow:inset 0 2px 0 #ffffff33,inset 0 -6px 12px #0009,0 18px 30px #000c;outline:1.5px dashed #fcebe550;outline-offset:-8px}
+.gift-mini .gift-lid{position:absolute;left:0;right:0;top:14%;height:24%;border-radius:10px;background:var(--felt-grain,none),linear-gradient(90deg,#142a49,#3a6aa4 30%,#24477a 60%,#10223d);box-shadow:inset 0 2px 0 #ffffff40,0 8px 14px #000a;z-index:2}
+.gift-q{position:absolute;inset:0;display:grid;place-items:center;z-index:1;font:400 clamp(60px,20vw,110px)/1 Anton,Impact,sans-serif;color:transparent;background:linear-gradient(160deg,#fff4cf,#e7c063 45%,#8a6320 62%,#f3d48a);-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 2px 0 #000) drop-shadow(0 0 10px #e7c06366)}
+@keyframes gift-idle{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-6px) rotate(-1.5deg)}}
+@media(prefers-reduced-motion:reduce){.gift-mini{animation:none}}
+.gift-q{inset:auto!important;left:50%!important;top:38%!important;translate:-50% -50%;width:42%;aspect-ratio:1;border-radius:50%;z-index:3!important;font-size:clamp(34px,11vw,62px)!important;color:#5a3e12!important;-webkit-text-fill-color:#5a3e12;text-shadow:0 1px 0 #fff6d6;background:radial-gradient(circle at 35% 30%,#fff6d6,#e7c063 45%,#a7781f 85%)!important;-webkit-background-clip:border-box!important;background-clip:border-box!important;filter:none!important;box-shadow:inset 0 2px 0 #fff8,inset 0 -3px 4px #0005,0 4px 8px #000a}

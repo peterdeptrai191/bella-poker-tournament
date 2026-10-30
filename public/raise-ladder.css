@@ -1,14 +1,14 @@
 /* Raise drawer: blind-based slider, quick picks and one-notch stepper (replaces typing chips). */
 .game-dock .raise-heading{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.game-dock .raise-heading>label{font-size:8px;letter-spacing:.12em;color:#b9cdd5}
+.game-dock .raise-heading>label{font-size:8px;letter-spacing:.12em;color:#cbc7c3}
 .raise-stepper{display:flex;align-items:center;gap:8px}
 .raise-stepper output{min-width:96px;text-align:center;font-size:19px;font-weight:750;color:#8ae4ff;font-variant-numeric:tabular-nums;line-height:1.1}
-.raise-stepper output small{display:block;font-size:9px;font-weight:600;color:#a9c4cf;letter-spacing:.04em}
-.raise-step{width:34px;height:34px;min-width:34px;padding:0;border-radius:50%;border:1px solid #6fb9d0;background:#1d3442;color:#dff7ff;font-size:20px;font-weight:600;display:grid;place-items:center}
-.raise-step:hover:enabled{background:#26475a;transform:none}
+.raise-stepper output small{display:block;font-size:9px;font-weight:600;color:#c1bcb7;letter-spacing:.04em}
+.raise-step{width:34px;height:34px;min-width:34px;padding:0;border-radius:50%;border:1px solid #6fb9d0;background:#2a2425;color:#dff7ff;font-size:20px;font-weight:600;display:grid;place-items:center}
+.raise-step:hover:enabled{background:#383132;transform:none}
 .raise-presets{display:flex;flex-wrap:wrap;gap:6px;margin:9px 0 4px}
-.raise-preset{flex:1 1 auto;min-width:0;padding:7px 9px;border-radius:999px;border:1px solid #5d93a8;background:#18303d;color:#d4eef7;font-size:11px;font-weight:700;white-space:nowrap}
-.raise-preset:hover:enabled{background:#21404f;transform:none}
-.raise-preset.active{background:#3ac9ed;border-color:#b6eefc;color:#0f2834}
+.raise-preset{flex:1 1 auto;min-width:0;padding:7px 9px;border-radius:999px;border:1px solid #8b827a;background:#252021;color:#d4eef7;font-size:11px;font-weight:700;white-space:nowrap}
+.raise-preset:hover:enabled{background:#312b2c;transform:none}
+.raise-preset.active{background:#3ac9ed;border-color:#b6eefc;color:#1d1a1a}
 .raise-preset:focus-visible,.raise-step:focus-visible{outline:2px solid #8ae4ff;outline-offset:2px}
 @media(orientation:landscape) and (max-height:600px){.raise-presets{margin:5px 0 2px;gap:4px}.raise-preset{padding:4px 7px;font-size:10px}.raise-step{width:28px;height:28px;min-width:28px}.raise-stepper output{font-size:16px}}

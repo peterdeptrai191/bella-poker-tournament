@@ -5,9 +5,9 @@
 @keyframes stop-pulse{50%{box-shadow:0 0 26px #ff6a55}}
 .spin-dialog h2{margin:6px 20px 2px;font-size:clamp(24px,6vw,34px);letter-spacing:.04em;background:linear-gradient(100deg,#ffe9a0,#e0ad45,#fff1c2);-webkit-background-clip:text;background-clip:text;color:transparent}
 .spin-sub{margin:0 0 6px;font-size:12px!important}
-.spin-wheel{position:relative;display:grid;grid-template-columns:repeat(var(--s),1fr);grid-template-rows:repeat(var(--s),1fr);gap:clamp(3px,.9vw,6px);width:min(720px,100%,70dvh);aspect-ratio:1;margin:6px auto 0;padding:clamp(6px,1.4vw,10px);box-sizing:border-box;border-radius:22px;background:linear-gradient(145deg,#1d3354,#0a1222);border:2.5px solid #d9b25e;outline:1px solid #6b4a17;outline-offset:-6px;box-shadow:inset 0 0 30px #000a,0 0 30px #e8b85022}
+.spin-wheel{position:relative;display:grid;grid-template-columns:repeat(var(--s),1fr);grid-template-rows:repeat(var(--s),1fr);gap:clamp(3px,.9vw,6px);width:min(720px,100%,70dvh);aspect-ratio:1;margin:6px auto 0;padding:clamp(6px,1.4vw,10px);box-sizing:border-box;border-radius:22px;background:linear-gradient(145deg,#322b2c,#131111);border:2.5px solid #d9b25e;outline:1px solid #6b4a17;outline-offset:-6px;box-shadow:inset 0 0 30px #000a,0 0 30px #e8b85022}
 .spin-tile,.spin-badge{position:relative;border-radius:clamp(6px,1.6vw,11px);overflow:hidden;display:grid;place-items:center;min-width:0;min-height:0}
-.spin-tile{background:radial-gradient(circle at 50% 30%,color-mix(in srgb,var(--c) 35%,#22344f),#0f1828);border:clamp(1.5px,.4vw,2.5px) solid var(--rc,#8a94a6);box-shadow:0 2px 6px #0008;transition:transform .07s,box-shadow .07s,filter .07s;z-index:1}
+.spin-tile{background:radial-gradient(circle at 50% 30%,color-mix(in srgb,var(--c) 35%,#322b2c),#181515);border:clamp(1.5px,.4vw,2.5px) solid var(--rc,#9f9891);box-shadow:0 2px 6px #0008;transition:transform .07s,box-shadow .07s,filter .07s;z-index:1}
 .spin-tile img{width:150%;height:150%;max-width:none;object-fit:contain;object-position:50% 0;translate:0 22%;pointer-events:none}
 .spin-badge{background:linear-gradient(145deg,#ffe9a0,#c98f2c);color:#3e2506;font:900 clamp(16px,4.5vw,28px)/1 Georgia,serif;box-shadow:inset 0 0 0 2px #fff4cc}
 .spin-tile[data-r=red]{--rc:#ff3b4f;box-shadow:inset 0 0 0 2px #ff3b4f55,0 0 10px #ff3b4f55}.spin-tile[data-r=purple]{--rc:#b25bff;box-shadow:inset 0 0 0 2px #b25bff66,0 0 12px #b25bff77}.spin-tile[data-r=rare]{--rc:#4aa3ff}.spin-tile[data-r=epic]{--rc:#b06bff}.spin-tile[data-r=gold]{--rc:#ffd34d}
@@ -16,14 +16,14 @@
 .spin-tile.lit{transform:scale(1.18);z-index:3;border-color:#fff7cf;box-shadow:0 0 0 3px #ffd34d,0 0 18px 6px #ffd34dcc;filter:none}
 .spin-tile.won{animation:spin-won .7s ease-in-out 4}
 @keyframes spin-won{50%{transform:scale(1.3);box-shadow:0 0 0 4px #fff,0 0 30px 12px #ffd34d}}
-.spin-centre{position:relative;margin:4px;border-radius:16px;display:grid;place-items:center;align-content:center;text-align:center;overflow:hidden;background:radial-gradient(circle,#24406a,#0c1526 75%);border:2px solid #c7a75d66;box-shadow:inset 0 0 30px #000b;min-height:0}
+.spin-centre{position:relative;margin:4px;border-radius:16px;display:grid;place-items:center;align-content:center;text-align:center;overflow:hidden;background:radial-gradient(circle,#3e3638,#161314 75%);border:2px solid #c7a75d66;box-shadow:inset 0 0 30px #000b;min-height:0}
 .spin-logo{font:900 clamp(30px,10vw,58px)/.95 Georgia,serif;color:#ffe29b;text-shadow:0 0 18px #e8b850aa;letter-spacing:.04em}
-.spin-logo small{display:block;margin:4px 0;font:italic 600 .42em/1 Georgia,serif;color:#c5cfe0;letter-spacing:.1em}
+.spin-logo small{display:block;margin:4px 0;font:italic 600 .42em/1 Georgia,serif;color:#d6d2cf;letter-spacing:.1em}
 .mystery-wheel .spin-logo{font-size:clamp(60px,20vw,120px);color:#e7c9ff;text-shadow:0 0 22px #c591ef}
 .spin-peek{width:82%;height:76%;object-fit:contain}
 .spin-centre em{display:block;margin-top:2px;font-style:normal;font-weight:800;font-size:clamp(12px,3.6vw,17px);color:#fff3d6}
 .spin-prize{width:100%;height:100%;animation:cr7-prize .8s cubic-bezier(.2,.7,.2,1)}
-.spin-wheel.has-prize .spin-centre{z-index:4;background:radial-gradient(circle,#3a5a8c,#0c1526 72%);box-shadow:0 0 40px #ffd34d55,inset 0 0 30px #000b}
+.spin-wheel.has-prize .spin-centre{z-index:4;background:radial-gradient(circle,#574b4d,#161314 72%);box-shadow:0 0 40px #ffd34d55,inset 0 0 30px #000b}
 .spin-dialog .cr7-result-name{min-height:1.2em;margin:10px 0 2px}
 .spin-dialog .spin-msg{margin:0;min-height:1.4em}
 @media(prefers-reduced-motion:reduce){.spin-tile.won,.spin-prize{animation:none}}
@@ -42,12 +42,12 @@
 
 /* Face-down POTW cards on the GOAT or BOAT board */
 .potw-board .spin-tile{overflow:visible;background:none;padding:0}
-.potw{--tc:#ffcc33;position:absolute;inset:0;border-radius:inherit;overflow:hidden;background:radial-gradient(ellipse at 50% 42%,#fff 0,color-mix(in srgb,var(--tc) 85%,#fff) 9%,var(--tc) 22%,color-mix(in srgb,var(--tc) 45%,#0a0c18) 55%,#07080f 100%)}
+.potw{--tc:#ffcc33;position:absolute;inset:0;border-radius:inherit;overflow:hidden;background:radial-gradient(ellipse at 50% 42%,#fff 0,color-mix(in srgb,var(--tc) 85%,#fff) 9%,var(--tc) 22%,color-mix(in srgb,var(--tc) 45%,#0f0d0d) 55%,#0a0809 100%)}
 .potw[data-t=purple]{--tc:#9b4dff}.potw[data-t=red]{--tc:#ff2d55}
 .potw-rays{position:absolute;inset:-30%;background:repeating-conic-gradient(from 0deg at 50% 46%,#ffffff2e 0 3deg,transparent 3deg 12deg);mix-blend-mode:screen}
 .potw-chev{position:absolute;top:0;bottom:0;right:0;width:24%;background:repeating-linear-gradient(135deg,transparent 0 5px,color-mix(in srgb,var(--tc) 70%,#000) 5px 7px,transparent 7px 12px);opacity:.55;mask:linear-gradient(90deg,transparent,#000 40%)}
-.potw-sil{position:absolute;left:50%;bottom:16%;width:64%;height:70%;translate:-50% 0;fill:#05060a;filter:drop-shadow(0 0 3px #0008)}
-.potw-base{position:absolute;left:50%;bottom:4%;translate:-50% 0;padding:1px 4px;border-radius:3px;background:#0b0d14e6;border:1px solid color-mix(in srgb,var(--tc) 70%,#fff);color:#ffd34d;font-size:clamp(4px,1.1vw,7px);letter-spacing:.5px;line-height:1.3;white-space:nowrap}
+.potw-sil{position:absolute;left:50%;bottom:16%;width:64%;height:70%;translate:-50% 0;fill:#070606;filter:drop-shadow(0 0 3px #0008)}
+.potw-base{position:absolute;left:50%;bottom:4%;translate:-50% 0;padding:1px 4px;border-radius:3px;background:#0e0c0ce6;border:1px solid color-mix(in srgb,var(--tc) 70%,#fff);color:#ffd34d;font-size:clamp(4px,1.1vw,7px);letter-spacing:.5px;line-height:1.3;white-space:nowrap}
 .potw-board .spin-tile[data-r=gold]{box-shadow:0 0 8px #ffcc3366}
 .potw-board .spin-tile[data-r=purple]{box-shadow:0 0 12px #9b4dff99}
 .potw-board .spin-tile[data-r=red]{box-shadow:0 0 10px #ff2d55,0 0 22px #ff2d5588}
@@ -61,13 +61,37 @@
 /* the big card in the middle while the light runs */
 .spin-centre .potw{position:relative;inset:auto;width:58%;aspect-ratio:3/4;border-radius:14px;border:2px solid color-mix(in srgb,var(--tc) 80%,#fff);box-shadow:0 0 24px var(--tc)}
 .spin-centre .potw-base{font-size:clamp(7px,2vw,12px)}
-/* titles: G.O.A.T in blue, B.O.A.T in red */
-.goat-head{display:flex;align-items:baseline;justify-content:center;flex-wrap:wrap;gap:.25em;font:400 clamp(26px,7vw,40px)/1 'Black Ops One',Impact,sans-serif!important;letter-spacing:.02em;background:none!important;-webkit-text-fill-color:initial;color:#fff!important;margin:4px 8px 2px!important}
-.goat-head .g{color:#3fa9ff;text-shadow:0 0 12px #3fa9ffaa,0 2px 0 #0b2a57}
-.goat-head .b{color:#ff3348;text-shadow:0 0 12px #ff3348aa,0 2px 0 #5a0a14}
-.goat-head small{font:italic 700 .42em Georgia,serif;color:#e8dcc0}
-.spin-centre .goat-head{flex-direction:column;align-items:center;font-size:clamp(28px,9vw,58px)!important;gap:.12em}
-.cr7-dialog .goat-title.goat-head{position:absolute;top:4%;left:0;right:0;filter:drop-shadow(0 3px 0 #000) drop-shadow(0 0 16px #000c);font-size:clamp(26px,8vw,44px)!important;padding:0 40px;-webkit-background-clip:initial;background-clip:initial}
+/* titles: solid extruded lettering (6 layers deep), glossy painted-metal face, a white light sweep and small
+   glints; sapphire G.O.A.T, ruby B.O.A.T. No outline, no neon glow. */
+.goat-head{position:relative;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:.22em;font:400 clamp(30px,8vw,48px)/1.05 Anton,Impact,'Arial Narrow',sans-serif!important;letter-spacing:.03em;background:none!important;-webkit-text-fill-color:initial;color:#fff!important;margin:4px 8px 6px!important}
+.goat-head .w{position:relative;display:inline-block;color:transparent;-webkit-text-fill-color:transparent;-webkit-background-clip:text;background-clip:text;-webkit-text-stroke:0}
+.goat-head .g{background-image:linear-gradient(180deg,#fff 0,#dff0ff 22%,#7fc0ff 45%,#1d6fe0 62%,#0b3c8f 80%,#3a8cf0 100%);text-shadow:0 1px 0 #0d3a7a,0 2px 0 #0b3270,0 3px 0 #0a2b62,0 4px 0 #082455,0 5px 0 #061d47,0 6px 0 #05173a,0 10px 14px #000c}
+.goat-head .b{background-image:linear-gradient(180deg,#fff 0,#ffe0e4 22%,#ff7d8e 45%,#d6152f 62%,#7d0716 80%,#e2334c 100%);text-shadow:0 1px 0 #7a0a18,0 2px 0 #6c0915,0 3px 0 #5e0812,0 4px 0 #50060f,0 5px 0 #43050c,0 6px 0 #360409,0 10px 14px #000c}
+.goat-head .w::after{content:attr(data-t);position:absolute;inset:0;background:inherit;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;text-shadow:none}
+.goat-head .w::before{content:attr(data-t);position:absolute;inset:0;z-index:2;background:linear-gradient(110deg,transparent 42%,#ffffffd0 50%,transparent 58%) no-repeat;background-size:250% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;text-shadow:none;animation:goat-sweep 4s ease-in-out infinite}
+.goat-head .b::before{animation-delay:-2s}
+@keyframes goat-sweep{0%,40%{background-position:130% 0}80%,100%{background-position:-30% 0}}
+.goat-head small{font:italic 600 .3em Barlow,'Segoe UI',sans-serif;color:#cfc9bf;letter-spacing:.1em}
+.goat-glint{position:absolute;z-index:3;width:.26em;height:.26em;background:#fff;clip-path:polygon(50% 0,58% 42%,100% 50%,58% 58%,50% 100%,42% 58%,0 50%,42% 42%);animation:goat-glint 2.4s ease-in-out infinite;pointer-events:none}
+@keyframes goat-glint{0%,70%,100%{transform:scale(0) rotate(0);opacity:0}80%{transform:scale(1) rotate(45deg);opacity:1}}
+@media(prefers-reduced-motion:reduce){.goat-head .w::before,.goat-glint{animation:none}}
+.spin-centre .goat-head{flex-direction:column;font-size:clamp(34px,11vw,66px)!important;gap:.05em}
+.cr7-dialog .goat-title.goat-head{position:absolute;top:4%;left:0;right:0;font-size:clamp(34px,10vw,56px)!important;padding:0 40px;-webkit-background-clip:initial;background-clip:initial}
+/* cards on the board: polished metal frames instead of neon */
+.potw-board .spin-tile{border:clamp(2px,.5vw,3px) solid transparent!important;background:var(--frame) border-box!important;box-shadow:inset 0 0 0 1px #0006,0 2px 5px #000a!important;animation:none!important}
+.potw-board .spin-tile[data-r=gold]{--frame:linear-gradient(135deg,#fff3c4,#b8862c 30%,#ffe7a0 50%,#8a6320 70%,#f6d77e)}
+.potw-board .spin-tile[data-r=purple]{--frame:linear-gradient(135deg,#efe2ff,#6c3fb5 30%,#d8c2ff 50%,#4a2a85 70%,#c6a8f5)}
+.potw-board .spin-tile[data-r=red]{--frame:linear-gradient(135deg,#ffe0e4,#a3122a 30%,#ffb3bd 50%,#6e0b1b 70%,#f08a98)}
+.potw-board .potw{inset:0;border-radius:calc(clamp(6px,1.6vw,11px) - 2px)}
+.potw-board .potw[data-t=gold]{--tc:#d9a93a}.potw-board .potw[data-t=purple]{--tc:#7b45d6}.potw-board .potw[data-t=red]{--tc:#c81e3a}
+.potw-board .potw-rays{background:repeating-conic-gradient(from 0deg at 50% 46%,#ffffff1c 0 3deg,transparent 3deg 12deg)}
+.potw-board .spin-tile.lit{transform:scale(1.15);filter:brightness(1.3)!important;box-shadow:0 0 0 2px #fff,0 6px 16px #000c!important}
+.potw-board .spin-tile.won{animation:spin-won-metal .7s ease-in-out 4!important}
+@keyframes spin-won-metal{50%{transform:scale(1.25);filter:brightness(1.5)}}
+.spark-star{filter:drop-shadow(0 0 3px #fff)!important}
+.spin-centre .potw{box-shadow:0 10px 30px #000c!important;border:3px solid transparent!important;background-origin:border-box}
+.spin-wheel.potw-board{background:linear-gradient(145deg,#241f20,#0e0c0c);border:2.5px solid transparent;background-clip:padding-box;box-shadow:0 0 0 2.5px #c99a3e,inset 0 0 30px #000a,0 10px 30px #000a;outline-color:#f3d48a55}
+.potw-board .spin-badge{background:linear-gradient(135deg,#fff3c4,#b8862c 35%,#ffe7a0 55%,#8a6320);box-shadow:inset 0 0 0 1px #0005}
 /* keep the wallet line right under the board */
 .spin-dialog .cr7-result-name:empty,.spin-dialog .spin-msg:empty{display:none}
 .spin-dialog .cr7-wallet{margin:8px 0 2px}
@@ -75,3 +99,52 @@
 .skin-sil{display:grid!important;box-sizing:border-box;place-items:center;position:relative;overflow:hidden;background:radial-gradient(ellipse at 50% 45%,#9b4dff55,transparent 65%)}
 .skin-sil img{width:71%;height:88%;max-height:88%;min-height:0;object-fit:contain;filter:brightness(0) drop-shadow(0 0 6px #b98cff) drop-shadow(0 0 2px #fff6)}
 .cr7-reward-grid .skin-sil{height:190px}@media(max-width:420px){.cr7-reward-grid .skin-sil{height:150px}}
+
+/* Face-down card, design C: carbon leather and gold foil */
+.potw.back-c{--stripe:#e7c06338;background:linear-gradient(135deg,#0000 46%,var(--stripe) 47% 51%,#0000 52%) 0 0/12px 12px,radial-gradient(ellipse at 50% 40%,#29272d,#09090b 72%)!important;display:grid;place-items:center}
+.potw.back-c::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='.2'/%3E%3C/svg%3E");mix-blend-mode:overlay;pointer-events:none}
+.potw-q{position:relative;font:400 1em/1 Anton,Impact,sans-serif;font-size:clamp(20px,7cqi,60px);color:transparent;background:linear-gradient(160deg,#fff4cf,#c99a3e 45%,#6b4a17 60%,#f3d48a);-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 2px 0 #000) drop-shadow(0 0 8px #e7c06340)}
+.potw{container-type:inline-size}
+.potw .potw-q{font-size:62cqi}
+.potw-logo{position:absolute;top:7%;right:7%;width:22%;display:none;filter:drop-shadow(0 2px 3px #000a)}
+.spin-centre .potw-logo,.rv-back .potw-logo{display:block}
+.spin-centre .potw .potw-q,.rv-back .potw .potw-q{font-size:58cqi}
+.potw-board .potw.back-c{--tc:initial}
+/* Front of a skin card (card-face.js) */
+.cf{position:absolute;inset:0;display:block;container-type:inline-size}
+.cf>svg,.cf>img:first-child{position:absolute;inset:4% 2% 10%;width:96%;height:86%}
+.cf-label.goat-head{position:absolute;top:4.5%;left:6%;margin:0!important;font-size:11cqi!important;justify-content:flex-start;z-index:2}
+.goat-head .w.s{background-image:linear-gradient(180deg,#fff 0,#fff3c4 25%,#e7c063 55%,#8a6320 80%,#f3d48a 100%);text-shadow:0 1px 0 #6b4a17,0 2px 0 #5a3e12,0 3px 0 #48310e,0 6px 10px #000c}
+.cf-logo{position:absolute;top:4%;right:5%;width:15%;z-index:2;filter:drop-shadow(0 2px 3px #000b)}
+.cf-stars{position:absolute;left:0;right:0;bottom:0;z-index:2;display:flex;justify-content:center;gap:2.2cqi;padding:6cqi 0 3.5cqi;background:linear-gradient(transparent,#000d 60%)}
+.cf-stars i{width:9.5cqi;aspect-ratio:1;clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);background:#fff}
+.cf-stars i::after{content:'';display:block;width:100%;height:100%;clip-path:inherit;background:#141316;transform:scale(.72)}
+.cf-stars i.on{background:linear-gradient(180deg,#fff8d6,#e7c063 55%,#a7781f);filter:drop-shadow(0 1px 1px #000)}
+.cf-stars i.on::after{display:none}
+.cr7-reward-grid .cf-stars{display:flex!important;position:static;background:none;padding:4px 0 0;container-type:normal}
+.cr7-reward-grid .cf-stars i{width:14px}
+/* tickets and group missions (missions.js) */
+.ticket-chip{display:inline-flex;align-items:center;gap:5px}.ticket-chip small{opacity:.75;font-size:.85em}
+.missions-dialog{width:min(520px,94vw);text-align:left}
+.missions-dialog>small,.missions-dialog h2{text-align:center;display:block}
+.m-wallet{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0 6px}
+.m-wallet div{display:grid;place-items:center;padding:10px 4px;border-radius:12px;background:#ffffff0a;border:1px solid #ffffff1a}
+.m-wallet b{font:400 26px/1 Anton,Impact,sans-serif;color:#fff}.m-wallet span{font-size:11px;color:#c5cfe0}
+.missions-dialog h3{font-size:14px;margin:16px 0 6px;color:#ffe29b}
+.m-list{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.m-list li{display:grid;grid-template-columns:22px 1fr auto;gap:10px;align-items:center;padding:10px 12px;border-radius:12px;background:#ffffff08;border:1px solid #ffffff14}
+.m-list li.done{border-color:#71d5ac66;background:#71d5ac12}
+.m-check{width:20px;height:20px;border-radius:50%;border:1.5px solid #ffffff55;display:grid;place-items:center;font-size:12px;color:#71d5ac}
+.m-list b{display:block;font-size:13.5px}.m-list small{display:block;font-size:11.5px;color:#aeb6c4;line-height:1.4}
+.m-list em{font-style:normal;font-weight:800;font-size:12px;color:#ffd66e;white-space:nowrap}
+.m-bar{display:block;height:4px;border-radius:4px;background:#ffffff1a;margin-top:6px;overflow:hidden}.m-bar i{display:block;height:100%;background:linear-gradient(90deg,#d6152f,#ff5a6e)}
+.m-note{font-size:12px!important;margin-top:14px}
+
+.potw.back-c[data-t=gold]{--stripe:#e7c06340}.potw.back-c[data-t=red]{--stripe:#ff3b5545}.potw.back-c[data-t=purple]{--stripe:#b07bff45}
+/* stars in the same glossy, extruded style as the G.O.A.T lettering; smaller and lower */
+/* stars sit in the middle of the strip between the name plate and the bottom edge of the card */
+.cf-stars{gap:1.6cqi;padding:0;bottom:4.2cqi;background:none}
+.cf-stars i{width:7.2cqi;background:#ffffffd9}
+.cf-stars i::after{transform:scale(.62);background:#121115}
+.cf-stars i.on{background:linear-gradient(180deg,#fff 0,#fff3c4 22%,#f2c14e 50%,#a7781f 72%,#f6d77e 100%);filter:drop-shadow(0 1px 0 #6b4a17) drop-shadow(0 1px 0 #5a3e12) drop-shadow(0 1px 0 #3a280b) drop-shadow(0 2px 2px #000c)}
+.cr7-reward-grid .cf-stars i{width:12px}

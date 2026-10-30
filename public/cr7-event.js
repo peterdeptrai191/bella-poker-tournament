@@ -1,10 +1,14 @@
 // GOAT or BOAT box (was the CR7 B.O.A.T pack) and the Bella mystery pack, both shown as a spinning wheel.
 import {CHARACTERS,characterById} from './characters.js';
 import {animatedCharacter} from './character-motion.js';
-import {CR7_EVENT,CR7_PRICE,BOX_NAME,cr7Skins,goatSkins,goatTiles,goatFrame,goatOdds,GROUP_ODDS,SPARKLE} from './cr7-catalog.js';
+import {CR7_EVENT,CR7_PRICE,BOX_NAME,DAILY_SPINS,cr7Skins,goatSkins,goatTiles,goatFrame,goatOdds,GROUP_ODDS,SPARKLE} from './cr7-catalog.js';
 import {wheelHTML,spinner,stillArt,celebrate,potwCard} from './spin-wheel.js';
 import {dimmer,revealCard} from './card-reveal.js';
-const GOAT_HEAD='<span class="g">G.O.A.T</span><small>or</small><span class="b">B.O.A.T</span>';
+import {starRow} from './card-face.js';
+import {openGift} from './gift-box.js';
+// small white glints that flash on the G.O.A.T / B.O.A.T lettering
+export function addGlints(root){root.querySelectorAll('.goat-head:not(.cf-label)').forEach(h=>{if(h.querySelector('.goat-glint'))return;[[6,8,0],[44,58,.8],[66,4,1.6],[94,52,.4]].forEach(([x,y,d])=>{const g=document.createElement('i');g.className='goat-glint';g.style.left=x+'%';g.style.top=y+'%';g.style.animationDelay=d+'s';h.append(g);});});}
+const GOAT_HEAD='<span class="w g" data-t="G.O.A.T">G.O.A.T</span><small>or</small><span class="w b" data-t="B.O.A.T">B.O.A.T</span>';
 const ODDS_LINE=`Thẻ đỏ ${GROUP_ODDS.red}% · Thẻ tím ${GROUP_ODDS.purple}% · Thẻ vàng ${GROUP_ODDS.gold}%`;
 let getAccount=()=>null,performRequest,isHome=()=>false,offering=false;
 const offered=new Set();
@@ -21,11 +25,11 @@ function listRewards(){
  const odds=goatOdds(),tiles=goatTiles(),goats=goatSkins().filter(c=>c.id.startsWith('goat-m10')),special=goatSkins().filter(c=>!c.id.startsWith('goat-m10'));
  const groups=[[goats,'GOAT'],[cr7Skins(),'BOAT'],[special,'Special Skin'],[tiles.map(id=>CHARACTERS.find(c=>c.id===id)).filter(c=>!c.event),'Skin từ 10 coin trở lên']];
  const d=dialog('cr7-rewards');
- d.innerHTML=`<button class="cr7-close" aria-label="Đóng">×</button><small>${BOX_NAME.toUpperCase()}</small><h2>Có gì trong vòng quay?</h2><p><b>${ODDS_LINE}</b><br>Máy chủ bốc nhóm màu trước rồi chọn thẻ trong nhóm. Trong nhóm đỏ, M10 Barca và CR7 Real hiếm hơn (2% mỗi thẻ). GOAT, BOAT và Special Skin chỉ có trong vòng quay này.</p>`+groups.map(([skins,title])=>`<h3>${title}</h3><div class="cr7-reward-grid">${skins.map(c=>`<article data-frame="${goatFrame(c)}" style="--cr7-color:${c.color}">${boxArt(c)}<b>${esc(c.name)}</b><span>${pct(odds[c.id]||0)}${getAccount()?.ownedSkins?.includes(c.id)?' · ✓ Đã sở hữu':''}</span></article>`).join('')}</div>`).join('')+'<p>Skin trùng được giữ nguyên trong bộ sưu tập, không hoàn coin.</p>';
+ d.innerHTML=`<button class="cr7-close" aria-label="Đóng">×</button><small>${BOX_NAME.toUpperCase()}</small><h2>Có gì trong vòng quay?</h2><p><b>${ODDS_LINE}</b><br>Máy chủ bốc nhóm màu trước rồi chọn thẻ trong nhóm. Trong nhóm đỏ, M10 Barca và CR7 Real hiếm hơn (2% mỗi thẻ). GOAT, BOAT và Special Skin chỉ có trong vòng quay này.</p>`+groups.map(([skins,title])=>`<h3>${title}</h3><div class="cr7-reward-grid">${skins.map(c=>`<article data-frame="${goatFrame(c)}" style="--cr7-color:${c.color}">${boxArt(c)}<b>${esc(c.name)}</b>${starRow(c)}<span>${pct(odds[c.id]||0)}${getAccount()?.ownedSkins?.includes(c.id)?' · ✓ Đã sở hữu':''}</span></article>`).join('')}</div>`).join('')+'<p>Skin trùng được giữ nguyên trong bộ sưu tập, không hoàn coin.</p>';
  d.querySelector('button').onclick=()=>d.close();d.showModal();
 }
 
-export function offerCr7(){const a=getAccount();if(!a||!isHome()||a.cr7Event?.seen||offered.has(a.id)||offering)return;offering=true;setTimeout(()=>{offering=false;const current=getAccount();if(current?.id!==a.id||!isHome())return;const opened=document.querySelector('dialog[open]');if(opened){opened.addEventListener('close',()=>setTimeout(offerCr7,300),{once:true});return;}offered.add(a.id);const d=dialog('cr7-poster');d.innerHTML=`<button class="cr7-close" aria-label="Đóng sự kiện">×</button><div class="cr7-poster-art goat-poster"><img src="/assets/events/cr7-boat/goat-or-boat-poster.webp" alt="M10 và CR7 quay lưng vào nhau"><h2 class="goat-title goat-head">${GOAT_HEAD}</h2></div><h2>Tặng bạn 1 lượt quay</h2><p>${ODDS_LINE}<br>Lượt đầu miễn phí · Các lượt sau ${CR7_PRICE} coin</p><button class="cr7-gold" data-enter>Quay miễn phí →</button>`;d.querySelector('.cr7-close').onclick=()=>d.close();d.querySelector('[data-enter]').onclick=()=>{d.close();openCr7Pack();};d.showModal();performRequest({op:'seeCr7Event'}).catch(()=>{offered.delete(a.id);});},650);}
+export function offerCr7(){const a=getAccount();if(!a||!isHome()||a.cr7Event?.seen||offered.has(a.id)||offering)return;offering=true;setTimeout(()=>{offering=false;const current=getAccount();if(current?.id!==a.id||!isHome())return;const opened=document.querySelector('dialog[open]');if(opened){opened.addEventListener('close',()=>setTimeout(offerCr7,300),{once:true});return;}offered.add(a.id);const d=dialog('cr7-poster');d.innerHTML=`<button class="cr7-close" aria-label="Đóng sự kiện">×</button><div class="cr7-poster-art goat-poster"><img src="/assets/events/cr7-boat/goat-or-boat-poster.webp" alt="M10 và CR7 quay lưng vào nhau"><h2 class="goat-title goat-head">${GOAT_HEAD}</h2></div><h2>Tặng bạn 1 lượt quay</h2><p>${ODDS_LINE}<br>Lượt đầu miễn phí · Các lượt sau ${CR7_PRICE} coin</p><button class="cr7-gold" data-enter>Quay miễn phí →</button>`;d.querySelector('.cr7-close').onclick=()=>d.close();d.querySelector('[data-enter]').onclick=()=>{d.close();openCr7Pack();};d.showModal();addGlints(d);performRequest({op:'seeCr7Event'}).catch(()=>{offered.delete(a.id);});},650);}
 
 const idle=(label,cls='')=>`<b class="spin-logo ${cls}">${label}</b>`;
 const stepCentre=id=>{const c=characterById(id);return `<img class="spin-peek" src="${stillArt(c)}" alt="" onerror="this.remove()"><em>${esc(c.name)}</em>`;};
@@ -51,15 +55,24 @@ function wheelDialog(mode){
  $('.cr7-equip').onclick=async e=>{e.currentTarget.disabled=true;try{await performRequest({op:'equipSkin',character:result.skin});d.close();}catch(err){e.currentTarget.disabled=false;ui(err.message);}};
  $('[data-open]').onclick=async()=>{if(pending)return;const current=getAccount();receipt??=mode.newReceipt(current);if(mode.storageKey)try{localStorage.setItem(mode.storageKey(accountId),JSON.stringify(receipt));}catch{}
   pending=true;canStop=false;stopNow=null;result=null;$('.cr7-result-name').textContent='';$('.spin-msg').textContent='';wheel.classList.remove('has-prize');ui();
-  try{const [data]=await Promise.all([mode.request(receipt),sp.start()]);
+  try{let data;
+   if(mode.gift)data=await mode.request(receipt);          // mystery pack: no wheel, a gift box to tap open
+   else{[data]=await Promise.all([mode.request(receipt),sp.start()]);
    // full speed and the prize is known: now the player may press DỪNG (or it stops by itself after 8 s)
    canStop=true;ui();$('[data-stop]').focus();
    await new Promise(r=>{const t=setTimeout(r,8000);stopNow=()=>{clearTimeout(t);r();};});
-   canStop=false;stopNow=false;ui();
+   canStop=false;stopNow=false;ui();}
    if(getAccount()?.id!==accountId){sp.stop();d.close();return;}
    result=data.result;const tile=Number.isInteger(result.tile)?result.tile:mode.tiles.indexOf(result.skin);
    const c=characterById(result.skin);
-   if(mode.reveal){const dim=dimmer(d);await sp.land(tile,{onPlan:ms=>dim.fade(ms),winSound:false});await revealCard(d,c,mode.frame(c),{duplicate:result.duplicate});dim.remove();}
+   if(mode.reveal){
+    // the screen goes fully dark while the light is still slowing down, so the last few cards (and the one
+    // it stops on) happen in the dark; the tunnel then shows the prize
+    // after the screen is black the ticking carries on for one more second, then the tunnel starts
+    const dim=dimmer(d);let plan=0;const landing=sp.land(tile,{onPlan:ms=>{plan=ms;dim.fade(ms*.62);},winSound:false});
+    await Promise.race([landing,new Promise(r=>setTimeout(r,plan*.62))]);await new Promise(r=>setTimeout(r,1000));sp.jump(tile);
+    await revealCard(d,c,mode.frame(c),{duplicate:result.duplicate});dim.remove();}
+   else if(mode.gift){await openGift(d,c);sp.jump(tile);}
    else await sp.land(tile);
    receipt=null;if(mode.storageKey)try{localStorage.removeItem(mode.storageKey(accountId));}catch{}
    centre.innerHTML=animatedCharacter(c,'spin-prize');wheel.classList.add('has-prize');
@@ -67,18 +80,18 @@ function wheelDialog(mode){
    if(!mode.reveal)celebrate(c);pending=false;ui();mode.onDone?.(result);
   }catch(err){sp.stop();canStop=false;stopNow=null;if(mode.resetOn?.test(err.message)){receipt=null;if(mode.storageKey)try{localStorage.removeItem(mode.storageKey(accountId));}catch{}}pending=false;ui(err.message+(receipt?' — Bấm lại để tiếp tục đúng lượt này, không trừ coin hai lần.':''));}
  };
- ui();d.showModal();
+ ui();d.showModal();addGlints(d);
 }
 
 export function openCr7Pack(){
  wheelDialog({eyebrow:'BELLA • VÒNG QUAY',title:GOAT_HEAD,titleClass:'goat-head',label:GOAT_HEAD,badge:'🐐',frame:goatFrame,sparkle:SPARKLE,hidden:true,reveal:true,tiles:goatTiles(),
   sub:ODDS_LINE,
-  footnote:`Mỗi tài khoản được tặng 1 lượt quay. Các lượt sau ${CR7_PRICE} coin. Skin trùng không hoàn coin.`,
+  footnote:`Mỗi tài khoản được tặng 1 lượt quay. Các lượt sau ${CR7_PRICE} coin. Tối đa ${DAILY_SPINS} lượt mỗi ngày. Skin trùng không hoàn coin.`,
   storageKey:id=>'bella.'+CR7_EVENT+'.pending.'+id,validReceipt:r=>r&&typeof r.free==='boolean'&&typeof r.requestId==='string',
-  newReceipt:a=>({requestId:crypto.randomUUID(),free:!a.cr7Event?.freeUsed}),
-  button:(a,r)=>{const free=r?r.free:!a.cr7Event?.freeUsed;return r?{text:'Tiếp tục lượt đang quay'}:free?{text:'Quay miễn phí 🎁'}:a.coins<CR7_PRICE?{text:`Chưa đủ ${CR7_PRICE} coin`,disabled:true}:{text:`Quay · ${CR7_PRICE} coin`};},
-  walletNote:a=>a.cr7Event?.freeUsed?`Lượt tiếp: ${CR7_PRICE} coin`:'Còn 1 lượt miễn phí',
-  request:r=>performRequest({op:'openCr7Pack',...r}),resetOn:/đã dùng lượt miễn phí|chưa đủ \d+ coin/});
+  newReceipt:a=>{const free=!a.cr7Event?.freeUsed;return {requestId:crypto.randomUUID(),free,ticket:!free&&(a.tickets||0)>0};},
+  button:(a,r)=>{const free=r?r.free:!a.cr7Event?.freeUsed;return r?{text:'Tiếp tục lượt đang quay'}:(a.cr7Event?.spinsToday||0)>=DAILY_SPINS?{text:'Hết lượt hôm nay · quay lại ngày mai',disabled:true}:free?{text:'Quay miễn phí 🎁'}:(a.tickets||0)>0?{text:`Quay bằng vé 🎟 · còn ${a.tickets} vé`}:a.coins<CR7_PRICE?{text:`Chưa đủ ${CR7_PRICE} coin`,disabled:true}:{text:`Quay · ${CR7_PRICE} coin`};},
+  walletNote:a=>(a.cr7Event?.freeUsed?((a.tickets||0)>0?`Vé: ${a.tickets}`:`Lượt tiếp: ${CR7_PRICE} coin`):'Còn 1 lượt miễn phí')+` · Hôm nay: ${Math.max(0,DAILY_SPINS-(a.cr7Event?.spinsToday||0))}/${DAILY_SPINS} lượt`,
+  request:r=>performRequest({op:'openCr7Pack',...r}),resetOn:/đã dùng lượt miễn phí|chưa đủ \d+ coin|quay đủ \d+ lượt|chưa có vé/});
 }
 
 const MYSTERY_TIERS=[[3,50],[10,35],[15,15],[20,5]];
@@ -87,11 +100,11 @@ function listMystery(){const d=dialog('cr7-rewards');const total=MYSTERY_TIERS.r
  d.innerHTML='<button class="cr7-close" aria-label="Đóng">×</button><small>BELLA MYSTERY PACK</small><h2>Tỷ lệ gói bí ẩn</h2><p>Bốc nhóm giá theo tỷ lệ, rồi chọn đều một skin trong nhóm.</p>'+MYSTERY_TIERS.map(([p,w])=>{const skins=CHARACTERS.filter(c=>c.price===p&&!c.event);return `<h3>Skin ${p} coin · ${pct(w/total)}</h3><div class="cr7-reward-grid">${skins.map(c=>`<article style="--cr7-color:${c.color}">${art(c)}<b>${esc(c.name)}</b><span>${pct(w/total/skins.length)}</span></article>`).join('')}</div>`;}).join('');
  d.querySelector('button').onclick=()=>d.close();d.showModal();}
 export function openMysteryPack(onDone){
- wheelDialog({cls:'mystery-wheel',eyebrow:'BELLA MYSTERY PACK',title:'Ai đang chờ bạn?',label:'?',badge:'?',tiles:mysteryTiles(),
+ wheelDialog({cls:'mystery-wheel',gift:true,eyebrow:'BELLA MYSTERY PACK',title:'Ai đang chờ bạn?',label:'<span class="gift-mini" aria-hidden="true"><span class="gift-lid"><i class="rib-v"></i><span class="bow"><i></i><i></i></span></span><span class="gift-body"><i class="rib-v"></i><i class="rib-h"></i><b class="gift-q">?</b></span></span>',badge:'?',tiles:mysteryTiles(),
   sub:'3 coin: 47,62% · 10 coin: 33,33% · 15 coin: 14,29% · 20 coin: 4,76%',
   footnote:'Giá 10 coin/lượt. Có thể ra skin đã sở hữu, skin trùng không hoàn coin.',list:listMystery,
   newReceipt:()=>({requestId:crypto.randomUUID()}),
-  button:(a,r)=>r?{text:'Tiếp tục lượt đang quay'}:a.coins<10?{text:'Chưa đủ 10 coin',disabled:true}:{text:'Quay · 10 coin ✦'},
+  button:(a,r)=>r?{text:'Tiếp tục mở quà'}:a.coins<10?{text:'Chưa đủ 10 coin',disabled:true}:{text:'Mở hộp quà · 10 coin 🎁'},
   request:r=>performRequest({op:'buyRandomSkin',requestId:r.requestId}),resetOn:/chưa đủ 10 coin/,onDone:r=>onDone?.(r.skin)});
 }
 document.addEventListener('click',e=>{if(e.target.closest('[data-cr7-pack]'))openCr7Pack();});
