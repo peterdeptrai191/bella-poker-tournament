@@ -1,4 +1,5 @@
 import {cr7Character} from './cr7-motion.js';
+import {goatCharacter} from './goat-motion.js';
 import {heroCharacter} from './hero-motion.js';
 // Eyelids are registered in the artwork's original pixel coordinates.
 // Keeping the effects in the same SVG viewport preserves every existing seat box.
@@ -27,6 +28,7 @@ const glitter=w=>`<g class="bella-glitter" aria-hidden="true">${GLITTER.map(([x,
 const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 export function animatedCharacter(character,cls='character-avatar'){
+ if(character.id.startsWith('goat-'))return goatCharacter(character,cls);
  if(character.event==='cr7-boat-v1')return cr7Character(character,cls);
  const hero=heroCharacter(character,cls);if(hero)return hero;
  const m=motion[character.id];

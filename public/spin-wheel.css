@@ -1,0 +1,26 @@
+/* Spin wheel (spin-wheel.js): tiles on a ring, a light running around them, the prize in the middle. */
+.spin-dialog{width:min(560px,96vw)}
+.spin-dialog h2{margin:6px 20px 2px;font-size:clamp(24px,6vw,34px);letter-spacing:.04em;background:linear-gradient(100deg,#ffe9a0,#e0ad45,#fff1c2);-webkit-background-clip:text;background-clip:text;color:transparent}
+.spin-sub{margin:0 0 6px;font-size:12px!important}
+.spin-wheel{--size:min(440px,100%);container-type:inline-size;position:relative;width:var(--size);aspect-ratio:1;margin:6px auto 0}
+.spin-track{position:absolute;inset:3%;border-radius:50%;background:radial-gradient(circle,transparent 58%,#ffffff08 59%,#ffffff12 70%,transparent 71%),radial-gradient(circle,#1d3354 0,#0a1222 72%);border:2px solid #c7a75d55;box-shadow:0 0 30px #000a inset,0 0 24px #e8b85022}
+.spin-tile{--t:min(13cqi,260cqi / var(--n));position:absolute;left:var(--x);top:var(--y);width:var(--t);height:var(--t);margin:calc(var(--t) / -2) 0 0 calc(var(--t) / -2);border-radius:50%;display:grid;place-items:center;overflow:hidden;background:radial-gradient(circle at 50% 35%,#2b3e5c,#101a2c);border:2px solid var(--rc,#8a94a6);box-shadow:0 2px 6px #0008;transition:transform .08s,box-shadow .08s;z-index:1}
+.spin-tile img{width:118%;height:118%;object-fit:contain;object-position:50% 12%;translate:0 6%;pointer-events:none}
+.spin-tile[data-r=rare]{--rc:#4aa3ff}.spin-tile[data-r=epic]{--rc:#b06bff}.spin-tile[data-r=gold]{--rc:#ffd34d}
+.spin-tile[data-r=boat]{--rc:#ff4d5e;box-shadow:0 0 0 2px #ffd34d88,0 2px 6px #0008}.spin-tile[data-r=goat]{--rc:#6cc4ff;box-shadow:0 0 0 2px #ffd34d88,0 2px 6px #0008}
+.spin-wheel.spinning .spin-tile:not(.lit){filter:brightness(.7)}
+.spin-tile.lit{transform:scale(1.4);z-index:3;border-color:#fff7cf;box-shadow:0 0 0 3px #ffd34d,0 0 18px 6px #ffd34dcc}
+.spin-tile.won{animation:spin-won .7s ease-in-out 4}
+@keyframes spin-won{50%{transform:scale(1.6);box-shadow:0 0 0 4px #fff,0 0 30px 12px #ffd34d}}
+.spin-centre{position:absolute;inset:17%;border-radius:50%;display:grid;place-items:center;align-content:center;text-align:center;overflow:hidden;background:radial-gradient(circle,#24406a,#0c1526 70%);border:2px solid #c7a75d66;box-shadow:inset 0 0 30px #000b}
+.spin-logo{font:900 clamp(26px,9cqi,44px)/.95 Georgia,serif;color:#ffe29b;text-shadow:0 0 18px #e8b850aa;letter-spacing:.04em}
+.spin-logo small{display:block;margin:4px 0;font:italic 600 .42em/1 Georgia,serif;color:#c5cfe0;letter-spacing:.1em}
+.mystery-wheel .spin-logo{font-size:clamp(60px,22cqi,110px);color:#e7c9ff;text-shadow:0 0 22px #c591ef}
+.spin-peek{width:62%;height:62%;object-fit:contain}
+.spin-centre em{display:block;margin-top:2px;font-style:normal;font-weight:800;font-size:clamp(11px,3.4cqi,15px);color:#fff3d6}
+.spin-prize{width:100%;height:100%;animation:cr7-prize .8s cubic-bezier(.2,.7,.2,1)}
+.spin-wheel.has-prize .spin-centre{inset:9%;z-index:4;background:radial-gradient(circle,#3a5a8c,#0c1526 72%);box-shadow:0 0 40px #ffd34d55,inset 0 0 30px #000b}
+.spin-dialog .cr7-result-name{min-height:1.2em;margin:10px 0 2px}
+.spin-dialog .spin-msg{margin:0;min-height:1.4em}
+@media(prefers-reduced-motion:reduce){.spin-tile.won,.spin-prize{animation:none}}
+.spin-dialog [hidden]{display:none!important}

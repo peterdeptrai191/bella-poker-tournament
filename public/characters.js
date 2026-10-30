@@ -19,6 +19,8 @@ export const CHARACTERS = [
  {id:'bella-spider',name:'Spider-Man',color:'#77d7f8',tag:'Bella nhện · Tơ chuyển động',locked:true,price:10,effect:'web',asset:'bella-spider-transparent.png'},
  {id:'sydney-sweeney',name:'Sydney Sweeney',color:'#ff9fce',tag:'Huyền thoại · Heart Royale',locked:true,price:20,effect:'hearts',rarity:'legendary'},
  {id:'son-tung-mtp',name:'Sơn Tùng MTP',color:'#c7bbff',tag:'Spotlight · Sân khấu ánh sao',locked:true,price:20,effect:'music'},
- ...[['mu','CR7 MU','#ff443d'],['sporting','CR7 Sporting','#55ef99'],['real','CR7 Real','#b3dfff'],['al-nassr','CR7 Al Nassr','#ffd64d']].map(([id,name,color])=>({id:'cr7-'+id,name,color,tag:'B.O.A.T · Độc quyền pack',price:null,locked:true,event:'cr7-boat-v1',effect:'football'}))
+ ...[['mu','CR7 MU','#ff443d'],['sporting','CR7 Sporting','#55ef99'],['real','CR7 Real','#b3dfff'],['al-nassr','CR7 Al Nassr','#ffd64d']].map(([id,name,color])=>({id:'cr7-'+id,name,color,tag:'B.O.A.T · Độc quyền pack',price:null,locked:true,event:'cr7-boat-v1',effect:'football'})),
+ // GOAT skins: only from the GOAT or BOAT box (art in /assets/events/goat/, effects in goat-motion.js)
+ ...[['goat-m10-barca-2015','M10 Barca 2015','#2f5fc4','Big Time · 30.05.2015'],['goat-m10-bernabeu','M10 Bernabéu','#c4304f','Big Time · 23.04.2017'],['goat-m10-paris','M10 Paris','#3d5bb5','GOAT · Paris'],['goat-m10-miami','M10 Miami','#ff5fae','GOAT · Miami'],['goat-neymar-samba','Neymar Samba','#ffd43b','Samba · Số 10']].map(([id,name,color,tag])=>({id,name,color,tag,price:null,locked:true,event:'cr7-boat-v1',effect:'football'}))
 ];
 export const characterById = id => CHARACTERS.find(c=>c.id===id)||CHARACTERS.find(c=>c.id===DEFAULT_CHARACTER);
