@@ -87,9 +87,9 @@ export function whoosh({volume=.7,ms=650}={}){
 }
 // Plays a recording with its volume following `points` ([seconds, gain] pairs). Returns a control whose
 // peak(gain) jumps straight to that loudness (used when the player skips ahead).
-export function playShaped(name,points){
+export function playShaped(name,points,{delay=0}={}){
  if(!audio||audio.state!=='running'||!buffers[name]||!sfxEnabled())return {peak(){},stop(){}};
- const t=audio.currentTime,src=audio.createBufferSource(),g=audio.createGain();src.buffer=buffers[name];
+ const t=audio.currentTime+delay/1000,src=audio.createBufferSource(),g=audio.createGain();src.buffer=buffers[name];
  g.gain.setValueAtTime(points[0][1],t);for(const [at,v] of points.slice(1))g.gain.linearRampToValueAtTime(v,t+at);
  src.connect(g).connect(audio.destination);src.start(t);
  return {peak(v){const n=audio.currentTime;g.gain.cancelScheduledValues(n);g.gain.setValueAtTime(v,n);g.gain.linearRampToValueAtTime(0,n+2.2);},stop(){try{src.stop();}catch{}}};

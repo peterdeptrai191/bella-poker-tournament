@@ -3,6 +3,8 @@ import {CHARACTERS} from './characters.js';
 export const CR7_EVENT='cr7-boat-v1';
 export const CR7_PRICE=17;
 export const BOX_NAME='GOAT or BOAT';
+// Each account may spin at most this many times a day (Vietnam time, server clock), the free spin included.
+export const DAILY_SPINS=10;
 const BOAT_ORDER=['cr7-mu','cr7-real','cr7-sporting','cr7-al-nassr'];
 export const cr7Skins=()=>CHARACTERS.filter(c=>c.event===CR7_EVENT&&c.id.startsWith('cr7-')).sort((a,b)=>BOAT_ORDER.indexOf(a.id)-BOAT_ORDER.indexOf(b.id));
 export const goatSkins=()=>CHARACTERS.filter(c=>c.event===CR7_EVENT&&c.id.startsWith('goat-'));

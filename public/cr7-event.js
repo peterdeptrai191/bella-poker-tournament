@@ -1,7 +1,7 @@
 // GOAT or BOAT box (was the CR7 B.O.A.T pack) and the Bella mystery pack, both shown as a spinning wheel.
 import {CHARACTERS,characterById} from './characters.js';
 import {animatedCharacter} from './character-motion.js';
-import {CR7_EVENT,CR7_PRICE,BOX_NAME,cr7Skins,goatSkins,goatTiles,goatFrame,goatOdds,GROUP_ODDS,SPARKLE} from './cr7-catalog.js';
+import {CR7_EVENT,CR7_PRICE,BOX_NAME,DAILY_SPINS,cr7Skins,goatSkins,goatTiles,goatFrame,goatOdds,GROUP_ODDS,SPARKLE} from './cr7-catalog.js';
 import {wheelHTML,spinner,stillArt,celebrate,potwCard} from './spin-wheel.js';
 import {dimmer,revealCard} from './card-reveal.js';
 const GOAT_HEAD='<span class="g">G.O.A.T</span><small>or</small><span class="b">B.O.A.T</span>';
@@ -62,8 +62,9 @@ function wheelDialog(mode){
    if(mode.reveal){
     // the screen goes fully dark while the light is still slowing down, so the last few cards (and the one
     // it stops on) happen in the dark; the tunnel then shows the prize
-    const dim=dimmer(d);let plan=0;sp.land(tile,{onPlan:ms=>{plan=ms;dim.fade(ms*.62);},winSound:false});
-    await new Promise(r=>setTimeout(r,plan*.62+250));sp.jump(tile);
+    // after the screen is black the ticking carries on for one more second, then the tunnel starts
+    const dim=dimmer(d);let plan=0;const landing=sp.land(tile,{onPlan:ms=>{plan=ms;dim.fade(ms*.62);},winSound:false});
+    await Promise.race([landing,new Promise(r=>setTimeout(r,plan*.62))]);await new Promise(r=>setTimeout(r,1000));sp.jump(tile);
     await revealCard(d,c,mode.frame(c),{duplicate:result.duplicate});dim.remove();}
    else await sp.land(tile);
    receipt=null;if(mode.storageKey)try{localStorage.removeItem(mode.storageKey(accountId));}catch{}
@@ -78,12 +79,12 @@ function wheelDialog(mode){
 export function openCr7Pack(){
  wheelDialog({eyebrow:'BELLA • VÒNG QUAY',title:GOAT_HEAD,titleClass:'goat-head',label:GOAT_HEAD,badge:'🐐',frame:goatFrame,sparkle:SPARKLE,hidden:true,reveal:true,tiles:goatTiles(),
   sub:ODDS_LINE,
-  footnote:`Mỗi tài khoản được tặng 1 lượt quay. Các lượt sau ${CR7_PRICE} coin. Skin trùng không hoàn coin.`,
+  footnote:`Mỗi tài khoản được tặng 1 lượt quay. Các lượt sau ${CR7_PRICE} coin. Tối đa ${DAILY_SPINS} lượt mỗi ngày. Skin trùng không hoàn coin.`,
   storageKey:id=>'bella.'+CR7_EVENT+'.pending.'+id,validReceipt:r=>r&&typeof r.free==='boolean'&&typeof r.requestId==='string',
   newReceipt:a=>({requestId:crypto.randomUUID(),free:!a.cr7Event?.freeUsed}),
-  button:(a,r)=>{const free=r?r.free:!a.cr7Event?.freeUsed;return r?{text:'Tiếp tục lượt đang quay'}:free?{text:'Quay miễn phí 🎁'}:a.coins<CR7_PRICE?{text:`Chưa đủ ${CR7_PRICE} coin`,disabled:true}:{text:`Quay · ${CR7_PRICE} coin`};},
-  walletNote:a=>a.cr7Event?.freeUsed?`Lượt tiếp: ${CR7_PRICE} coin`:'Còn 1 lượt miễn phí',
-  request:r=>performRequest({op:'openCr7Pack',...r}),resetOn:/đã dùng lượt miễn phí|chưa đủ \d+ coin/});
+  button:(a,r)=>{const free=r?r.free:!a.cr7Event?.freeUsed;return r?{text:'Tiếp tục lượt đang quay'}:(a.cr7Event?.spinsToday||0)>=DAILY_SPINS?{text:'Hết lượt hôm nay · quay lại ngày mai',disabled:true}:free?{text:'Quay miễn phí 🎁'}:a.coins<CR7_PRICE?{text:`Chưa đủ ${CR7_PRICE} coin`,disabled:true}:{text:`Quay · ${CR7_PRICE} coin`};},
+  walletNote:a=>(a.cr7Event?.freeUsed?`Lượt tiếp: ${CR7_PRICE} coin`:'Còn 1 lượt miễn phí')+` · Hôm nay: ${Math.max(0,DAILY_SPINS-(a.cr7Event?.spinsToday||0))}/${DAILY_SPINS} lượt`,
+  request:r=>performRequest({op:'openCr7Pack',...r}),resetOn:/đã dùng lượt miễn phí|chưa đủ \d+ coin|quay đủ \d+ lượt/});
 }
 
 const MYSTERY_TIERS=[[3,50],[10,35],[15,15],[20,5]];

@@ -30,3 +30,20 @@ test('box skins cannot be bought one by one and the free spin is used once',asyn
  const login=await call('login',{username:'CR7 test',password:'pw'});assert.equal(login.account.cr7Event.freeUsed,true);
  assert.equal((await call('seeCr7Event')).account.cr7Event.seen,true);
 });
+
+test('GOAT or BOAT: at most 10 spins a day per account, the free spin included; repeats of the same spin do not count',async()=>{
+ clearMemory();const u=await accountRequest({body:{op:'register',username:'Spin limit',password:'pw'}}),token=u.cookieToken;
+ const call=(op,body={})=>accountRequest({token,body:{op,requestId:randomUUID(),...body}});
+ const identity=await authenticateAccount(token),doc=await accountDocument(identity);doc.value.coins=1000;await writeRecord(identity.key,doc.raw,doc.value);
+ const first=randomUUID();await call('openCr7Pack',{requestId:first,free:true});await call('openCr7Pack',{requestId:first,free:true});
+ for(let i=0;i<9;i++)await call('openCr7Pack',{free:false});
+ const acc=(await call('account')).account;assert.equal(acc.cr7Event.spinsToday,10);assert.equal(acc.coins,1000-9*17);
+ await assert.rejects(()=>call('openCr7Pack',{free:false}),/đủ 10 lượt/);
+ assert.equal((await call('account')).account.coins,1000-9*17);
+});
+test('logging in from two devices at the same moment opens the login coin box only once',async()=>{
+ clearMemory();await accountRequest({body:{op:'register',username:'Two devices',password:'pw'}});
+ const logins=await Promise.all(Array.from({length:4},()=>accountRequest({body:{op:'login',username:'Two devices',password:'pw',requestId:randomUUID()},ip:'device-'+Math.random()})));
+ const paid=logins.filter(r=>r.gift);assert.equal(paid.length,1);
+ const after=await accountRequest({body:{op:'login',username:'Two devices',password:'pw',requestId:randomUUID()}});assert.equal(after.gift,null);assert.equal(after.account.coins,paid[0].gift);
+});

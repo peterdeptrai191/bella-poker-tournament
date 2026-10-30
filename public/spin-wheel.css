@@ -61,19 +61,31 @@
 /* the big card in the middle while the light runs */
 .spin-centre .potw{position:relative;inset:auto;width:58%;aspect-ratio:3/4;border-radius:14px;border:2px solid color-mix(in srgb,var(--tc) 80%,#fff);box-shadow:0 0 24px var(--tc)}
 .spin-centre .potw-base{font-size:clamp(7px,2vw,12px)}
-/* titles: G.O.A.T in blue, B.O.A.T in red */
-.goat-head{display:flex;align-items:baseline;justify-content:center;flex-wrap:wrap;gap:.25em;font:400 clamp(26px,7vw,40px)/1 'Black Ops One',Impact,sans-serif!important;letter-spacing:.02em;background:none!important;-webkit-text-fill-color:initial;color:#fff!important;margin:4px 8px 2px!important}
-.goat-head .g,.goat-head .b{position:relative;display:inline-block;-webkit-text-stroke:1.5px currentColor;background-size:260% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:title-shine 3.2s ease-in-out infinite}
-.goat-head .g{color:#7cc4ff;background-image:linear-gradient(105deg,#1a6fe0 0 38%,#c8e8ff 46%,#fff 50%,#c8e8ff 54%,#2d8cff 62% 100%);filter:drop-shadow(0 2px 0 #06204a) drop-shadow(0 0 8px #3fa9ff) drop-shadow(0 0 18px #3fa9ff88)}
-.goat-head .b{color:#ff7a88;background-image:linear-gradient(105deg,#d1122b 0 38%,#ffd0d6 46%,#fff 50%,#ffd0d6 54%,#ff2d48 62% 100%);filter:drop-shadow(0 2px 0 #4a0610) drop-shadow(0 0 8px #ff3348) drop-shadow(0 0 18px #ff334888);animation-delay:-1.6s}
-@keyframes title-shine{0%{background-position:100% 0}55%,100%{background-position:0 0}}
-.goat-head .g::after,.goat-head .b::after{content:'';position:absolute;top:-.12em;right:-.28em;width:.42em;height:.42em;background:#fff;clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%);filter:drop-shadow(0 0 4px #fff);animation:title-twinkle 1.6s ease-in-out infinite;-webkit-text-fill-color:initial}
-.goat-head .b::after{right:auto;left:-.28em;top:auto;bottom:-.08em;animation-delay:-.8s}
-@keyframes title-twinkle{0%,100%{transform:scale(.2) rotate(0);opacity:0}50%{transform:scale(1) rotate(45deg);opacity:1}}
-@media(prefers-reduced-motion:reduce){.goat-head .g,.goat-head .b,.goat-head .g::after,.goat-head .b::after{animation:none}}
-.goat-head small{font:italic 700 .42em Georgia,serif;color:#e8dcc0}
-.spin-centre .goat-head{flex-direction:column;align-items:center;font-size:clamp(28px,9vw,58px)!important;gap:.12em}
-.cr7-dialog .goat-title.goat-head{position:absolute;top:4%;left:0;right:0;filter:drop-shadow(0 3px 0 #000) drop-shadow(0 0 16px #000c);font-size:clamp(26px,8vw,44px)!important;padding:0 40px;-webkit-background-clip:initial;background-clip:initial}
+/* titles: engraved metal lettering, sapphire G.O.A.T and ruby B.O.A.T with a slow light sweep (no neon) */
+.goat-head{display:flex;align-items:baseline;justify-content:center;flex-wrap:wrap;gap:.22em;font:900 clamp(26px,7.2vw,42px)/1 Cinzel,'Times New Roman',serif!important;letter-spacing:.04em;background:none!important;-webkit-text-fill-color:initial;color:#fff!important;margin:4px 8px 2px!important}
+.goat-head .g,.goat-head .b{position:relative;display:inline-block;-webkit-text-stroke:.6px #e9c877;background-size:100% 100%,240% 100%;background-repeat:no-repeat;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:title-shine 4.5s ease-in-out infinite}
+.goat-head .g{background-image:linear-gradient(180deg,#f2f8ff 0,#b9d3f2 30%,#4f7fbf 52%,#1d3f73 60%,#7fa8dc 85%,#d9e8fb 100%),linear-gradient(105deg,transparent 40%,#ffffffb0 50%,transparent 60%);filter:drop-shadow(0 1px 0 #ffffff55) drop-shadow(0 2px 0 #0b1d3a) drop-shadow(0 4px 6px #000a)}
+.goat-head .b{background-image:linear-gradient(180deg,#fff0f1 0,#f2a8b1 28%,#c1263b 52%,#6d0b18 60%,#d9566a 85%,#ffd5da 100%),linear-gradient(105deg,transparent 40%,#ffffffb0 50%,transparent 60%);filter:drop-shadow(0 1px 0 #ffffff55) drop-shadow(0 2px 0 #3a0610) drop-shadow(0 4px 6px #000a);animation-delay:-2.25s}
+@keyframes title-shine{0%,35%{background-position:0 0,140% 0}75%,100%{background-position:0 0,-40% 0}}
+.goat-head small{font:italic 600 .4em 'Times New Roman',serif;color:#d9c79a;letter-spacing:.08em}
+@media(prefers-reduced-motion:reduce){.goat-head .g,.goat-head .b{animation:none}}
+.spin-centre .goat-head{flex-direction:column;align-items:center;font-size:clamp(28px,9.5vw,60px)!important;gap:.1em}
+.cr7-dialog .goat-title.goat-head{position:absolute;top:4%;left:0;right:0;filter:drop-shadow(0 3px 6px #000c);font-size:clamp(26px,8vw,46px)!important;padding:0 40px;-webkit-background-clip:initial;background-clip:initial}
+/* cards on the board: polished metal frames instead of neon */
+.potw-board .spin-tile{border:clamp(2px,.5vw,3px) solid transparent!important;background:var(--frame) border-box!important;box-shadow:inset 0 0 0 1px #0006,0 2px 5px #000a!important;animation:none!important}
+.potw-board .spin-tile[data-r=gold]{--frame:linear-gradient(135deg,#fff3c4,#b8862c 30%,#ffe7a0 50%,#8a6320 70%,#f6d77e)}
+.potw-board .spin-tile[data-r=purple]{--frame:linear-gradient(135deg,#efe2ff,#6c3fb5 30%,#d8c2ff 50%,#4a2a85 70%,#c6a8f5)}
+.potw-board .spin-tile[data-r=red]{--frame:linear-gradient(135deg,#ffe0e4,#a3122a 30%,#ffb3bd 50%,#6e0b1b 70%,#f08a98)}
+.potw-board .potw{inset:0;border-radius:calc(clamp(6px,1.6vw,11px) - 2px)}
+.potw-board .potw[data-t=gold]{--tc:#d9a93a}.potw-board .potw[data-t=purple]{--tc:#7b45d6}.potw-board .potw[data-t=red]{--tc:#c81e3a}
+.potw-board .potw-rays{background:repeating-conic-gradient(from 0deg at 50% 46%,#ffffff1c 0 3deg,transparent 3deg 12deg)}
+.potw-board .spin-tile.lit{transform:scale(1.15);filter:brightness(1.3)!important;box-shadow:0 0 0 2px #fff,0 6px 16px #000c!important}
+.potw-board .spin-tile.won{animation:spin-won-metal .7s ease-in-out 4!important}
+@keyframes spin-won-metal{50%{transform:scale(1.25);filter:brightness(1.5)}}
+.spark-star{filter:drop-shadow(0 0 3px #fff)!important}
+.spin-centre .potw{box-shadow:0 10px 30px #000c!important;border:3px solid transparent!important;background-origin:border-box}
+.spin-wheel.potw-board{background:linear-gradient(145deg,#14243d,#070d18);border:2.5px solid transparent;background-clip:padding-box;box-shadow:0 0 0 2.5px #c99a3e,inset 0 0 30px #000a,0 10px 30px #000a;outline-color:#f3d48a55}
+.potw-board .spin-badge{background:linear-gradient(135deg,#fff3c4,#b8862c 35%,#ffe7a0 55%,#8a6320);box-shadow:inset 0 0 0 1px #0005}
 /* keep the wallet line right under the board */
 .spin-dialog .cr7-result-name:empty,.spin-dialog .spin-msg:empty{display:none}
 .spin-dialog .cr7-wallet{margin:8px 0 2px}
