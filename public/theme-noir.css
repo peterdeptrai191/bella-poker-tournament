@@ -1,8 +1,8 @@
 /* Red – blue – black – white look on felt (loaded last). Dark surfaces are warm blacks, main actions are raised red buttons,
    secondary actions white, gold only for coins and stars; the table felt is deep green. */
-:root{--bg:#0a0a0c;--panel:#151417;--line:#2d2a2e;--muted:#a49e97;--white:#f6f3ee;--noir-red:#d6152f;--noir-red-hi:#ff3049;--noir-red-lo:#6e0612}
+:root{--bg:#010313;--panel:#0f1b30;--line:#2a3550;--muted:#b9aca8;--white:#fcebe5;--noir-red:#ff001e;--noir-red-hi:#ff3349;--noir-red-lo:#7a000e;--navy:#1e3c65;--cream:#fcebe5}
 body{background:radial-gradient(ellipse at 80% -10%,#3a070f 0,transparent 55%),radial-gradient(ellipse at 0 110%,#1c0408 0,transparent 50%),var(--bg)}
-button.primary,.cr7-gold,.lobby-cta{background:linear-gradient(#ff2a45,#b40d24)!important;border-color:#ff5a6e!important;color:#fff!important;box-shadow:inset 0 1px 0 #ff8a99,0 3px 0 var(--noir-red-lo),0 8px 18px #d6152f33!important;text-shadow:0 1px 0 #0005}
+button.primary,.cr7-gold,.lobby-cta{background:linear-gradient(#ff6676,#ff2a42 49%,#ff001e 51%,#b80016)!important;border-color:#7a000e!important;color:#fff!important;box-shadow:inset 0 1px 0 #ff8a99,0 3px 0 var(--noir-red-lo),0 8px 18px #d6152f33!important;text-shadow:0 1px 0 #0005}
 button.primary:hover:enabled,.cr7-gold:hover:enabled{background:linear-gradient(#ff4058,#c81029)!important}
 button.primary:active:enabled,.cr7-gold:active:enabled{transform:translateY(2px);box-shadow:inset 0 1px 0 #ff8a99,0 1px 0 var(--noir-red-lo)!important}
 .header{border-bottom:2px solid var(--noir-red)}
@@ -18,22 +18,31 @@ dialog{background:#141316;border-color:#2d2a2e}
 .game-actions button:hover:enabled{filter:brightness(1.08)}
 
 /* ---- Felt everywhere: fabric grain, stitched edge and a raised, slightly 3D block for every frame ---- */
-:root{--felt-grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.15' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23f)'/%3E%3C/svg%3E");
- --felt-blue:radial-gradient(ellipse at 30% 0%,#2a56b8 0,#163a8a 45%,#0c2259 100%);--felt-red:radial-gradient(ellipse at 30% 0%,#d8253d 0,#a3122a 45%,#5e0612 100%);--felt-black:radial-gradient(ellipse at 30% 0%,#2a282c 0,#18171a 50%,#0d0c0e 100%);
- --raised:inset 0 1px 0 #ffffff2e,inset 0 -2px 0 #00000059,0 5px 0 #050506,0 6px 0 #ffffff0d,0 14px 26px #000000b3}
-body{background:var(--felt-grain),radial-gradient(ellipse at 85% -10%,#5e061255 0,transparent 55%),radial-gradient(ellipse at 0 110%,#0c225955 0,transparent 55%),#0b0a0c}
-.panel,.character-summary,.account-toolbar,.mystery-pack,.player-slot,.config-strip,.recent,.sidebar,.step,.join-box,.create-box{background:var(--felt-grain),var(--felt-blue)!important;border:1px solid #ffffff1f!important;box-shadow:var(--raised)!important;outline:1px dashed #ffffff26;outline-offset:-7px}
-.hero-art{box-shadow:var(--raised)!important;border:1px solid #ffffff22!important;outline:1px dashed #ffffff26;outline-offset:-8px}
+:root{
+ /* iOS 6-style materials: pebbled leather (lit from above), dark linen for the page, and stitching */
+ --felt-grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='l' x='0' y='0'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.55' numOctaves='3' seed='3' stitchTiles='stitch'/%3E%3CfeDiffuseLighting lighting-color='%23fff' surfaceScale='2.2' diffuseConstant='1'%3E%3CfeDistantLight azimuth='225' elevation='52'/%3E%3C/feDiffuseLighting%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  .35 0 0 0 -.18'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23l)'/%3E%3C/svg%3E");
+ --linen:repeating-linear-gradient(0deg,#ffffff06 0 1px,transparent 1px 3px),repeating-linear-gradient(90deg,#ffffff05 0 1px,transparent 1px 3px),repeating-linear-gradient(0deg,#0000002e 0 1px,transparent 1px 2px);
+ --felt-blue:radial-gradient(ellipse at 30% 0%,#2f5a90 0,#1e3c65 45%,#10223d 100%);--felt-red:radial-gradient(ellipse at 30% 0%,#ff3349 0,#ff001e 40%,#8a0012 100%);--felt-black:radial-gradient(ellipse at 30% 0%,#1a2236 0,#0a1020 50%,#010313 100%);
+ --raised:inset 0 1px 0 #ffffff33,inset 0 -2px 0 #00000066,0 4px 0 #00020a,0 5px 0 #ffffff0a,0 14px 26px #000000c0}
+body{background:var(--linen),radial-gradient(ellipse at 85% -10%,#ff001e26 0,transparent 55%),radial-gradient(ellipse at 0 110%,#1e3c6555 0,transparent 55%),#010313}
+.panel,.character-summary,.account-toolbar,.mystery-pack,.player-slot,.config-strip,.recent,.sidebar,.step,.join-box,.create-box{background:var(--felt-grain),var(--felt-blue)!important;border:1px solid #ffffff1f!important;box-shadow:var(--raised)!important;outline:1.5px dashed #fcebe540;outline-offset:-7px}
+.hero-art{box-shadow:var(--raised)!important;border:1px solid #ffffff22!important;outline:1.5px dashed #fcebe540;outline-offset:-8px}
 .player-slot.empty{background:var(--felt-grain),var(--felt-black)!important}
 dialog,.cr7-dialog,.deck-dialog,dialog.character-modal{background:var(--felt-grain),var(--felt-black)!important;border:1px solid #ffffff22!important;box-shadow:0 0 0 1px #000,0 8px 0 #050506,0 24px 70px #000d!important}
 /* buttons: red = main action, blue = secondary, all raised like felt-covered blocks */
-:is(.account-toolbar button,.waiting-bottom button:not(.primary),.room-heading button,.form-actions button:not(.primary),.character-summary button,.cr7-list,.cr7-equip,.recent button,.section-title button){background:var(--felt-grain),linear-gradient(#2a56b8,#163a8a)!important;border:1px solid #6b8fe0!important;color:#fff!important;box-shadow:inset 0 1px 0 #ffffff40,0 3px 0 #08163a,0 6px 12px #0008!important}
-:is(.account-toolbar button,.waiting-bottom button:not(.primary),.room-heading button,.form-actions button:not(.primary),.character-summary button,.cr7-list,.cr7-equip,.recent button,.section-title button):active:enabled{transform:translateY(2px);box-shadow:inset 0 1px 0 #ffffff40,0 1px 0 #08163a!important}
+:is(.account-toolbar button,.waiting-bottom button:not(.primary),.room-heading button,.form-actions button:not(.primary),.character-summary button,.cr7-list,.cr7-equip,.recent button,.section-title button){background:linear-gradient(#4a72a8,#2c5288 49%,#1e3c65 51%,#16304f)!important;border:1px solid #0b1a30!important;color:#fcebe5!important;text-shadow:0 -1px 0 #0008;box-shadow:inset 0 1px 0 #ffffff55,0 3px 0 #08142a,0 6px 12px #0008!important}
+:is(.account-toolbar button,.waiting-bottom button:not(.primary),.room-heading button,.form-actions button:not(.primary),.character-summary button,.cr7-list,.cr7-equip,.recent button,.section-title button):active:enabled{transform:translateY(2px);box-shadow:inset 0 1px 0 #ffffff55,0 1px 0 #08142a!important}
 .header nav button{background:none!important;border:0!important;box-shadow:none!important}
 .header nav button.current{color:#fff!important;box-shadow:inset 0 -3px 0 var(--noir-red)!important}
 input,select{background:#0b0a0c!important;border:1px solid #ffffff26!important;box-shadow:inset 0 2px 4px #000a}
 /* the spin board: blue felt block with a gold rim */
 .spin-wheel.potw-board{background:var(--felt-grain),var(--felt-blue)!important;box-shadow:0 0 0 2.5px #c99a3e,inset 0 2px 0 #ffffff26,inset 0 -3px 0 #0006,0 7px 0 #050506,0 18px 34px #000c!important}
-.spin-centre{background:var(--felt-grain),radial-gradient(ellipse at 50% 35%,#1d3f8f,#0a1a45 75%)!important;box-shadow:inset 0 3px 10px #000b,inset 0 -1px 0 #ffffff1a!important;border:1px solid #ffffff22!important}
+.spin-centre{background:var(--felt-grain),radial-gradient(ellipse at 50% 35%,#24477a,#0e1f38 75%)!important;box-shadow:inset 0 3px 10px #000b,inset 0 -1px 0 #ffffff1a!important;border:1px solid #ffffff22!important}
 .potw-board .spin-tile{box-shadow:inset 0 0 0 1px #0006,0 3px 0 #050506,0 5px 8px #000a!important}
 .spin-badge{box-shadow:inset 0 1px 0 #fff8,0 3px 0 #5a3e12,0 5px 8px #000a!important}
+
+/* leather blocks: a soft emboss line under the stitching and cream text */
+.panel,.character-summary,.account-toolbar,.mystery-pack,.player-slot,.config-strip,.recent,.sidebar{color:var(--cream)}
+.game-actions [data-raise-toggle],.game-actions [data-action="allin"],.game-actions [data-action="raise"]{background:linear-gradient(#ff6676,#ff2a42 49%,#ff001e 51%,#b80016)!important}
+.game-actions button:not([data-action="fold"]):not([data-raise-toggle]):not([data-action="allin"]){background:linear-gradient(#ffffff,#fcebe5 49%,#f1d9d0 51%,#dcc3b9)!important}
+.game-actions [data-action="fold"]{background:linear-gradient(#3b5d8c,#25456f 49%,#1e3c65 51%,#122641)!important;border-color:#0b1a30!important}

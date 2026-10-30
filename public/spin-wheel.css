@@ -142,7 +142,8 @@
 
 .potw.back-c[data-t=gold]{--stripe:#e7c06340}.potw.back-c[data-t=red]{--stripe:#ff3b5545}.potw.back-c[data-t=purple]{--stripe:#b07bff45}
 /* stars in the same glossy, extruded style as the G.O.A.T lettering; smaller and lower */
-.cf-stars{gap:1.6cqi;padding:5cqi 0 3cqi;background:linear-gradient(transparent,#000a 70%)}
+/* stars sit in the middle of the strip between the name plate and the bottom edge of the card */
+.cf-stars{gap:1.6cqi;padding:0;bottom:4.2cqi;background:none}
 .cf-stars i{width:7.2cqi;background:#ffffffd9}
 .cf-stars i::after{transform:scale(.62);background:#121115}
 .cf-stars i.on{background:linear-gradient(180deg,#fff 0,#fff3c4 22%,#f2c14e 50%,#a7781f 72%,#f6d77e 100%);filter:drop-shadow(0 1px 0 #6b4a17) drop-shadow(0 1px 0 #5a3e12) drop-shadow(0 1px 0 #3a280b) drop-shadow(0 2px 2px #000c)}
