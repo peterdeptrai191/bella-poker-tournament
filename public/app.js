@@ -4,7 +4,6 @@ import {walletChip,openMissions,groupRewardText} from '/missions.js';
 import {tournamentReward} from '/tournament-rewards.js';
 import {configureCardSkins} from '/card-skins.js';
 import {animatedCharacter} from '/character-motion.js';
-import {characterThumbnail} from '/character-thumbnail.js';
 import {equityInputs,winningSelection,showdownHighlights} from '/poker-insights.js';
 import {circularSeats as portraitSeats,turnFraction,seatMetrics} from '/table-layout.js';
 import {diffTableEffects} from '/effects.js';
@@ -58,7 +57,7 @@ document.addEventListener('click',e=>{if(!e.target.closest('[data-fullscreen]'))
 });
 function characterImage(id,cls='character-avatar'){return animatedCharacter(characterById(id),cls);}
 // In the shop, GOAT or BOAT skins you do not own yet are shadow figures.
-function shopImage(id,cls='character-avatar',thumbnail=false){const c=characterById(id);return c.event&&isCharacterLocked(id)?silhouette(c,cls):thumbnail?characterThumbnail(c,cls):characterImage(id,cls);}
+function shopImage(id,cls='character-avatar',thumbnail=false){const c=characterById(id);return c.event&&isCharacterLocked(id)?silhouette(c,cls):characterImage(id,cls);}
 function characterSummary(){const c=characterById(selectedCharacter);return `${characterImage(c.id)}<div><small>BELLA CREW / NHÂN VẬT CỦA BẠN</small><strong>${c.name}</strong><span>${c.tag}</span></div><button type="button" data-character-picker>Chọn nhân vật ↗</button>`;}
 function openCharacterPicker(){
  if(!account)return;const inRoom=page==='room'&&room&&session;let draft=selectedCharacter;const modal=$('#modal');modal.classList.add('character-modal');delete modal.dataset.gridKey;

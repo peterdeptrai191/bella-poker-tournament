@@ -1,5 +1,5 @@
 /* Preserve visible previews, stop work for off-screen/covered/hidden looping artwork. */
-.anim-off,.anim-off *,html.perf-hidden .character-motion,html.perf-hidden .character-motion *,html.perf-hidden .promo *,body.modal-up #app .character-motion,body.modal-up #app .character-motion *,body.modal-up #app .promo *{animation-play-state:paused!important}
+.anim-off:not(dialog:modal *),.anim-off:not(dialog:modal *) *,html.perf-hidden .character-motion,html.perf-hidden .character-motion *,html.perf-hidden .promo *,body.modal-up #app .character-motion,body.modal-up #app .character-motion *,body.modal-up #app .promo *{animation-play-state:paused!important}
 .character-grid .character-thumbnail{filter:none;contain:paint}
 .character-grid .character-option{content-visibility:auto;contain-intrinsic-size:auto 145px}
 @media(max-width:600px){.character-grid .character-option{contain-intrinsic-size:auto 130px}}

@@ -1,3 +1,4 @@
+import {standardCharacter} from './standard-motion.js';
 import {cr7Character} from './cr7-motion.js';
 import {goatCharacter} from './goat-motion.js';
 import {heroCharacter} from './hero-motion.js';
@@ -33,7 +34,7 @@ export function animatedCharacter(character,cls='character-avatar'){
  if(character.event==='cr7-boat-v1')return cr7Character(character,cls);
  const hero=heroCharacter(character,cls);if(hero)return hero;
  const m=motion[character.id];
- if(!m)return `<img class="${escape(cls)}" src="/assets/characters/${character.id}.webp" alt="Bella · ${escape(character.name)}" style="--character-color:${character.color}">`;
+ if(!m)return standardCharacter(character,cls);
  const cx=m.width/2,cy=353,rx=m.width*.45,ry=218;
  const orbit=`M ${cx-rx} ${cy} a ${rx} ${ry} 0 1 1 ${rx*2} 0 a ${rx} ${ry} 0 1 1 ${-rx*2} 0`;
  const front=`M ${cx+rx} ${cy} a ${rx} ${ry} 0 0 1 ${-rx*2} 0`;

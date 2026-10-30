@@ -29,3 +29,12 @@
 @media(prefers-reduced-motion:reduce){.bella-glow,.bella-rays,.bella-glitter circle{animation:none}.bella-sparkle{animation:none;opacity:.7}.fire-orbit-trail,.fire-front-trail,.fire-embers,.bella-eyelids{animation:none}.bella-eyelids{opacity:0}.fire-embers{opacity:.45}}
 
 .character-animate{display:block;flex-shrink:0;padding:0;border:0;background:none;border-radius:14px;line-height:0}.character-animate:hover:enabled{background:none;transform:none}.character-animate:focus-visible{outline:2px solid var(--character-color);outline-offset:3px}
+/* Live effects for every original crew skin. */
+.crew-aura{fill:var(--character-color);opacity:.1;animation:crew-aura 3s ease-in-out infinite}
+.crew-ring{fill:none;stroke:var(--character-color);stroke-width:3;stroke-dasharray:20 14 5 18;opacity:.55;animation:crew-ring 10s linear infinite}
+.crew-orbit{animation:crew-spin 12s linear infinite;animation-delay:var(--crew-delay);transform-origin:0 0}
+.crew-upright{animation:crew-spin 12s linear infinite reverse;animation-delay:var(--crew-delay);transform-origin:0 0}
+@keyframes crew-spin{to{transform:rotate(360deg)}}
+@keyframes crew-ring{to{stroke-dashoffset:-228}}
+@keyframes crew-aura{50%{opacity:.22}}
+@media(prefers-reduced-motion:reduce){.crew-aura,.crew-ring,.crew-orbit,.crew-upright{animation:none}}
