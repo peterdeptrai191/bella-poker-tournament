@@ -7,9 +7,16 @@
     },
     "api/fishing.js": {
       "maxDuration": 30
+    },
+    "api/sam.js": {
+      "maxDuration": 30
     }
   },
   "rewrites": [
+    {
+      "source": "/sam",
+      "destination": "/sam/index.html"
+    },
     {
       "source": "/fishing",
       "destination": "/fishing/index.html"
