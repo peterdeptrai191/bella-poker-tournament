@@ -128,3 +128,52 @@ dialog .character-preview,dialog .mystery-pack,.daily-day,.setting-row,.cr7-rewa
 /* account bar: its own block with the same gap above and below, contents centred */
 .account-toolbar{margin:22px auto 22px!important;justify-content:center;border-radius:18px!important}
 @media(max-width:760px){.account-toolbar{margin:18px 16px 18px!important}}
+
+/* ---- account bar v2 ---- */
+.acct2{display:grid!important;grid-template-columns:auto 1fr auto;align-items:center;gap:18px!important;padding:14px 20px!important;max-width:1180px}
+.acct-id{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:84px}
+.acct-ava{width:70px!important;height:82px!important}
+.acct-name{max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:800;font-size:13px;color:#fff;text-shadow:0 1px 0 #000}
+.acct-actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;max-width:560px;width:100%;justify-self:center}
+.acct-actions button{position:relative;display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:62px;padding:8px 6px!important;font-size:13px!important;font-weight:800!important;border-radius:14px!important}
+.acct-actions button span{font-size:20px;line-height:1}
+.acct-actions [data-daily-gift] i{position:absolute;top:6px;right:8px;width:9px;height:9px;border-radius:50%;background:#ff001e;box-shadow:0 0 0 2px #0b1a30}
+.acct-wallet{display:flex;flex-direction:column;align-items:flex-end;gap:4px;text-align:right}
+.acct-wallet strong{font-size:24px;color:#ffd66e;white-space:nowrap}.acct-wallet strong small{font-size:12px}
+.acct-days{font-size:12px;color:#fcebe5bb}
+.acct-status{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:#fcebe599;letter-spacing:.04em}
+.lamp{width:12px;height:12px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#d8d8d8,#7d7d7d 55%,#3e3e3e);box-shadow:inset 0 -1px 2px #0008,0 1px 0 #ffffff33,0 0 0 1.5px #0b1a30}
+.acct-status.on{color:#c8f5d6}.acct-status.on .lamp{background:radial-gradient(circle at 35% 30%,#eaffef,#4be27a 45%,#139a3f);box-shadow:inset 0 -1px 2px #0006,0 0 6px #4be27a,0 0 0 1.5px #0b1a30}
+@media(max-width:760px){.acct2{grid-template-columns:auto 1fr;grid-template-areas:"id wallet" "act act";gap:12px!important;padding:12px!important}.acct-id{grid-area:id;flex-direction:row;gap:10px}.acct-ava{width:54px!important;height:64px!important}.acct-wallet{grid-area:wallet}.acct-actions{grid-area:act;gap:8px}.acct-actions button{min-height:54px;font-size:12px!important}.acct-wallet strong{font-size:20px}}
+/* shop hub */
+.shop-hub{width:min(520px,94vw);text-align:left}.shop-hub>small,.shop-hub>h2{display:block;text-align:center}
+.hub-list{display:grid;gap:10px;margin-top:10px}
+.hub-item{display:grid!important;grid-template-columns:44px 1fr auto;align-items:center;gap:12px;width:100%;padding:12px 14px!important;text-align:left;border-radius:14px!important;background:var(--felt-grain),linear-gradient(#2c5288,#1e3c65 50%,#16304f)!important;border:1px solid #0b1a30!important;color:#fcebe5!important;box-shadow:inset 0 1px 0 #ffffff40,0 3px 0 #08142a,0 6px 12px #0008!important;outline:1px dashed #fcebe530;outline-offset:-5px}
+.hub-icon{display:grid;place-items:center;width:44px;height:44px;border-radius:12px;font-size:22px;background:linear-gradient(#0b1a30,#142a49);box-shadow:inset 0 2px 4px #000c}
+.hub-item b{display:block;font-size:15px;color:#fff}.hub-item small{display:block;font-size:12px;color:#fcebe5aa}
+.settings-account{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:16px;padding-top:14px;border-top:1px dashed #fcebe540}
+.settings-account .primary{margin-left:auto}
+/* promo slider */
+.promo{position:relative;margin:6px 0 26px}
+.promo-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;border-radius:22px;box-shadow:var(--raised)}
+.promo-track::-webkit-scrollbar{display:none}
+.promo-slide{position:relative;flex:0 0 100%;scroll-snap-align:start;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);min-height:300px;overflow:hidden;background:var(--felt-grain),var(--felt-blue)}
+.promo-slide.tone-red{background:var(--felt-grain),radial-gradient(ellipse at 20% 0,#a3122a,#5e0612 60%,#2a0309)}
+.promo-slide.tone-green{background:var(--felt-grain),radial-gradient(ellipse at 20% 0,#1f6141,#0a2c1c 70%)}
+.promo-slide.tone-black{background:var(--felt-grain),var(--felt-black)}
+.promo-slide::after{content:'';position:absolute;inset:8px;border-radius:16px;border:1.5px dashed #fcebe540;pointer-events:none}
+.promo-copy{position:relative;z-index:1;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:10px;padding:32px 36px}
+.promo-tag{font:400 12px/1 Anton,Impact,sans-serif;letter-spacing:.22em;color:#ffd66e}
+.promo-copy h2{margin:0;font:900 clamp(30px,4.6vw,52px)/1.05 'Barlow Condensed',Oswald,'Arial Narrow',sans-serif;color:transparent;background:linear-gradient(180deg,#ffffff 0%,#f7f8fa 30%,#dfe2e7 52%,#c3c8cf 70%,#d6dade 86%,#eef0f3 100%);-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 1px 0 #8a9099) drop-shadow(0 2px 3px #0008)}
+.promo-copy p{margin:0;max-width:44ch;color:#fcebe5d9;font-size:14px;line-height:1.6}
+.promo-copy .primary{margin-top:6px;padding:12px 22px}
+.promo-soon{display:inline-block;margin-top:6px;padding:8px 14px;border-radius:99px;border:1px dashed #fcebe560;color:#fcebe5cc;font-size:12px;font-weight:700}
+.promo-art{background-size:cover;background-position:center;mask-image:linear-gradient(90deg,transparent,#000 30%)}
+.tone-red .promo-art,.tone-navy .promo-art,.tone-black .promo-art{background-size:contain;background-repeat:no-repeat;background-position:center bottom;margin:16px 16px 0 0}
+.promo-dots{position:absolute;left:0;right:0;bottom:16px;display:flex;justify-content:center;gap:8px;pointer-events:none}
+.promo-dots button{pointer-events:auto;width:9px;height:9px;padding:0!important;min-height:0;border-radius:50%!important;border:0!important;background:#fcebe555!important;box-shadow:inset 0 1px 1px #0008!important}
+.promo-dots button[aria-current]{background:#fff!important;width:22px;border-radius:99px!important}
+@media(max-width:760px){.promo-slide{grid-template-columns:1fr;min-height:360px}.promo-art{position:absolute;inset:auto 0 0 auto;width:55%;height:60%;opacity:.55;margin:0!important}.promo-copy{padding:26px 22px 48px}}
+.acct-actions{justify-self:stretch!important}.acct-actions button{width:100%!important;flex:none!important;margin:0!important}@media(min-width:761px){.acct-actions{max-width:620px;justify-self:center!important}.acct-actions button{min-height:68px}}
+.acct2>.acct-actions{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;flex:none!important}.acct2>.acct-id{display:flex!important;flex-direction:column!important}.acct2>.acct-wallet{display:flex!important;flex-direction:column!important}@media(max-width:760px){.acct2>.acct-id{flex-direction:row!important}}
+.acct2>.acct-wallet{justify-self:end;align-items:flex-end!important}

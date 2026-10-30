@@ -28,7 +28,7 @@ if(typeof window!=='undefined'){
  document.addEventListener('visibilitychange',()=>{if(!document.hidden)sync();});
 }
 
-export function openSettings({layout,onLayout}={}){
+export function openSettings({layout,onLayout,onLogout,adminUrl}={}){
  if(document.querySelector('.settings-dialog'))return;
  const d=document.createElement('dialog');d.className='deck-dialog settings-dialog';d.setAttribute('aria-labelledby','settings-title');
  d.innerHTML=`<header class="deck-head"><div><small>BELLA POKER</small><h2 id="settings-title">Cài đặt</h2></div><button type="button" data-close aria-label="Đóng">×</button></header>
@@ -38,8 +38,9 @@ export function openSettings({layout,onLayout}={}){
   <div class="setting-row"><div><strong>Âm thanh hiệu ứng</strong><small>Tiếng chip, lật bài</small></div><button type="button" class="switch" role="switch" data-setting="sfx" aria-checked="${state.sfx}" aria-label="Âm thanh hiệu ứng"><i></i></button></div>
   <div class="setting-row"><label for="sfx-volume"><strong>Âm lượng hiệu ứng</strong></label><input id="sfx-volume" type="range" min="0" max="100" step="5" value="${Math.round(state.sfxVolume*100)}" ${state.sfx?'':'disabled'}></div>
   ${onLayout?`<div class="setting-row"><div><strong>Chế độ màn hình</strong><small>Ngang cần màn hình nằm ngang</small></div><div class="segmented" role="group" aria-label="Chế độ màn hình"><button type="button" data-layout-pick="portrait" aria-pressed="${layout!=='landscape'}">Dọc</button><button type="button" data-layout-pick="landscape" aria-pressed="${layout==='landscape'}">Ngang</button></div></div>`:''}
- </div>`;
+ </div>${onLogout||adminUrl?`<div class="settings-account">${adminUrl?`<a class="admin-entry" href="${adminUrl}">Quản trị ↗</a>`:''}${onLogout?'<button type="button" class="primary" data-settings-logout>Đăng xuất</button>':''}</div>`:''}`;
  d.querySelector('[data-close]').onclick=()=>d.close();
+ d.querySelector('[data-settings-logout]')?.addEventListener('click',()=>{d.close();onLogout();});
  d.querySelectorAll('[data-setting]').forEach(b=>b.onclick=()=>{const key=b.dataset.setting,on=b.getAttribute('aria-checked')!=='true';state[key]=on;write(key==='music'?'bella.music':'bella.sfx',on);b.setAttribute('aria-checked',String(on));if(key==='music'){d.querySelector('#music-volume').disabled=!on;unlocked=true;sync();}if(key==='sfx')d.querySelector('#sfx-volume').disabled=!on;});
  const sv=d.querySelector('#sfx-volume');sv.oninput=()=>{state.sfxVolume=Number(sv.value)/100;write('bella.sfxVolume',state.sfxVolume);};
  const vol=d.querySelector('#music-volume');vol.oninput=()=>{state.volume=Number(vol.value)/100;write('bella.musicVolume',state.volume);if(track)track.volume=state.volume*duck;unlocked=true;sync();};
