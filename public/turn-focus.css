@@ -6,4 +6,4 @@
 .game-shell .hero-plaque.is-turn{--turn-scale:1.1;scale:var(--turn-scale);transform-origin:50% 100%;animation:turn-pop .42s cubic-bezier(.2,.9,.3,1.25) both}
 .hero-plaque.is-turn .hero-character{filter:drop-shadow(0 0 8px #ffd66ecc)}
 @keyframes turn-pop{0%{scale:1}60%{scale:calc(var(--turn-scale) + .05)}100%{scale:var(--turn-scale)}}
-@media(prefers-reduced-motion:reduce){.opponent.is-turn,.game-shell .hero-plaque.is-turn{animation:none}}
+html[data-effects="reduced"]{.opponent.is-turn,.game-shell .hero-plaque.is-turn{animation:none}}

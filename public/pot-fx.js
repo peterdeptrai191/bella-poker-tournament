@@ -1,3 +1,4 @@
+import {effectsReduced} from './visual-effects.js';
 // Table chip effects: pot stacks in the middle of the table, chips flying between seats and the pot,
 // a chip shower for the winner, and the bust screen with a poker quote.
 // Chips are plain HTML + CSS (no images), coloured by value and by the chip skin the viewer has on
@@ -5,7 +6,7 @@
 import {chipBreakdown,CHIP_VALUES} from '/chip-skin-catalog.js';
 import {sfxEnabled,sfxVolume} from '/settings.js';
 
-const reduced=()=>window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+const reduced=()=>effectsReduced();
 const rand=(a,b)=>a+Math.random()*(b-a);
 const pick=list=>list[Math.floor(Math.random()*list.length)];
 

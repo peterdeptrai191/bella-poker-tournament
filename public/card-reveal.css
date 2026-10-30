@@ -82,4 +82,4 @@
 .reveal.s-instant .tn-ribs i{animation:none;opacity:0}
 .reveal.s-instant .rv-flash{animation:none}
 .reveal.s-instant .rv-card{opacity:1;transform:none}
-@media(prefers-reduced-motion:reduce){.reveal *{animation:none!important;transition:none!important}}
+html[data-effects="reduced"]{.reveal *{animation:none!important;transition:none!important}}

@@ -1,3 +1,4 @@
+import {effectsReduced} from './visual-effects.js';
 // GOAT or BOAT prize reveal: walking out of a stadium tunnel, 18 seconds for every card.
 //  0 s     dark tunnel, ceiling lights rush past, the crowd murmurs
 //  2 s     the gate at the end rolls open slowly (5 s) with a heavy rumble and a long whoosh; light floods in
@@ -14,7 +15,7 @@ import {potwCard} from './spin-wheel.js';
 import {duckMusic} from './settings.js';
 import {cardFace} from './card-face.js';
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const reduced=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
+const reduced=()=>effectsReduced();
 const lerp=(a,b,t)=>a+(b-a)*t;
 
 // A dark layer that fades in over `ms`.

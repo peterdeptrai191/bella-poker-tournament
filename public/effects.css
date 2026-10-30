@@ -18,7 +18,7 @@
 @media(max-width:375px){.game-shell{--board-card-width:35px;--board-card-height:51px}.many-seats{--board-card-width:30px;--board-card-height:44px}.game-pot strong{font-size:26px}.elimination-banner{left:12px;right:12px}}
 @media(max-height:740px) and (min-height:601px),(max-height:740px) and (orientation:portrait){.game-shell{--board-card-width:34px;--board-card-height:49px}.many-seats{--board-card-width:30px;--board-card-height:43px}.game-pot{padding:6px 12px;gap:2px;margin-bottom:7px}.game-pot strong{font-size:25px}.game-pot span{font-size:7px}.elimination-banner{top:178px;padding:11px}}
 @media(orientation:landscape) and (max-height:600px){.game-shell{--board-card-width:29px;--board-card-height:39px}.game-pot{min-width:106px;padding:4px 12px;margin-bottom:6px;gap:1px}.game-pot strong{font-size:23px}.game-pot span{font-size:6px}.elimination-banner{top:70px;left:25%;right:25%;padding:10px}.elimination-banner strong{font-size:12px}}
-@media(prefers-reduced-motion:reduce){.chip-delta{opacity:1}.elimination-banner{opacity:1}}
+html[data-effects="reduced"]{.chip-delta{opacity:1}.elimination-banner{opacity:1}}
 .table-notices{position:absolute;z-index:45;top:202px;left:16px;right:16px;display:grid;gap:8px;pointer-events:none}
 .table-notices .elimination-banner{position:relative;top:auto;left:auto;right:auto}.table-notices button{pointer-events:auto}
 .game-shell>.game-pot{position:absolute;z-index:8;top:108px;left:20px;right:174px;width:auto;min-width:0;max-width:none;height:82px;justify-content:center;margin:0;padding:9px 12px;border-radius:14px}.game-shell>.game-pot strong{font-size:34px}.game-shell>.game-pot span{font-size:8px}

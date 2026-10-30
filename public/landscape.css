@@ -64,7 +64,7 @@
 .rotate-hint strong{max-width:260px;font-size:16px;line-height:1.4}
 .rotate-hint button{padding:10px 22px;border-radius:99px;border:1px solid #e6be7b;background:transparent;color:#ffe7a5;font-weight:800}
 @keyframes rotate-nudge{40%,60%{rotate:90deg}}
-@media(prefers-reduced-motion:reduce){.rotate-hint span{animation:none}}
+html[data-effects="reduced"]{.rotate-hint span{animation:none}}
 
 /* First-visit choice */
 .layout-dialog{width:min(520px,calc(100vw - 24px))}

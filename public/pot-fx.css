@@ -63,5 +63,5 @@ body.busted .game-shell{filter:grayscale(1) brightness(.45);transition:filter .5
 @keyframes bust-bar{from{transform:scaleX(1)}to{transform:scaleX(0)}}
 
 @media(orientation:landscape) and (max-height:600px){.pot-stage{bottom:calc(100% + 6px);scale:.8;transform-origin:bottom center}}
-@media(prefers-reduced-motion:reduce){.chip.drop,.draft-stack,.draft-amount,.bust-quote,.bust-card,.pot-stage.settled .chip-stacks{animation:none}}
+html[data-effects="reduced"]{.chip.drop,.draft-stack,.draft-amount,.bust-quote,.bust-card,.pot-stage.settled .chip-stacks{animation:none}}
 .game-shell:has(.pot-stage) .table-branding{opacity:0;transition:opacity .3s}

@@ -1,3 +1,4 @@
+import {effectsReduced} from './visual-effects.js';
 // Mystery pack opening: a leather gift box with a red ribbon appears; tap it 3 to 5 times (it shakes and light
 // leaks out a little more each time), then the lid flies off, light bursts out and the card rises from the box.
 // The prize is already decided by the server; the taps are only the show.
@@ -16,7 +17,7 @@ export function openGift(host,c){
    <div class="gift-info"><strong>${esc(c.name)}</strong><button type="button" class="cr7-gold gift-ok">Nhận thẻ</button></div>`;
   host.append(el);
   const box=el.querySelector('.gift'),hint=el.querySelector('.gift-hint');
-  if(matchMedia('(prefers-reduced-motion: reduce)').matches){el.classList.add('opened','done');}
+  if(effectsReduced()){el.classList.add('opened','done');}
   box.addEventListener('click',()=>{if(open)return;taps++;el.style.setProperty('--leak',taps/need);
    box.classList.remove('shake');void box.offsetWidth;box.classList.add('shake');playSound('one',{volume:.5});
    const left=need-taps;hint.innerHTML=left>0?`Còn <b>${left}</b> lần nữa…`:'';

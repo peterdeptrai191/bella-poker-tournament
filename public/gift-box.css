@@ -31,4 +31,4 @@
 .gift-stage.done .gift-info{opacity:1;pointer-events:auto}
 @keyframes gift-card{0%{opacity:0;transform:translateY(30%) scale(.3)}60%{opacity:1}100%{opacity:1;transform:translateY(-8%) scale(1)}}
 @keyframes gift-fade{to{opacity:0;transform:translateY(20%) scale(.9)}}
-@media(prefers-reduced-motion:reduce){.gift-stage *{animation:none!important;transition:none!important}.gift-stage.opened .gift-card{opacity:1;transform:none}.gift-stage.opened .gift-body,.gift-stage.opened .gift-lid{opacity:0}}
+html[data-effects="reduced"]{.gift-stage *{animation:none!important;transition:none!important}.gift-stage.opened .gift-card{opacity:1;transform:none}.gift-stage.opened .gift-body,.gift-stage.opened .gift-lid{opacity:0}}

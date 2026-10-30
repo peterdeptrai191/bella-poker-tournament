@@ -23,4 +23,4 @@
 @keyframes goat-sway{from{transform:rotate(-3deg)}to{transform:rotate(3deg)}}
 @keyframes goat-dance{from{transform:rotate(-3deg) translateY(0)}to{transform:rotate(3deg) translateY(-10px)}}
 @keyframes goat-bob{50%{transform:translateY(-8px)}}
-@media(prefers-reduced-motion:reduce){.goat-motion *{animation:none!important}.goat-flash{opacity:.6}}
+html[data-effects="reduced"]{.goat-motion *{animation:none!important}.goat-flash{opacity:.6}}

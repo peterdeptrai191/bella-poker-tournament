@@ -24,7 +24,7 @@
 @media(max-width:375px){.emote-dock{right:13px}.game-shell:has(.emote-dock) .game-room-info{right:66px}.emote-menu{grid-template-columns:repeat(5,48px)}}
 @media(max-height:740px) and (min-height:601px),(max-height:740px) and (orientation:portrait){.emote-dock{top:63px}}
 @media(orientation:landscape) and (max-height:600px){.emote-dock{top:53px;right:16px}.emote-toggle.glass-button{width:35px;height:35px;min-width:35px}.emote-toggle svg{width:26px;height:26px}}
-@media(prefers-reduced-motion:reduce){.emote-menu{animation:none}}
+html[data-effects="reduced"]{.emote-menu{animation:none}}
 
 /* Settings dialog (settings.js) */
 .settings-dialog{width:min(460px,calc(100vw - 24px))}

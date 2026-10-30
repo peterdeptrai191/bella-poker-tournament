@@ -55,7 +55,7 @@ body.peek-open .hero-hand .holecards{visibility:hidden}
 @keyframes mood-pop{0%{scale:.3;opacity:0}60%{scale:1.2;opacity:1}100%{scale:1}}
 
 @media(orientation:landscape) and (max-height:600px){.peek-stage{--pw:min(18vh,110px)}.peek-panel{gap:8px}}
-@media(prefers-reduced-motion:reduce){.peek-stage,.peek-panel,.peek-stage.closing,.peek-stage.closing .peek-panel,.mood-badge,.mood-label{animation:none}.peek-moods{transition:none}}
+html[data-effects="reduced"]{.peek-stage,.peek-panel,.peek-stage.closing,.peek-stage.closing .peek-panel,.mood-badge,.mood-label{animation:none}.peek-moods{transition:none}}
 
 /* Room option on the create form. */
 .peek-option{grid-column:1/-1;flex-direction:row;align-items:flex-start;gap:12px;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:#14121255;cursor:pointer}

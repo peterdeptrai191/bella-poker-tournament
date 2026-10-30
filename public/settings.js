@@ -1,3 +1,4 @@
+import {effectsReduced,setFullEffects} from './visual-effects.js';
 // Player settings, remembered on this device: background music (on/off + volume) and sound effects.
 // The music is one jazz file played on a loop. Browsers only allow sound after the player has touched the
 // page, so it starts on the first tap; it keeps playing in a background tab and streams instead of downloading
@@ -36,13 +37,14 @@ export function openSettings({layout,onLayout,onLogout,adminUrl}={}){
  if(document.querySelector('.settings-dialog'))return;
  const d=document.createElement('dialog');d.className='deck-dialog settings-dialog';d.setAttribute('aria-labelledby','settings-title');
  d.innerHTML=`<header class="deck-head"><div><small>BELLA POKER</small><h2 id="settings-title">Cài đặt</h2></div><button type="button" data-close aria-label="Đóng">×</button></header>
- <div class="settings-list">
+ <div class="settings-list"><div class="setting-row"><div><strong>Hiệu ứng chuyển động đầy đủ</strong><small>Nhân vật, đường hầm, pháo hoa và mở pack</small></div><button type="button" class="switch" role="switch" data-full-effects aria-checked="${!effectsReduced()}" aria-label="Hiệu ứng chuyển động đầy đủ"><i></i></button></div>
   <div class="setting-row"><div><strong>Nhạc nền</strong><small>Jazz lounge, phát lặp lại</small></div><button type="button" class="switch" role="switch" data-setting="music" aria-checked="${state.music}" aria-label="Nhạc nền"><i></i></button></div>
   <div class="setting-row"><label for="music-volume"><strong>Âm lượng nhạc</strong></label><input id="music-volume" type="range" min="0" max="100" step="5" value="${Math.round(state.volume*100)}" ${state.music?'':'disabled'}></div>
   <div class="setting-row"><div><strong>Âm thanh hiệu ứng</strong><small>Tiếng chip, lật bài</small></div><button type="button" class="switch" role="switch" data-setting="sfx" aria-checked="${state.sfx}" aria-label="Âm thanh hiệu ứng"><i></i></button></div>
   <div class="setting-row"><label for="sfx-volume"><strong>Âm lượng hiệu ứng</strong></label><input id="sfx-volume" type="range" min="0" max="100" step="5" value="${Math.round(state.sfxVolume*100)}" ${state.sfx?'':'disabled'}></div>
   ${onLayout?`<div class="setting-row"><div><strong>Chế độ màn hình</strong><small>Ngang cần màn hình nằm ngang</small></div><div class="segmented" role="group" aria-label="Chế độ màn hình"><button type="button" data-layout-pick="portrait" aria-pressed="${layout!=='landscape'}">Dọc</button><button type="button" data-layout-pick="landscape" aria-pressed="${layout==='landscape'}">Ngang</button></div></div>`:''}
  </div>${onLogout||adminUrl?`<div class="settings-account">${adminUrl?`<a class="admin-entry" href="${adminUrl}">Quản trị ↗</a>`:''}${onLogout?'<button type="button" class="primary" data-settings-logout>Đăng xuất</button>':''}</div>`:''}`;
+ d.querySelector('[data-full-effects]').onclick=e=>{const b=e.currentTarget,on=b.getAttribute('aria-checked')!=='true';setFullEffects(on);b.setAttribute('aria-checked',String(on));};
  d.querySelector('[data-close]').onclick=()=>d.close();
  d.querySelector('[data-settings-logout]')?.addEventListener('click',()=>{d.close();onLogout();});
  d.querySelectorAll('[data-setting]').forEach(b=>b.onclick=()=>{const key=b.dataset.setting,on=b.getAttribute('aria-checked')!=='true';state[key]=on;write(key==='music'?'bella.music':'bella.sfx',on);b.setAttribute('aria-checked',String(on));if(key==='music'){d.querySelector('#music-volume').disabled=!on;unlocked=true;sync();}if(key==='sfx')d.querySelector('#sfx-volume').disabled=!on;});

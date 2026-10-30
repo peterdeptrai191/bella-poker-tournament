@@ -1,3 +1,4 @@
+import {effectsReduced} from './visual-effects.js';
 import './perf.js';
 import {configureCr7,offerCr7,openCr7Pack,openMysteryPack,silhouette} from '/cr7-event.js';
 import {walletChip,openMissions,groupRewardText} from '/missions.js';
@@ -97,7 +98,7 @@ function boardCard(c,index){if(!c)return `<div class="board-slot">${card(null,fa
 function blindNotice(){const e=[...tableEffects.values()].find(e=>e.type==='blind'&&Date.now()-e.started<e.duration);if(!e)return '';return `<div class="game-hint blind-notice" data-effect-key="${esc(e.key)}" role="status" aria-live="polite"><span class="hint-symbol">↑</span><div><strong>Blind tăng</strong><span>${number(e.from.sb)}/${number(e.from.bb)} → ${number(e.to.sb)}/${number(e.to.bb)}</span></div><small id="turn-clock"></small></div>`;}
 function eliminationNotice(){return [...tableEffects.values()].filter(e=>e.type==='elimination'&&Date.now()-e.started<e.duration).map(e=>`<aside class="elimination-banner" data-effect-key="${esc(e.key)}" role="status" aria-live="polite"><span class="elimination-icon">♠</span><div><small>NGƯỜI CHƠI BỊ LOẠI</small>${e.players.map(p=>`<strong>${esc(p.name)}${p.id===room.me?' · Bạn':''} <span>— Hạng #${p.rank}</span></strong>`).join('')}<p>Đã kết thúc lượt thi đấu trong giải.</p></div><button data-dismiss-elimination="${esc(e.key)}" aria-label="Đóng thông báo loại">×</button></aside>`).join('');}
 function playTableEffects(){
- if(!tableEffects.size)return;const reduced=window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+ if(!tableEffects.size)return;const reduced=effectsReduced();
  document.querySelectorAll('[data-effect-key]').forEach(el=>{const e=tableEffects.get(el.dataset.effectKey);if(!e)return;const elapsed=Date.now()-e.started;if(elapsed>=e.duration||reduced)return;
  let frames=(e.type==='board'||e.type==='hole')?[{transform:'rotateY(180deg)'},{transform:'rotateY(0deg)'}]:e.type==='chips'?[{opacity:0,transform:'translate(-50%,5px) scale(.8)',offset:0},{opacity:1,transform:'translate(-50%,-5px) scale(1.08)',offset:.18},{opacity:1,transform:'translate(-50%,-17px) scale(1)',offset:.65},{opacity:0,transform:'translate(-50%,-32px) scale(.95)',offset:1}]:[{opacity:0,transform:'translateY(-12px)',offset:0},{opacity:1,transform:'translateY(0)',offset:.06},{opacity:1,transform:'translateY(0)',offset:.93},{opacity:0,transform:'translateY(-8px)',offset:1}];
  const animation=el.animate(frames,{duration:e.duration-e.delay,delay:e.delay,easing:(e.type==='board'||e.type==='hole')?'cubic-bezier(.2,.6,.2,1)':'ease-out',fill:'both'});animation.currentTime=elapsed;
@@ -137,7 +138,7 @@ function promoSlider(){return `<section class="promo" aria-roledescription="caro
 let promoTimer=null;
 function wirePromo(){const t=document.querySelector('.promo-track');if(!t||t.dataset.wired)return;t.dataset.wired=1;
  const dots=[...document.querySelectorAll('[data-promo]')],cur=()=>Math.round(t.scrollLeft/t.clientWidth);
- const go=i=>t.scrollTo({left:i*t.clientWidth,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+ const go=i=>t.scrollTo({left:i*t.clientWidth,behavior:effectsReduced()?'auto':'smooth'});
  const mark=()=>dots.forEach((d,i)=>d.toggleAttribute('aria-current',i===cur()));
  dots.forEach((d,i)=>d.onclick=()=>{go(i);restart();});t.addEventListener('scroll',()=>requestAnimationFrame(mark),{passive:true});
  const restart=()=>{clearInterval(promoTimer);promoTimer=setInterval(()=>{if(!document.body.contains(t)){clearInterval(promoTimer);return;}if(!t.matches(':hover')&&!document.hidden&&!document.body.classList.contains('modal-up')&&!t.closest('.promo').classList.contains('anim-off'))go((cur()+1)%SLIDES.length);},5500);};

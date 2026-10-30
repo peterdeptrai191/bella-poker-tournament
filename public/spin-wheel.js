@@ -1,3 +1,4 @@
+import {effectsReduced} from './visual-effects.js';
 // A square board of reward cards along the four edges, with a light that runs around it.
 // The player presses Quay: the light speeds up, runs at full speed, and the player presses Dừng to slow it
 // down onto the prize. The prize is decided by the server when the spin starts; pressing Dừng only decides
@@ -31,7 +32,7 @@ export function wheelHTML(tiles,centre='',badge='★',frame=rarity,sparkle=new S
 }
 
 export function spinner(root,tiles,{onStep}={}){
- const els=[...root.querySelectorAll('.spin-tile')].sort((a,b)=>a.dataset.i-b.dataset.i),n=els.length,reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+ const els=[...root.querySelectorAll('.spin-tile')].sort((a,b)=>a.dataset.i-b.dataset.i),n=els.length,reduced=effectsReduced();
  let pos=0,timer=null,running=false;
  const light=i=>{els.forEach(e=>e.classList.remove('lit'));els[i].classList.add('lit');onStep?.(tiles[i],i);};
  const step=()=>{pos=(pos+1)%n;light(pos);playSound('one',{volume:.16});};

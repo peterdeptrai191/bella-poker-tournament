@@ -26,7 +26,7 @@
 @keyframes bella-pulse{50%{opacity:.6;scale:.94}}
 @keyframes bella-rise{0%{opacity:0;translate:0 0;scale:.4}15%{opacity:1;scale:1}80%{opacity:.8}100%{opacity:0;translate:0 -420px;scale:.6}}
 @keyframes bella-twinkle{0%,100%{opacity:0;scale:.2;rotate:0deg}45%{opacity:1;scale:1;rotate:45deg}60%{opacity:.9;scale:.85}}
-@media(prefers-reduced-motion:reduce){.bella-glow,.bella-rays,.bella-glitter circle{animation:none}.bella-sparkle{animation:none;opacity:.7}.fire-orbit-trail,.fire-front-trail,.fire-embers,.bella-eyelids{animation:none}.bella-eyelids{opacity:0}.fire-embers{opacity:.45}}
+html[data-effects="reduced"]{.bella-glow,.bella-rays,.bella-glitter circle{animation:none}.bella-sparkle{animation:none;opacity:.7}.fire-orbit-trail,.fire-front-trail,.fire-embers,.bella-eyelids{animation:none}.bella-eyelids{opacity:0}.fire-embers{opacity:.45}}
 
 .character-animate{display:block;flex-shrink:0;padding:0;border:0;background:none;border-radius:14px;line-height:0}.character-animate:hover:enabled{background:none;transform:none}.character-animate:focus-visible{outline:2px solid var(--character-color);outline-offset:3px}
 /* Live effects for every original crew skin. */
@@ -37,4 +37,4 @@
 @keyframes crew-spin{to{transform:rotate(360deg)}}
 @keyframes crew-ring{to{stroke-dashoffset:-228}}
 @keyframes crew-aura{50%{opacity:.22}}
-@media(prefers-reduced-motion:reduce){.crew-aura,.crew-ring,.crew-orbit,.crew-upright{animation:none}}
+html[data-effects="reduced"]{.crew-aura,.crew-ring,.crew-orbit,.crew-upright{animation:none}}
