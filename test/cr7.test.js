@@ -3,12 +3,11 @@ import {accountRequest,authenticateAccount,accountDocument} from '../lib/account
 import {clearMemory,writeRecord} from '../lib/store.js';
 import {cr7Skins,goatSkins,goatTiles,isCheap} from '../public/cr7-catalog.js';
 import {CHARACTERS} from '../public/characters.js';
-test('GOAT or BOAT: every skin but the free one is on the wheel, skins under 10 coin on two tiles',()=>{
+test('GOAT or BOAT: only skins from 10 coin up and the box-only skins, one card each',()=>{
  assert.equal(cr7Skins().length,4);assert.equal(goatSkins().length,5);
- const tiles=goatTiles(),count=id=>tiles.filter(t=>t===id).length;
- for(const c of CHARACTERS){if(c.price===0)assert.equal(count(c.id),0);else assert.equal(count(c.id),isCheap(c)?2:1,c.id);}
- assert.equal(tiles.length,CHARACTERS.filter(c=>c.price!==0).length+CHARACTERS.filter(c=>c.price!==0&&isCheap(c)).length);
- for(let i=1;i<tiles.length;i++)assert.notEqual(tiles[i],tiles[i-1]);
+ const tiles=goatTiles(),want=CHARACTERS.filter(c=>c.event||(typeof c.price==='number'&&c.price>=10)).map(c=>c.id);
+ assert.deepEqual([...tiles].sort(),[...want].sort());assert.equal(new Set(tiles).size,tiles.length);
+ assert.ok(!tiles.some(id=>isCheap(CHARACTERS.find(c=>c.id===id))));
 });
 test('box skins cannot be bought one by one and the free spin is used once',async()=>{
  clearMemory();const u=await accountRequest({body:{op:'register',username:'CR7 test',password:'pw'}}),token=u.cookieToken;

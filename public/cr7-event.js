@@ -1,7 +1,7 @@
 // GOAT or BOAT box (was the CR7 B.O.A.T pack) and the Bella mystery pack, both shown as a spinning wheel.
 import {CHARACTERS,characterById} from './characters.js';
 import {animatedCharacter} from './character-motion.js';
-import {CR7_EVENT,CR7_PRICE,BOX_NAME,cr7Skins,goatSkins,goatTiles,isCheap} from './cr7-catalog.js';
+import {CR7_EVENT,CR7_PRICE,BOX_NAME,cr7Skins,goatSkins,goatTiles,goatFrame} from './cr7-catalog.js';
 import {wheelHTML,spinner,stillArt,celebrate} from './spin-wheel.js';
 let getAccount=()=>null,performRequest,isHome=()=>false,offering=false;
 const offered=new Set();
@@ -12,14 +12,14 @@ const pct=x=>(x*100).toLocaleString('vi-VN',{maximumFractionDigits:2})+'%';
 const art=c=>animatedCharacter(c,'cr7-preview-art');
 
 function listRewards(){
- const tiles=goatTiles(),share=c=>tiles.filter(t=>t===c.id).length/tiles.length,inBox=CHARACTERS.filter(c=>c.price!==0);
- const groups=[[goatSkins(),'GOAT · Độc quyền vòng quay'],[cr7Skins(),'BOAT · Độc quyền vòng quay'],[inBox.filter(c=>!c.event&&!isCheap(c)),'Skin từ 10 coin trở lên · 1 ô'],[inBox.filter(isCheap),'Skin dưới 10 coin · 2 ô']];
+ const tiles=goatTiles(),share=1/tiles.length,goats=goatSkins().filter(c=>c.id.startsWith('goat-m10')),special=goatSkins().filter(c=>!c.id.startsWith('goat-m10'));
+ const groups=[[goats,'GOAT'],[cr7Skins(),'BOAT'],[special,'Special Skin'],[tiles.map(id=>CHARACTERS.find(c=>c.id===id)).filter(c=>!c.event),'Skin từ 10 coin trở lên']];
  const d=dialog('cr7-rewards');
- d.innerHTML=`<button class="cr7-close" aria-label="Đóng">×</button><small>${BOX_NAME.toUpperCase()}</small><h2>Có gì trong vòng quay?</h2><p>${tiles.length} ô, ô nào cũng có cơ hội như nhau. Skin dưới 10 coin chiếm 2 ô nên dễ ra hơn, skin xịn chỉ có 1 ô.</p>`+groups.map(([skins,title])=>`<h3>${title}</h3><div class="cr7-reward-grid">${skins.map(c=>`<article style="--cr7-color:${c.color}">${art(c)}<b>${esc(c.name)}</b><span>${pct(share(c))}</span></article>`).join('')}</div>`).join('')+'<p>Skin trùng được giữ nguyên trong bộ sưu tập, không hoàn coin.</p>';
+ d.innerHTML=`<button class="cr7-close" aria-label="Đóng">×</button><small>${BOX_NAME.toUpperCase()}</small><h2>Có gì trong vòng quay?</h2><p>${tiles.length} thẻ, thẻ nào cũng có cơ hội như nhau: ${pct(share)} mỗi thẻ. GOAT, BOAT và Special Skin chỉ có trong vòng quay này.</p>`+groups.map(([skins,title])=>`<h3>${title}</h3><div class="cr7-reward-grid">${skins.map(c=>`<article style="--cr7-color:${c.color}">${art(c)}<b>${esc(c.name)}</b><span>${pct(share)}</span></article>`).join('')}</div>`).join('')+'<p>Skin trùng được giữ nguyên trong bộ sưu tập, không hoàn coin.</p>';
  d.querySelector('button').onclick=()=>d.close();d.showModal();
 }
 
-export function offerCr7(){const a=getAccount();if(!a||!isHome()||a.cr7Event?.seen||offered.has(a.id)||offering)return;offering=true;setTimeout(()=>{offering=false;const current=getAccount();if(current?.id!==a.id||!isHome())return;const opened=document.querySelector('dialog[open]');if(opened){opened.addEventListener('close',()=>setTimeout(offerCr7,300),{once:true});return;}offered.add(a.id);const d=dialog('cr7-poster');d.innerHTML=`<button class="cr7-close" aria-label="Đóng sự kiện">×</button><div class="cr7-poster-art goat-poster"><img src="/assets/events/cr7-boat/goat-or-boat-poster.webp" alt="M10 và CR7 quay lưng vào nhau"><h2 class="goat-title">GOAT<small>or</small>BOAT</h2></div><h2>Tặng bạn 1 lượt quay</h2><p>${goatTiles().length} ô, ô nào cũng như nhau<br>Lượt đầu miễn phí · Các lượt sau ${CR7_PRICE} coin</p><button class="cr7-gold" data-enter>Quay miễn phí →</button>`;d.querySelector('.cr7-close').onclick=()=>d.close();d.querySelector('[data-enter]').onclick=()=>{d.close();openCr7Pack();};d.showModal();performRequest({op:'seeCr7Event'}).catch(()=>{offered.delete(a.id);});},650);}
+export function offerCr7(){const a=getAccount();if(!a||!isHome()||a.cr7Event?.seen||offered.has(a.id)||offering)return;offering=true;setTimeout(()=>{offering=false;const current=getAccount();if(current?.id!==a.id||!isHome())return;const opened=document.querySelector('dialog[open]');if(opened){opened.addEventListener('close',()=>setTimeout(offerCr7,300),{once:true});return;}offered.add(a.id);const d=dialog('cr7-poster');d.innerHTML=`<button class="cr7-close" aria-label="Đóng sự kiện">×</button><div class="cr7-poster-art goat-poster"><img src="/assets/events/cr7-boat/goat-or-boat-poster.webp" alt="M10 và CR7 quay lưng vào nhau"><h2 class="goat-title">GOAT<small>or</small>BOAT</h2></div><h2>Tặng bạn 1 lượt quay</h2><p>${goatTiles().length} thẻ đặc biệt, thẻ nào cũng như nhau<br>Lượt đầu miễn phí · Các lượt sau ${CR7_PRICE} coin</p><button class="cr7-gold" data-enter>Quay miễn phí →</button>`;d.querySelector('.cr7-close').onclick=()=>d.close();d.querySelector('[data-enter]').onclick=()=>{d.close();openCr7Pack();};d.showModal();performRequest({op:'seeCr7Event'}).catch(()=>{offered.delete(a.id);});},650);}
 
 const idle=label=>`<b class="spin-logo">${label}</b>`;
 const stepCentre=id=>{const c=characterById(id);return `<img class="spin-peek" src="${stillArt(c)}" alt="" onerror="this.remove()"><em>${esc(c.name)}</em>`;};
@@ -30,7 +30,7 @@ function wheelDialog(mode){
  const accountId=a.id,d=dialog('cr7-pack spin-dialog '+(mode.cls||''));let pending=false,receipt=null,result=null,canStop=false,stopNow=null;
  if(mode.storageKey){try{receipt=JSON.parse(localStorage.getItem(mode.storageKey(accountId)));if(!mode.validReceipt(receipt))receipt=null;}catch{receipt=null;}}
  d.addEventListener('cancel',e=>{if(pending)e.preventDefault();});
- d.innerHTML=`<button class="cr7-close" aria-label="Đóng">×</button><small>${mode.eyebrow}</small><h2>${mode.title}</h2><p class="spin-sub">${mode.sub}</p>${wheelHTML(mode.tiles,idle(mode.label),mode.badge)}<h3 class="cr7-result-name" aria-live="polite"></h3><p class="spin-msg"></p><p class="cr7-wallet"></p><button class="cr7-gold" data-open></button><button class="cr7-gold spin-stop" data-stop hidden>DỪNG ✋</button><button class="cr7-equip" hidden>Dùng skin vừa nhận</button><button class="cr7-list">✧ Xem tỷ lệ & hiệu ứng</button><p class="cr7-error" role="status"></p><small class="cr7-footnote">${mode.footnote}</small>`;
+ d.innerHTML=`<button class="cr7-close" aria-label="Đóng">×</button><small>${mode.eyebrow}</small><h2>${mode.title}</h2><p class="spin-sub">${mode.sub}</p>${wheelHTML(mode.tiles,idle(mode.label),mode.badge,mode.frame)}<h3 class="cr7-result-name" aria-live="polite"></h3><p class="spin-msg"></p><p class="cr7-wallet"></p><button class="cr7-gold" data-open></button><button class="cr7-gold spin-stop" data-stop hidden>DỪNG ✋</button><button class="cr7-equip" hidden>Dùng skin vừa nhận</button><button class="cr7-list">✧ Xem tỷ lệ & hiệu ứng</button><p class="cr7-error" role="status"></p><small class="cr7-footnote">${mode.footnote}</small>`;
  const $=s=>d.querySelector(s),centre=$('.spin-centre'),wheel=$('.spin-wheel');
  const sp=spinner(wheel,mode.tiles,{onStep:id=>{centre.innerHTML=stepCentre(id);}});
  const ui=(error='')=>{const current=getAccount();if(current?.id!==accountId){d.close();return;}
@@ -62,8 +62,8 @@ function wheelDialog(mode){
 }
 
 export function openCr7Pack(){
- wheelDialog({eyebrow:'BELLA • VÒNG QUAY',title:BOX_NAME,label:'GOAT<small>or</small>BOAT',badge:'🐐',tiles:goatTiles(),
-  sub:`${goatTiles().length} ô · ô nào cũng có cơ hội như nhau · skin dưới 10 coin chiếm 2 ô`,
+ wheelDialog({eyebrow:'BELLA • VÒNG QUAY',title:BOX_NAME,label:'GOAT<small>or</small>BOAT',badge:'🐐',frame:goatFrame,tiles:goatTiles(),
+  sub:`${goatTiles().length} thẻ đặc biệt · thẻ nào cũng có cơ hội như nhau`,
   footnote:`Mỗi tài khoản được tặng 1 lượt quay. Các lượt sau ${CR7_PRICE} coin. Skin trùng không hoàn coin.`,
   storageKey:id=>'bella.'+CR7_EVENT+'.pending.'+id,validReceipt:r=>r&&typeof r.free==='boolean'&&typeof r.requestId==='string',
   newReceipt:a=>({requestId:crypto.randomUUID(),free:!a.cr7Event?.freeUsed}),

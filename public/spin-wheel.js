@@ -16,13 +16,13 @@ export const isJackpot=c=>['goat','boat','gold'].includes(rarity(c));
 
 // Cells of an s×s square's edge, clockwise from the top-left corner.
 function edge(s){const out=[];for(let c=0;c<s;c++)out.push([0,c]);for(let r=1;r<s;r++)out.push([r,s-1]);for(let c=s-2;c>=0;c--)out.push([s-1,c]);for(let r=s-2;r>0;r--)out.push([r,0]);return out;}
-export function wheelHTML(tiles,centre='',badge='★'){
+export function wheelHTML(tiles,centre='',badge='★',frame=rarity){
  const n=tiles.length;let s=3;while(4*(s-1)<n)s++;
  const cells=edge(s),spare=cells.length-n,corners=[0,s-1,2*(s-1),3*(s-1)].slice(0,spare);  // leftover corners become badges
  let k=0;const html=cells.map(([r,c],i)=>{const pos=`grid-area:${r+1}/${c+1}`;
   if(corners.includes(i))return `<span class="spin-badge" style="${pos}" aria-hidden="true">${badge}</span>`;
   const id=tiles[k],ch=characterById(id),j=k++;
-  return `<span class="spin-tile" data-r="${rarity(ch)}" data-i="${j}" style="${pos};--c:${ch.color}" title="${esc(ch.name)}"><img src="${stillArt(ch)}" alt="" loading="lazy" onerror="this.remove()"></span>`;}).join('');
+  return `<span class="spin-tile" data-r="${frame(ch)}" data-i="${j}" style="${pos};--c:${ch.color}" title="${esc(ch.name)}"><img src="${stillArt(ch)}" alt="" loading="lazy" onerror="this.remove()"></span>`;}).join('');
  return `<div class="spin-wheel" style="--s:${s}">${html}<div class="spin-centre" style="grid-area:2/2/${s}/${s}">${centre}</div></div>`;
 }
 

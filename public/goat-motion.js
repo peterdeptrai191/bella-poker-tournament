@@ -24,7 +24,7 @@ function scene(kind,uid){
  return {back:`<g class="goat-spin-slow" style="transform-origin:${CX}px ${CY}px"><path d="M${CX} 20L${CX+300} ${CY}L${CX} 640L${CX-300} ${CY}Z" fill="#ffdf00" opacity=".18" stroke="#2fd36b" stroke-width="8" stroke-opacity=".7"/><circle cx="${CX}" cy="${CY}" r="150" fill="#1d4fd6" opacity=".35"/><path d="M${CX-150} ${CY-20}Q${CX} ${CY-70} ${CX+150} ${CY+20}" stroke="#fff" stroke-width="10" fill="none" opacity=".45"/></g><circle class="goat-pulse" cx="${CX}" cy="${CY}" r="270" fill="none" stroke="#2fd36b" stroke-width="6" stroke-dasharray="40 24"/>`,front:confetti(['#ffdf00','#2fd36b','#1d4fd6','#fff'],18)};
 }
 
-function plate(p){
+export function plate(p){
  const big=p.kind==='bigtime',y=600;
  return `<g class="goat-plate ${big?'bigtime':''}" aria-hidden="true"><rect x="90" y="${y}" width="460" height="${big?88:64}" rx="14" fill="${big?'#0b0b0f':'#0f1a2e'}" stroke="#f4c542" stroke-width="4"/>${big?`<rect x="90" y="${y}" width="140" height="88" rx="14" fill="#f4c542"/><rect x="200" y="${y}" width="30" height="88" fill="#f4c542"/><text x="160" y="${y+40}" text-anchor="middle" font-size="24" font-weight="900" fill="#0b0b0f" letter-spacing="1">BIG</text><text x="160" y="${y+70}" text-anchor="middle" font-size="24" font-weight="900" fill="#0b0b0f" letter-spacing="1">TIME</text><text x="390" y="${y+40}" text-anchor="middle" font-size="30" font-weight="900" fill="#fff">${esc(p.name)}</text><text x="390" y="${y+74}" text-anchor="middle" font-size="24" font-weight="800" fill="#f4c542" letter-spacing="3">${esc(p.date)}</text>`:`<text x="${CX}" y="${y+43}" text-anchor="middle" font-size="32" font-weight="900" fill="#fff" letter-spacing="2">${esc(p.name)}</text>`}</g>`;
 }
