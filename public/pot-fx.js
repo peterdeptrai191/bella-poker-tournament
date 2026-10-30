@@ -66,7 +66,7 @@ export function chipRain({full=true,target=null,delay=0,volume=1}={}){
 // ---------- Sound: five recordings of real chips on a table, from one chip to a whole stack ----------
 // They are decoded once into memory, so a sound starts instantly and several can overlap.
 // Browsers only allow audio after the player has touched the page, so everything starts on the first tap.
-const SOUNDS={one:'/assets/sfx/chip-1.mp3',small:'/assets/sfx/chip-stack-s.mp3',medium:'/assets/sfx/chip-stack-m.mp3',allin:'/assets/sfx/chip-allin.mp3',win:'/assets/sfx/chip-win.mp3',cheer:'/assets/sfx/crowd-cheer.mp3'};
+const SOUNDS={one:'/assets/sfx/chip-1.mp3',small:'/assets/sfx/chip-stack-s.mp3',medium:'/assets/sfx/chip-stack-m.mp3',allin:'/assets/sfx/chip-allin.mp3',win:'/assets/sfx/chip-win.mp3',cheer:'/assets/sfx/crowd-cheer.mp3',crowd:'/assets/sfx/crowd-cheer-long.mp3'};
 let audio=null,loading=null;const buffers={};
 function load(){loading??=Promise.all(Object.entries(SOUNDS).map(async([name,url])=>{try{const data=await (await fetch(url)).arrayBuffer();buffers[name]=await audio.decodeAudioData(data);}catch{}}));return loading;}
 function unlock(){try{audio??=new (window.AudioContext||window.webkitAudioContext)();if(audio.state==='suspended')audio.resume();load();}catch{}}
@@ -84,6 +84,32 @@ export function whoosh({volume=.7,ms=650}={}){
  bp.frequency.setValueAtTime(260,t);bp.frequency.exponentialRampToValueAtTime(3200,t+ms/1000*.7);
  g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(volume,t+ms/1000*.35);g.gain.exponentialRampToValueAtTime(0.0001,t+ms/1000);
  src.connect(bp).connect(g).connect(audio.destination);src.start(t);src.stop(t+ms/1000);
+}
+// Plays a recording with its volume following `points` ([seconds, gain] pairs). Returns a control whose
+// peak(gain) jumps straight to that loudness (used when the player skips ahead).
+export function playShaped(name,points){
+ if(!audio||audio.state!=='running'||!buffers[name]||!sfxEnabled())return {peak(){},stop(){}};
+ const t=audio.currentTime,src=audio.createBufferSource(),g=audio.createGain();src.buffer=buffers[name];
+ g.gain.setValueAtTime(points[0][1],t);for(const [at,v] of points.slice(1))g.gain.linearRampToValueAtTime(v,t+at);
+ src.connect(g).connect(audio.destination);src.start(t);
+ return {peak(v){const n=audio.currentTime;g.gain.cancelScheduledValues(n);g.gain.setValueAtTime(v,n);g.gain.linearRampToValueAtTime(0,n+2.2);},stop(){try{src.stop();}catch{}}};
+}
+// A heavy stadium gate rolling open, made on the spot: a deep rumble, metal grinding that wobbles, and a
+// loud clunk when it stops.
+export function gateSound(ms=3000,volume=.9){
+ if(!audio||audio.state!=='running'||!sfxEnabled())return;
+ const t=audio.currentTime,d=ms/1000,len=Math.ceil(audio.sampleRate*d),buf=audio.createBuffer(1,len,audio.sampleRate),x=buf.getChannelData(0);
+ let last=0;for(let i=0;i<len;i++){const w=Math.random()*2-1;last=(last+.02*w)/1.02;x[i]=last*3.5;}           // brown noise
+ const rumble=audio.createBufferSource(),lp=audio.createBiquadFilter(),rg=audio.createGain();rumble.buffer=buf;lp.type='lowpass';lp.frequency.value=140;
+ rg.gain.setValueAtTime(.0001,t);rg.gain.exponentialRampToValueAtTime(volume,t+.5);rg.gain.setValueAtTime(volume,t+d-.4);rg.gain.exponentialRampToValueAtTime(.0001,t+d);
+ rumble.connect(lp).connect(rg).connect(audio.destination);rumble.start(t);rumble.stop(t+d);
+ const white=audio.createBuffer(1,len,audio.sampleRate),wd=white.getChannelData(0);for(let i=0;i<len;i++)wd[i]=Math.random()*2-1;
+ const grind=audio.createBufferSource(),bp=audio.createBiquadFilter(),gg=audio.createGain(),lfo=audio.createOscillator(),lg=audio.createGain();
+ grind.buffer=white;bp.type='bandpass';bp.Q.value=9;bp.frequency.setValueAtTime(700,t);bp.frequency.linearRampToValueAtTime(980,t+d);
+ lfo.frequency.value=7;lg.gain.value=.12;lfo.connect(lg).connect(gg.gain);gg.gain.setValueAtTime(.0001,t);gg.gain.linearRampToValueAtTime(volume*.25,t+.6);gg.gain.setValueAtTime(volume*.25,t+d-.35);gg.gain.linearRampToValueAtTime(.0001,t+d);
+ grind.connect(bp).connect(gg).connect(audio.destination);grind.start(t);grind.stop(t+d);lfo.start(t);lfo.stop(t+d);
+ const thump=audio.createOscillator(),tg=audio.createGain(),te=t+d-.05;thump.type='sine';thump.frequency.setValueAtTime(95,te);thump.frequency.exponentialRampToValueAtTime(38,te+.35);
+ tg.gain.setValueAtTime(.0001,te);tg.gain.exponentialRampToValueAtTime(volume*1.2,te+.02);tg.gain.exponentialRampToValueAtTime(.0001,te+.6);thump.connect(tg).connect(audio.destination);thump.start(te);thump.stop(te+.65);
 }
 // The bigger the bet, the bigger the sound: one chip for blinds and small calls, a short stack for an
 // ordinary raise, a bigger stack for a large raise, and a whole stack pushed in for an all-in.

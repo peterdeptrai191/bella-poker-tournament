@@ -13,12 +13,15 @@ function dialog(cls){const d=document.createElement('dialog');d.className='cr7-d
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const pct=x=>(x*100).toLocaleString('vi-VN',{maximumFractionDigits:2})+'%';
 const art=c=>animatedCharacter(c,'cr7-preview-art');
+// Box-only skins you do not own yet show as a shadow figure; the name and the odds stay visible.
+export const silhouette=(c,cls='cr7-preview-art')=>`<span class="${cls} skin-sil" role="img" aria-label="Skin bí ẩn: ${esc(c.name)}"><img src="${stillArt(c)}" alt="" onerror="this.remove()"></span>`;
+const boxArt=c=>c.event&&!getAccount()?.ownedSkins?.includes(c.id)?silhouette(c):art(c);
 
 function listRewards(){
  const odds=goatOdds(),tiles=goatTiles(),goats=goatSkins().filter(c=>c.id.startsWith('goat-m10')),special=goatSkins().filter(c=>!c.id.startsWith('goat-m10'));
  const groups=[[goats,'GOAT'],[cr7Skins(),'BOAT'],[special,'Special Skin'],[tiles.map(id=>CHARACTERS.find(c=>c.id===id)).filter(c=>!c.event),'Skin từ 10 coin trở lên']];
  const d=dialog('cr7-rewards');
- d.innerHTML=`<button class="cr7-close" aria-label="Đóng">×</button><small>${BOX_NAME.toUpperCase()}</small><h2>Có gì trong vòng quay?</h2><p><b>${ODDS_LINE}</b><br>Máy chủ bốc nhóm màu trước rồi chọn thẻ trong nhóm. Trong nhóm đỏ, M10 Barca và CR7 Real hiếm hơn (2% mỗi thẻ). GOAT, BOAT và Special Skin chỉ có trong vòng quay này.</p>`+groups.map(([skins,title])=>`<h3>${title}</h3><div class="cr7-reward-grid">${skins.map(c=>`<article data-frame="${goatFrame(c)}" style="--cr7-color:${c.color}">${art(c)}<b>${esc(c.name)}</b><span>${pct(odds[c.id]||0)}</span></article>`).join('')}</div>`).join('')+'<p>Skin trùng được giữ nguyên trong bộ sưu tập, không hoàn coin.</p>';
+ d.innerHTML=`<button class="cr7-close" aria-label="Đóng">×</button><small>${BOX_NAME.toUpperCase()}</small><h2>Có gì trong vòng quay?</h2><p><b>${ODDS_LINE}</b><br>Máy chủ bốc nhóm màu trước rồi chọn thẻ trong nhóm. Trong nhóm đỏ, M10 Barca và CR7 Real hiếm hơn (2% mỗi thẻ). GOAT, BOAT và Special Skin chỉ có trong vòng quay này.</p>`+groups.map(([skins,title])=>`<h3>${title}</h3><div class="cr7-reward-grid">${skins.map(c=>`<article data-frame="${goatFrame(c)}" style="--cr7-color:${c.color}">${boxArt(c)}<b>${esc(c.name)}</b><span>${pct(odds[c.id]||0)}${getAccount()?.ownedSkins?.includes(c.id)?' · ✓ Đã sở hữu':''}</span></article>`).join('')}</div>`).join('')+'<p>Skin trùng được giữ nguyên trong bộ sưu tập, không hoàn coin.</p>';
  d.querySelector('button').onclick=()=>d.close();d.showModal();
 }
 
