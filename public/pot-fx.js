@@ -3,7 +3,7 @@
 // Chips are plain HTML + CSS (no images), coloured by value and by the chip skin the viewer has on
 // (see pot-fx.css), and animated with the Web Animations API. Sounds are five short recordings of real chips.
 import {chipBreakdown,CHIP_VALUES} from '/chip-skin-catalog.js';
-import {sfxEnabled} from '/settings.js';
+import {sfxEnabled,sfxVolume} from '/settings.js';
 
 const reduced=()=>window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 const rand=(a,b)=>a+Math.random()*(b-a);
@@ -73,10 +73,19 @@ function unlock(){try{audio??=new (window.AudioContext||window.webkitAudioContex
 if(typeof window!=='undefined'){for(const type of ['pointerdown','keydown'])window.addEventListener(type,unlock,{capture:true,passive:true});}
 export function playSound(name,{delay=0,volume=1}={}){
  if(!audio||audio.state!=='running'||!buffers[name]||volume<=0||!sfxEnabled())return;
- const source=audio.createBufferSource(),gain=audio.createGain();source.buffer=buffers[name];gain.gain.value=volume;source.connect(gain).connect(audio.destination);source.start(audio.currentTime+delay/1000);
+ const source=audio.createBufferSource(),gain=audio.createGain();source.buffer=buffers[name];gain.gain.value=volume*sfxVolume();source.connect(gain).connect(audio.destination);source.start(audio.currentTime+delay/1000);
 }
+// A soft physical button press: a tiny click from the switch and a low, muted thump from the padding under
+// the leather, made on the spot.
+export function pressSound(){
+ if(!audio||audio.state!=='running'||!sfxEnabled())return;const t=audio.currentTime,v=.35*sfxVolume();
+ const len=Math.ceil(audio.sampleRate*.012),buf=audio.createBuffer(1,len,audio.sampleRate),d=buf.getChannelData(0);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,3);
+ const click=audio.createBufferSource(),hp=audio.createBiquadFilter(),cg=audio.createGain();click.buffer=buf;hp.type='bandpass';hp.frequency.value=3200;hp.Q.value=1.2;cg.gain.value=v*.9;click.connect(hp).connect(cg).connect(audio.destination);click.start(t);
+ const o=audio.createOscillator(),og=audio.createGain();o.type='sine';o.frequency.setValueAtTime(190,t);o.frequency.exponentialRampToValueAtTime(90,t+.06);og.gain.setValueAtTime(.0001,t);og.gain.exponentialRampToValueAtTime(v,t+.004);og.gain.exponentialRampToValueAtTime(.0001,t+.08);o.connect(og).connect(audio.destination);o.start(t);o.stop(t+.09);
+}
+if(typeof window!=='undefined')window.addEventListener('pointerdown',e=>{if(e.target.closest?.('button:not(:disabled),[role=button],.spin-tile'))setTimeout(pressSound,0);},{capture:true,passive:true});
 // A whoosh made on the spot: a burst of noise swept from low to high through a band filter.
-export function whoosh({volume=.7,ms=650}={}){
+export function whoosh({volume=.7,ms=650}={}){volume*=sfxVolume();
  if(!audio||audio.state!=='running'||!sfxEnabled())return;
  const t=audio.currentTime,len=Math.ceil(audio.sampleRate*ms/1000),buf=audio.createBuffer(1,len,audio.sampleRate),d=buf.getChannelData(0);
  for(let i=0;i<len;i++)d[i]=Math.random()*2-1;
@@ -89,14 +98,14 @@ export function whoosh({volume=.7,ms=650}={}){
 // peak(gain) jumps straight to that loudness (used when the player skips ahead).
 export function playShaped(name,points,{delay=0}={}){
  if(!audio||audio.state!=='running'||!buffers[name]||!sfxEnabled())return {peak(){},stop(){}};
- const t=audio.currentTime+delay/1000,src=audio.createBufferSource(),g=audio.createGain();src.buffer=buffers[name];
- g.gain.setValueAtTime(points[0][1],t);for(const [at,v] of points.slice(1))g.gain.linearRampToValueAtTime(v,t+at);
+ const t=audio.currentTime+delay/1000,src=audio.createBufferSource(),g=audio.createGain(),k=sfxVolume();src.buffer=buffers[name];
+ g.gain.setValueAtTime(points[0][1]*k,t);for(const [at,v] of points.slice(1))g.gain.linearRampToValueAtTime(v*k,t+at);
  src.connect(g).connect(audio.destination);src.start(t);
  return {peak(v){const n=audio.currentTime;g.gain.cancelScheduledValues(n);g.gain.setValueAtTime(v,n);g.gain.linearRampToValueAtTime(0,n+2.2);},stop(){try{src.stop();}catch{}}};
 }
 // A heavy stadium gate rolling open, made on the spot: a deep rumble, metal grinding that wobbles, and a
 // loud clunk when it stops.
-export function gateSound(ms=3000,volume=.9){
+export function gateSound(ms=3000,volume=.9){volume*=sfxVolume();
  if(!audio||audio.state!=='running'||!sfxEnabled())return;
  const t=audio.currentTime,d=ms/1000,len=Math.ceil(audio.sampleRate*d),buf=audio.createBuffer(1,len,audio.sampleRate),x=buf.getChannelData(0);
  let last=0;for(let i=0;i<len;i++){const w=Math.random()*2-1;last=(last+.02*w)/1.02;x[i]=last*3.5;}           // brown noise

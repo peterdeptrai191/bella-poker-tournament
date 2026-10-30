@@ -11,6 +11,7 @@
 import {animatedCharacter} from './character-motion.js';
 import {playSound,playShaped,gateSound,whoosh} from './pot-fx.js';
 import {potwCard} from './spin-wheel.js';
+import {duckMusic} from './settings.js';
 import {cardFace} from './card-face.js';
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const reduced=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -123,9 +124,12 @@ export function revealCard(host,c,tier,{duplicate=false}={}){
    crowd.push(playShaped('crowd',[[0,0],[1.4,.45],[3,.6],[5.2,1.05],[8.5,1.05],[10.7,0]],{delay:9600}));
    // the Champions League-style anthem: its last 16 s start as the gate opens, so the final big chord
    // (12.8 s into the clip) lands exactly when the card glows and turns into the skin
-   crowd.push(playShaped('anthem',[[0,.0],[1.2,.35],[5,.55],[9,.75],[12.6,1.15],[15,1.1],[16.2,.9]],{delay:2000}));
+   crowd.push(playShaped('anthem',[[0,.0],[1.2,.35],[5,.55],[9,.75],[12.6,1.15],[13.8,1.0],[16.2,0]],{delay:2000}));
+   // the jazz in the background dips away as you walk into the tunnel and comes back softly after the reveal,
+   // as the anthem's last chord fades, so the two never fight
+   duckMusic(.06,2500);timers.push(setTimeout(()=>duckMusic(1,4500),15600));
    for(const [name,at] of steps)timers.push(setTimeout(()=>apply(name),at));
   }
-  el.querySelector('.rv-ok').onclick=()=>{el.classList.add('s-leaving');for(const c of crowd)c.peak(.5);setTimeout(()=>{fx.stop();el.remove();done();},250);};
+  el.querySelector('.rv-ok').onclick=()=>{duckMusic(1,1500);el.classList.add('s-leaving');for(const c of crowd)c.peak(.5);setTimeout(()=>{fx.stop();el.remove();done();},250);};
  });
 }

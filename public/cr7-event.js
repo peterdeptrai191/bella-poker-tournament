@@ -5,6 +5,7 @@ import {CR7_EVENT,CR7_PRICE,BOX_NAME,DAILY_SPINS,cr7Skins,goatSkins,goatTiles,go
 import {wheelHTML,spinner,stillArt,celebrate,potwCard} from './spin-wheel.js';
 import {dimmer,revealCard} from './card-reveal.js';
 import {starRow} from './card-face.js';
+import {openGift} from './gift-box.js';
 // small white glints that flash on the G.O.A.T / B.O.A.T lettering
 export function addGlints(root){root.querySelectorAll('.goat-head:not(.cf-label)').forEach(h=>{if(h.querySelector('.goat-glint'))return;[[6,8,0],[44,58,.8],[66,4,1.6],[94,52,.4]].forEach(([x,y,d])=>{const g=document.createElement('i');g.className='goat-glint';g.style.left=x+'%';g.style.top=y+'%';g.style.animationDelay=d+'s';h.append(g);});});}
 const GOAT_HEAD='<span class="w g" data-t="G.O.A.T">G.O.A.T</span><small>or</small><span class="w b" data-t="B.O.A.T">B.O.A.T</span>';
@@ -54,11 +55,13 @@ function wheelDialog(mode){
  $('.cr7-equip').onclick=async e=>{e.currentTarget.disabled=true;try{await performRequest({op:'equipSkin',character:result.skin});d.close();}catch(err){e.currentTarget.disabled=false;ui(err.message);}};
  $('[data-open]').onclick=async()=>{if(pending)return;const current=getAccount();receipt??=mode.newReceipt(current);if(mode.storageKey)try{localStorage.setItem(mode.storageKey(accountId),JSON.stringify(receipt));}catch{}
   pending=true;canStop=false;stopNow=null;result=null;$('.cr7-result-name').textContent='';$('.spin-msg').textContent='';wheel.classList.remove('has-prize');ui();
-  try{const [data]=await Promise.all([mode.request(receipt),sp.start()]);
+  try{let data;
+   if(mode.gift)data=await mode.request(receipt);          // mystery pack: no wheel, a gift box to tap open
+   else{[data]=await Promise.all([mode.request(receipt),sp.start()]);
    // full speed and the prize is known: now the player may press DỪNG (or it stops by itself after 8 s)
    canStop=true;ui();$('[data-stop]').focus();
    await new Promise(r=>{const t=setTimeout(r,8000);stopNow=()=>{clearTimeout(t);r();};});
-   canStop=false;stopNow=false;ui();
+   canStop=false;stopNow=false;ui();}
    if(getAccount()?.id!==accountId){sp.stop();d.close();return;}
    result=data.result;const tile=Number.isInteger(result.tile)?result.tile:mode.tiles.indexOf(result.skin);
    const c=characterById(result.skin);
@@ -69,6 +72,7 @@ function wheelDialog(mode){
     const dim=dimmer(d);let plan=0;const landing=sp.land(tile,{onPlan:ms=>{plan=ms;dim.fade(ms*.62);},winSound:false});
     await Promise.race([landing,new Promise(r=>setTimeout(r,plan*.62))]);await new Promise(r=>setTimeout(r,1000));sp.jump(tile);
     await revealCard(d,c,mode.frame(c),{duplicate:result.duplicate});dim.remove();}
+   else if(mode.gift){await openGift(d,c);sp.jump(tile);}
    else await sp.land(tile);
    receipt=null;if(mode.storageKey)try{localStorage.removeItem(mode.storageKey(accountId));}catch{}
    centre.innerHTML=animatedCharacter(c,'spin-prize');wheel.classList.add('has-prize');
@@ -96,11 +100,11 @@ function listMystery(){const d=dialog('cr7-rewards');const total=MYSTERY_TIERS.r
  d.innerHTML='<button class="cr7-close" aria-label="Đóng">×</button><small>BELLA MYSTERY PACK</small><h2>Tỷ lệ gói bí ẩn</h2><p>Bốc nhóm giá theo tỷ lệ, rồi chọn đều một skin trong nhóm.</p>'+MYSTERY_TIERS.map(([p,w])=>{const skins=CHARACTERS.filter(c=>c.price===p&&!c.event);return `<h3>Skin ${p} coin · ${pct(w/total)}</h3><div class="cr7-reward-grid">${skins.map(c=>`<article style="--cr7-color:${c.color}">${art(c)}<b>${esc(c.name)}</b><span>${pct(w/total/skins.length)}</span></article>`).join('')}</div>`;}).join('');
  d.querySelector('button').onclick=()=>d.close();d.showModal();}
 export function openMysteryPack(onDone){
- wheelDialog({cls:'mystery-wheel',eyebrow:'BELLA MYSTERY PACK',title:'Ai đang chờ bạn?',label:'?',badge:'?',tiles:mysteryTiles(),
+ wheelDialog({cls:'mystery-wheel',gift:true,eyebrow:'BELLA MYSTERY PACK',title:'Ai đang chờ bạn?',label:'?',badge:'?',tiles:mysteryTiles(),
   sub:'3 coin: 47,62% · 10 coin: 33,33% · 15 coin: 14,29% · 20 coin: 4,76%',
   footnote:'Giá 10 coin/lượt. Có thể ra skin đã sở hữu, skin trùng không hoàn coin.',list:listMystery,
   newReceipt:()=>({requestId:crypto.randomUUID()}),
-  button:(a,r)=>r?{text:'Tiếp tục lượt đang quay'}:a.coins<10?{text:'Chưa đủ 10 coin',disabled:true}:{text:'Quay · 10 coin ✦'},
+  button:(a,r)=>r?{text:'Tiếp tục mở quà'}:a.coins<10?{text:'Chưa đủ 10 coin',disabled:true}:{text:'Mở hộp quà · 10 coin 🎁'},
   request:r=>performRequest({op:'buyRandomSkin',requestId:r.requestId}),resetOn:/chưa đủ 10 coin/,onDone:r=>onDone?.(r.skin)});
 }
 document.addEventListener('click',e=>{if(e.target.closest('[data-cr7-pack]'))openCr7Pack();});
