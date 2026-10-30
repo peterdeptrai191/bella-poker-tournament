@@ -34,13 +34,16 @@
 .tn-haze{position:absolute;inset:0;background:radial-gradient(ellipse 60% 25% at 50% 70%,#ffffff12,transparent 70%);animation:tn-haze 6s ease-in-out infinite alternate}
 @keyframes tn-haze{to{transform:translateX(4%) scaleY(1.2)}}
 /* red carpet (drawn in card-reveal.js) */
-.tn-carpet{position:absolute;inset:0;width:100%;height:100%}
-.cp-person{opacity:0;transition:opacity .5s}.cp-person.on{opacity:1}
-.cp-phone{fill:#fffbe0;filter:drop-shadow(0 0 4px #fff);animation:cp-phone 1.8s ease-in-out infinite var(--d)}
+.tn-carpet{position:absolute;inset:0;pointer-events:none}
+.cp-reveal{position:absolute;inset:0;clip-path:inset(0 0 35% 0);will-change:clip-path}
+.cp-reveal>img{position:absolute;inset:0;width:100%;height:100%;display:block}
+.cp-roll{position:absolute;left:0;top:0;width:100px;height:20px;border-radius:10px;transform-origin:0 0;opacity:0;will-change:transform;background:linear-gradient(90deg,#ffe39a 0 4%,transparent 4% 96%,#ffe39a 96%),linear-gradient(#ff7a8c,#b3132b 25%,#5a0612 70%,#2a0207)}
+/* phone lights and camera flashes are tiny separate lights so only opacity changes (cheap) */
+.cp-phone,.cp-flash{position:absolute;translate:-50% -50%;border-radius:50%;pointer-events:none;will-change:opacity}
+.cp-phone{background:radial-gradient(circle,#ffffffcc 0,#fffbe066 35%,transparent 70%);animation:cp-phone 1.8s ease-in-out infinite var(--d)}
+.cp-flash{background:radial-gradient(circle,#fff 0,#ffffffd9 18%,transparent 70%);opacity:0;animation:cp-flash 2.4s linear infinite var(--d)}
 @keyframes cp-phone{0%,100%{opacity:1}50%{opacity:.35}}
-.cp-flash{opacity:0;animation:cp-flash 2.4s linear infinite var(--d)}
 @keyframes cp-flash{0%,6%,100%{opacity:0}2%{opacity:1}}
-.cp-post{opacity:0;transform-box:fill-box;transform-origin:50% 100%;transform:scaleY(.2);transition:opacity .35s,transform .45s cubic-bezier(.2,1.3,.4,1)}.cp-post.on{opacity:1;transform:none}
 .rv-fire{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
 /* the card: comes from the far end face-down, glows white-hot and turns into the skin */
 .rv-card{position:absolute;z-index:3;left:50%;top:47%;width:min(62vw,300px);aspect-ratio:3/4;translate:-50% -50%;opacity:0;transform:scale(.14)}
@@ -62,8 +65,10 @@
 @keyframes rv-flash{20%{opacity:.85}100%{opacity:0}}
 /* celebration: sparkles running round the edge of the screen */
 .rv-edge{position:absolute;inset:0;z-index:6;pointer-events:none;opacity:0;box-shadow:inset 0 0 0 3px #ffd34d,inset 0 0 40px #ffd34daa,inset 0 0 90px color-mix(in srgb,var(--tc) 60%,transparent);transition:opacity .5s}
-.reveal.s-celebrate .rv-edge{opacity:1;animation:rv-edge 1.4s ease-in-out infinite alternate}
-@keyframes rv-edge{to{box-shadow:inset 0 0 0 4px #fff3c4,inset 0 0 60px #ffd34d,inset 0 0 120px color-mix(in srgb,var(--tc) 80%,transparent)}}
+.reveal.s-celebrate .rv-edge{opacity:1}
+.rv-edge::after{content:'';position:absolute;inset:0;box-shadow:inset 0 0 0 4px #fff3c4,inset 0 0 60px #ffd34d,inset 0 0 120px color-mix(in srgb,var(--tc) 80%,transparent);opacity:0;will-change:opacity}
+.reveal.s-celebrate .rv-edge::after{animation:rv-edge 1.4s ease-in-out infinite alternate}
+@keyframes rv-edge{to{opacity:1}}
 .rv-edge i{position:absolute;width:16px;height:16px;margin:-8px 0 0 -8px;background:#fff;clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%);filter:drop-shadow(0 0 4px #ffd34d);scale:var(--s);animation:rv-twinkle 1.2s ease-in-out infinite var(--d)}
 @keyframes rv-twinkle{0%,100%{opacity:.15;transform:scale(.4) rotate(0)}50%{opacity:1;transform:scale(1.15) rotate(45deg)}}
 .rv-info{position:absolute;z-index:7;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;gap:6px;padding:40px 20px max(18px,4vh);text-align:center;background:linear-gradient(transparent,#000000d9 40%);opacity:0;transition:opacity .35s;pointer-events:none}

@@ -25,26 +25,27 @@ export function dimmer(host){
 
 // One particle engine for the sparkler fountains and the fireworks.
 function sparks(canvas){
- const ctx=canvas.getContext('2d'),dpr=Math.min(2,devicePixelRatio||1),W=canvas.width=innerWidth*dpr,H=canvas.height=innerHeight*dpr,parts=[],jobs=[];let running=true;
+ const ctx=canvas.getContext('2d'),dpr=Math.min(1.5,devicePixelRatio||1),W=canvas.width=innerWidth*dpr,H=canvas.height=innerHeight*dpr,parts=[],jobs=[];let running=true;
  const COLORS=['#ffd34d','#ff2d55','#ffffff','#ff8a3d','#ff5fae','#7cc4ff','#b98cff'];
  const add=(x,y,vx,vy,c,life=1,size=2.2,drag=.985,grav=.06)=>parts.push({x,y,vx,vy,c,life,size,drag,grav});
  const burst=(x,y,n=120,power=1)=>{const c=COLORS[Math.floor(Math.random()*COLORS.length)],c2=COLORS[Math.floor(Math.random()*COLORS.length)];for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,v=(1.5+Math.random()*6)*dpr*power;add(x,y,Math.cos(a)*v,Math.sin(a)*v,i%3?c:c2,1,2.6*dpr);}};
- const loop=t=>{if(!running)return;for(const j of jobs)j(t);
+ let awake=false,until=0;
+ const wake=ms=>{until=Math.max(until,performance.now()+ms+2500);if(!awake&&running){awake=true;requestAnimationFrame(loop);}};
+ const loop=t=>{if(!running){awake=false;return;}if(t>until&&!parts.length){awake=false;ctx.clearRect(0,0,W,H);return;}for(const j of jobs)j(t);
   ctx.globalCompositeOperation='destination-out';ctx.fillStyle='rgba(0,0,0,.24)';ctx.fillRect(0,0,W,H);ctx.globalCompositeOperation='lighter';
   for(let i=parts.length-1;i>=0;i--){const p=parts[i];p.x+=p.vx;p.y+=p.vy;p.vy+=p.grav*dpr;p.vx*=p.drag;p.vy*=p.drag;p.life-=.014;if(p.life<=0){parts.splice(i,1);continue;}ctx.globalAlpha=Math.min(1,p.life*1.4);ctx.fillStyle=p.c;ctx.beginPath();ctx.arc(p.x,p.y,p.size,0,7);ctx.fill();}
   requestAnimationFrame(loop);};
- requestAnimationFrame(loop);
  return {
   // golden sparks shooting up from two points for `ms`
   // rockets fired from the bottom left and right corners: a smoky trail up, then a burst that falls and fades
-  rockets(ms){const end=performance.now()+ms;let next=0,side=1;jobs.push(t=>{if(t>end||t<next)return;next=t+260+Math.random()*200;side=-side;
+  rockets(ms){wake(ms);const end=performance.now()+ms;let next=0,side=1;jobs.push(t=>{if(t>end||t<next)return;next=t+260+Math.random()*200;side=-side;
    const x=side<0?W*(.02+Math.random()*.08):W*(.9+Math.random()*.08),y=H*1.02,tx=side<0?W*(.12+Math.random()*.3):W*(.58+Math.random()*.3),ty=H*(.08+Math.random()*.3),steps=48;
    let k=0;const fly=()=>{k++;const px=lerp(x,tx,k/steps),py=lerp(y,ty,1-Math.pow(1-k/steps,2));add(px,py,(Math.random()-.5)*.6*dpr,.6*dpr,'#ffe2a8',.55,1.4*dpr,.96,.02);add(px,py,0,0,'#7a6a66',.35,2.6*dpr,.9,-.01);
     if(k<steps)requestAnimationFrame(fly);else{const c=COLORS[Math.floor(Math.random()*COLORS.length)];for(let i=0;i<95;i++){const a=Math.random()*Math.PI*2,v=(1+Math.random()*4.2)*dpr;add(px,py,Math.cos(a)*v,Math.sin(a)*v,i%4?c:'#fff',1,2*dpr,.975,.05);}}};
    requestAnimationFrame(fly);});},
-  fountains(points,ms){const end=performance.now()+ms;jobs.push(t=>{if(t>end)return;for(const [x,y] of points)for(let k=0;k<2;k++)add(x*dpr,y*dpr,(Math.random()-.5)*1.6*dpr,-(3.5+Math.random()*3.5)*dpr,Math.random()<.2?'#ffffff':'#ffc94a',.75,1.4*dpr,.99,.08);});},
+  fountains(points,ms){wake(ms);const end=performance.now()+ms;jobs.push(t=>{if(t>end)return;for(const [x,y] of points)for(let k=0;k<2;k++)add(x*dpr,y*dpr,(Math.random()-.5)*1.6*dpr,-(3.5+Math.random()*3.5)*dpr,Math.random()<.2?'#ffffff':'#ffc94a',.75,1.4*dpr,.99,.08);});},
   // big fireworks all over the top of the screen for `ms`
-  fireworks(ms){const end=performance.now()+ms;let next=0;jobs.push(t=>{if(t>end||t<next)return;next=t+300+Math.random()*250;burst(W*(.1+Math.random()*.8),H*(.06+Math.random()*.3),100,1.05);});burst(W*.25,H*.2,140,1.25);burst(W*.75,H*.18,140,1.25);},
+  fireworks(ms){wake(ms);const end=performance.now()+ms;let next=0;jobs.push(t=>{if(t>end||t<next)return;next=t+300+Math.random()*250;burst(W*(.1+Math.random()*.8),H*(.06+Math.random()*.3),100,1.05);});burst(W*.25,H*.2,140,1.25);burst(W*.75,H*.18,140,1.25);},
   stop(){running=false;}
  };
 }
@@ -62,16 +63,16 @@ function carpetScene(){
  let seed=7;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;const people=[];
  for(const side of [-1,1])for(let row=2;row>=0;row--)for(let i=0;i<11;i++){const t=.02+i*.085+row*.012+rnd()*.02;if(t>.95)continue;const y=lerp(y0,H*1.02,t),s=scaleAt(y);
   people.push({y,s,x:cx+side*(halfAt(y)+(46+row*30+rnd()*10)*s),h:H*(.16+rnd()*.03)*s,side,row,kind:(i+row+(side>0?1:0))%3===0?'press':'fan',arm:rnd()<.45,phone:rnd()<.6,d:(rnd()*3).toFixed(2)});}
- people.sort((a,b)=>a.y-b.y||b.row-a.row);
+ people.sort((a,b)=>a.y-b.y||b.row-a.row);const lights=[];
  const person=p=>{const {x,y,h,s}=p,hy=y-h*.84,bob=`style="--d:-${p.d}s"`;let extra='';
-  if(p.kind==='fan'&&p.arm){const ax=x-p.side*h*.14,top=y-h*1.12;extra=`<path d="M${x-p.side*h*.1} ${y-h*.56} L${ax} ${top}" stroke="#050506" stroke-width="${h*.07}" stroke-linecap="round"/>`+(p.phone?`<rect class="cp-phone" ${bob} x="${ax-h*.04}" y="${top-h*.1}" width="${h*.08}" height="${h*.12}" rx="${h*.015}"/>`:'');}
-  if(p.kind==='press')extra=`<rect x="${x-p.side*h*.18-h*.12}" y="${hy-h*.04}" width="${h*.24}" height="${h*.15}" rx="${h*.02}" fill="#050506"/><circle cx="${x-p.side*h*.32}" cy="${hy+h*.03}" r="${h*.055}" fill="#16161a"/><circle class="cp-flash" ${bob} cx="${x-p.side*h*.2}" cy="${hy-h*.08}" r="${h*.5}" fill="url(#cp-flashg)"/>`;
-  return `<g class="cp-person" data-y="${y}"><path d="M${x-h*.25} ${y}Q${x-h*.27} ${y-h*.6} ${x} ${y-h*.64}Q${x+h*.27} ${y-h*.6} ${x+h*.25} ${y}Z" fill="#050506" stroke="#ff6a7c40" stroke-width="1"/><ellipse cx="${x}" cy="${hy}" rx="${h*.11}" ry="${h*.13}" fill="#050506" stroke="#ff6a7c40" stroke-width="1"/>${extra}</g>`;};
+  if(p.kind==='fan'&&p.arm){const ax=x-p.side*h*.14,top=y-h*1.12;extra=`<path d="M${x-p.side*h*.1} ${y-h*.56} L${ax} ${top}" stroke="#050506" stroke-width="${h*.07}" stroke-linecap="round"/>`+(p.phone?`<rect x="${ax-h*.04}" y="${top-h*.1}" width="${h*.08}" height="${h*.12}" rx="${h*.015}" fill="#fffbe0"/>`:'');if(p.phone)lights.push(`<i class="cp-phone" style="left:${ax}px;top:${top-h*.04}px;width:${h*.16}px;height:${h*.2}px;--d:-${p.d}s"></i>`);}
+  if(p.kind==='press')extra=`<rect x="${x-p.side*h*.18-h*.12}" y="${hy-h*.04}" width="${h*.24}" height="${h*.15}" rx="${h*.02}" fill="#050506"/><circle cx="${x-p.side*h*.32}" cy="${hy+h*.03}" r="${h*.055}" fill="#16161a"/>`;lights.push(`<i class="cp-flash" style="left:${x-p.side*h*.2}px;top:${hy-h*.08}px;width:${h}px;height:${h}px;--d:-${p.d}s"></i>`);
+  return `<g><path d="M${x-h*.25} ${y}Q${x-h*.27} ${y-h*.6} ${x} ${y-h*.64}Q${x+h*.27} ${y-h*.6} ${x+h*.25} ${y}Z" fill="#050506" stroke="#ff6a7c40" stroke-width="1"/><ellipse cx="${x}" cy="${hy}" rx="${h*.11}" ry="${h*.13}" fill="#050506" stroke="#ff6a7c40" stroke-width="1"/>${extra}</g>`;};
  const posts=[.06,.2,.42,.78].map(t=>{const y=lerp(y0,H*1.02,t),s=scaleAt(y);return {y,s,h:H*.2*s,side:[-1,1].map(side=>cx+side*(halfAt(y)+22*s))};});
  const post=(x,p)=>{const {y,s,h}=p,w=7*s;return `<ellipse cx="${x}" cy="${y+2*s}" rx="${16*s}" ry="${4.5*s}" fill="#000" opacity=".55" filter="url(#cp-blur)"/><ellipse cx="${x}" cy="${y}" rx="${11*s}" ry="${3.6*s}" fill="url(#cp-goldH)"/><rect x="${x-w/2}" y="${y-h}" width="${w}" height="${h}" fill="url(#cp-goldH)"/><ellipse cx="${x}" cy="${y-h*.55}" rx="${w*.75}" ry="${1.6*s}" fill="url(#cp-goldH)"/><circle cx="${x}" cy="${y-h-4*s}" r="${6.5*s}" fill="url(#cp-knob)"/>`;};
  const rope=(a,b,side)=>{const xa=a.side[side],xb=b.side[side],ya=a.y-a.h+2*a.s,yb=b.y-b.h+2*b.s,s=(a.s+b.s)/2,mx=(xa+xb)/2,my=(ya+yb)/2+H*.05*s;
   return `<path d="M${xa} ${ya} Q${mx} ${my} ${xb} ${yb}" stroke="#2a0207" stroke-width="${7*s}" fill="none" stroke-linecap="round" opacity=".6" transform="translate(0 ${3*s})"/><path d="M${xa} ${ya} Q${mx} ${my} ${xb} ${yb}" stroke="url(#cp-rope)" stroke-width="${6*s}" fill="none" stroke-linecap="round"/><path d="M${xa} ${ya-1.5*s} Q${mx} ${my-1.5*s} ${xb} ${yb-1.5*s}" stroke="#ff8a98" stroke-width="${1.4*s}" fill="none" opacity=".55" stroke-linecap="round"/>`;};
- const svg=`<svg class="tn-carpet" viewBox="0 0 ${W} ${H}" aria-hidden="true"><defs>
+ const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}"><defs>
   <filter id="cp-blur"><feGaussianBlur stdDeviation="3"/></filter>
   <filter id="cp-nap"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="4"/><feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .22 0"/><feComposite in2="SourceGraphic" operator="in"/></filter>
   <linearGradient id="cp-velvet" x1="0" y1="${y0}" x2="0" y2="${H}" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#1c0206"/><stop offset=".35" stop-color="#4a0610"/><stop offset=".75" stop-color="#7a0c1c"/><stop offset="1" stop-color="#9c1226"/></linearGradient>
@@ -81,17 +82,23 @@ function carpetScene(){
   <radialGradient id="cp-knob" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#fff6d6"/><stop offset=".35" stop-color="#e9c060"/><stop offset="1" stop-color="#6b4c12"/></radialGradient>
   <linearGradient id="cp-rope" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c41a33"/><stop offset="1" stop-color="#5a0612"/></linearGradient>
   <linearGradient id="cp-roll" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff7a8c"/><stop offset=".25" stop-color="#b3132b"/><stop offset=".7" stop-color="#5a0612"/><stop offset="1" stop-color="#2a0207"/></linearGradient>
-  <radialGradient id="cp-flashg"><stop offset="0" stop-color="#fff"/><stop offset=".18" stop-color="#fff" stop-opacity=".85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient><clipPath id="cp-clip"><rect class="cp-clip" x="0" y="0" width="${W}" height="${y0}"/></clipPath></defs>
-  <g clip-path="url(#cp-clip)"><polygon points="${edge(y0,-1,4)} ${edge(y0,1,4)} ${edge(H,1,20)} ${edge(H,-1,20)}" fill="#000" opacity=".6" filter="url(#cp-blur)"/>
+  <radialGradient id="cp-flashg"><stop offset="0" stop-color="#fff"/><stop offset=".18" stop-color="#fff" stop-opacity=".85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>
+  <g><polygon points="${edge(y0,-1,4)} ${edge(y0,1,4)} ${edge(H,1,20)} ${edge(H,-1,20)}" fill="#000" opacity=".6" filter="url(#cp-blur)"/>
   <polygon points="${trimL}" fill="url(#cp-trim)"/><polygon points="${trimR}" fill="url(#cp-trim)"/><polygon points="${velvet}" fill="url(#cp-velvet)"/><polygon points="${velvet}" fill="url(#cp-sheen)"/><polygon points="${velvet}" fill="#fff" filter="url(#cp-nap)"/></g>
-  <g class="cp-people">${people.map(person).join('')}</g><g class="cp-roll"></g><g class="cp-posts">${posts.map((p,i)=>`<g class="cp-post" data-y="${p.y}">${i?[0,1].map(side=>rope(posts[i-1],p,side)).join(''):''}${p.side.map(x=>post(x,p)).join('')}</g>`).join('')}</g></svg>`;
- // the carpet unrolls: what is past the roll is visible, the roll moves toward you and grows with distance
- const unroll=(root,ms)=>{const clip=root.querySelector('.cp-clip'),roll=root.querySelector('.cp-roll');const start=performance.now();
-  const frame=t=>{const k=Math.min(1,(t-start)/ms),p=Math.pow(k,1.7),y=lerp(y0,H+40,p),s=scaleAt(Math.min(y,H)),hw=halfAt(Math.min(y,H))+2,r=9*s+3;
-   clip.setAttribute('height',y);root.querySelectorAll('.cp-post,.cp-person').forEach(g=>g.classList.toggle('on',y>=+g.dataset.y-4));roll.innerHTML=k<1?`<rect x="${cx-hw}" y="${y-r}" width="${hw*2}" height="${r*2}" rx="${r}" fill="url(#cp-roll)"/><rect x="${cx-hw}" y="${y-r}" width="${trimAt(Math.min(y,H))}" height="${r*2}" rx="${r*.5}" fill="url(#cp-goldH)"/><rect x="${cx+hw-trimAt(Math.min(y,H))}" y="${y-r}" width="${trimAt(Math.min(y,H))}" height="${r*2}" rx="${r*.5}" fill="url(#cp-goldH)"/>`:'';
-   if(k<1)requestAnimationFrame(frame);};requestAnimationFrame(frame);};
- const finish=root=>{root.querySelector('.cp-clip').setAttribute('height',H+40);root.querySelectorAll('.cp-post,.cp-person').forEach(g=>g.classList.add('on'));root.querySelector('.cp-roll').innerHTML='';};
- return {svg,unroll,finish,gate:[[W*.35+6,H*.65],[W*.65-6,H*.65]]};
+  <g>${people.map(person).join('')}</g><g>${posts.map((p,i)=>`<g>${i?[0,1].map(side=>rope(posts[i-1],p,side)).join(''):''}${p.side.map(x=>post(x,p)).join('')}</g>`).join('')}</g></svg>`;
+ // The whole carpet scene is painted once into a picture; unrolling only moves a clip edge and the roll,
+ // both on the compositor, so it stays smooth on slow phones.
+ const url=URL.createObjectURL(new Blob([svg],{type:'image/svg+xml'}));
+ const html=`<div class="tn-carpet" aria-hidden="true"><div class="cp-reveal"><img src="${url}" alt="" decoding="async">${lights.join('')}</div><i class="cp-roll"></i></div>`;
+ const ease=k=>Math.pow(k,1.7),N=14;
+ const unroll=(root,ms)=>{const rv=root.querySelector('.cp-reveal'),roll=root.querySelector('.cp-roll'),frames=[],rframes=[];
+  for(let i=0;i<=N;i++){const k=i/N,y=lerp(y0,H+40,ease(k)),yy=Math.min(y,H),hw=halfAt(yy)+2,r=9*scaleAt(yy)+3;
+   frames.push({clipPath:`inset(0 0 ${Math.max(0,H-y)}px 0)`,offset:k});
+   rframes.push({transform:`translate(${cx-hw}px,${y-r}px) scale(${hw*2/100},${r*2/20})`,opacity:k<1?1:0,offset:k});}
+  rv.animate(frames,{duration:ms,fill:'forwards',easing:'linear'});roll.animate(rframes,{duration:ms,fill:'forwards',easing:'linear'});};
+ const finish=root=>{root.querySelector('.cp-reveal').style.clipPath='none';root.querySelector('.cp-roll').style.opacity=0;};
+ const cleanup=()=>URL.revokeObjectURL(url);
+ return {svg:html,unroll,finish,cleanup,gate:[[W*.35+6,H*.65],[W*.65-6,H*.65]]};
 }
 const EDGE_STARS=Array.from({length:44},(_,i)=>{const side=i%4,t=((i*37)%100)/100;const [x,y]=side===0?[t*100,1.5]:side===1?[98.5,t*100]:side===2?[t*100,98.5]:[1.5,t*100];return `<i style="left:${x}%;top:${y}%;--d:${-(i*.13)%1.2}s;--s:${.6+((i*7)%5)/6}"></i>`;}).join('');
 
@@ -130,6 +137,6 @@ export function revealCard(host,c,tier,{duplicate=false}={}){
    duckMusic(.06,2500);timers.push(setTimeout(()=>duckMusic(1,4500),15600));
    for(const [name,at] of steps)timers.push(setTimeout(()=>apply(name),at));
   }
-  el.querySelector('.rv-ok').onclick=()=>{duckMusic(1,1500);el.classList.add('s-leaving');for(const c of crowd)c.peak(.5);setTimeout(()=>{fx.stop();el.remove();done();},250);};
+  el.querySelector('.rv-ok').onclick=()=>{duckMusic(1,1500);el.classList.add('s-leaving');for(const c of crowd)c.peak(.5);setTimeout(()=>{fx.stop();scene.cleanup();el.remove();done();},250);};
  });
 }
