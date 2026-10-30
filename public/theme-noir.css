@@ -101,3 +101,10 @@ dialog .character-preview,dialog .mystery-pack,.daily-day,.setting-row,.cr7-rewa
 .auth-brand{color:var(--cream)}
 /* the eyebrow above the home title in blue metal */
 .hero .eyebrow{background:linear-gradient(180deg,#ffffff 0,#dff0ff 22%,#7fc0ff 45%,#2d7ae6 62%,#1a4f9e 80%,#5a9cf0 100%)!important;-webkit-background-clip:text!important;background-clip:text!important;filter:drop-shadow(0 1px 0 #0d2f63) drop-shadow(0 2px 3px #000b)!important}
+/* close buttons: a brushed-metal button with a stamped ×, set a little lower and in from the corner */
+.cr7-close,.deck-head [data-close],[data-character-close],dialog [data-close]:not(.primary):not(.cr7-gold){top:16px!important;right:16px!important;width:36px!important;height:36px!important;min-height:0!important;padding:0!important;border-radius:50%!important;display:grid!important;place-items:center;font:700 19px/1 Inter,'Segoe UI',sans-serif!important;color:#3a3f47!important;text-shadow:0 1px 0 #ffffffb0!important;
+ background:radial-gradient(circle at 50% 50%,#0000 52%,#00000022 53% 55%,#0000 56%),repeating-conic-gradient(from 0deg,#ffffff1a 0 4deg,#0000001a 4deg 8deg),radial-gradient(circle at 35% 28%,#ffffff 0,#e9ecf0 25%,#b9bfc7 62%,#8c939c 100%)!important;
+ border:1px solid #5b616a!important;box-shadow:inset 0 1px 0 #fff,inset 0 -2px 3px #0004,0 2px 0 #2a2e33,0 4px 8px #000a!important;transition:transform .08s}
+.cr7-close:active,.deck-head [data-close]:active,[data-character-close]:active,dialog [data-close]:not(.primary):not(.cr7-gold):active{transform:translateY(1px);box-shadow:inset 0 2px 3px #0005,0 1px 0 #2a2e33!important}
+.cr7-close:hover,.deck-head [data-close]:hover,[data-character-close]:hover{filter:brightness(1.06)}
+.deck-head [data-close],[data-character-close]{position:relative;top:4px!important;right:0!important}
