@@ -1,7 +1,7 @@
 /* GOAT or BOAT reveal: the stadium tunnel (card-reveal.js). The tunnel exit is the middle 30% of the
    screen (35%–65% both ways); walls, floor and ceiling run from the screen edges to it. */
-.reveal-dim{position:fixed;inset:0;z-index:30;background:#000;opacity:0;pointer-events:none;transition:opacity 1s ease-in}
-.reveal-dim.on{opacity:.9}
+.reveal-dim{position:fixed;inset:0;z-index:30;background:#000;opacity:0;pointer-events:none;transition:opacity 1s cubic-bezier(.4,0,.8,.6)}
+.reveal-dim.on{opacity:1}
 .reveal{--tc:#ffcc33;--glow:#ffe9a0;position:fixed;inset:0;z-index:40;overflow:hidden;background:#000;color:#fff;cursor:pointer;animation:rv-in .3s ease-out both}
 .reveal[data-tier=purple]{--tc:#a855ff;--glow:#e2c2ff}
 .reveal[data-tier=red]{--tc:#ff2d55;--glow:#ffc2cf}

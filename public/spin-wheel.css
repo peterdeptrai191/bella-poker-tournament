@@ -63,8 +63,14 @@
 .spin-centre .potw-base{font-size:clamp(7px,2vw,12px)}
 /* titles: G.O.A.T in blue, B.O.A.T in red */
 .goat-head{display:flex;align-items:baseline;justify-content:center;flex-wrap:wrap;gap:.25em;font:400 clamp(26px,7vw,40px)/1 'Black Ops One',Impact,sans-serif!important;letter-spacing:.02em;background:none!important;-webkit-text-fill-color:initial;color:#fff!important;margin:4px 8px 2px!important}
-.goat-head .g{color:#3fa9ff;text-shadow:0 0 12px #3fa9ffaa,0 2px 0 #0b2a57}
-.goat-head .b{color:#ff3348;text-shadow:0 0 12px #ff3348aa,0 2px 0 #5a0a14}
+.goat-head .g,.goat-head .b{position:relative;display:inline-block;-webkit-text-stroke:1.5px currentColor;background-size:260% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:title-shine 3.2s ease-in-out infinite}
+.goat-head .g{color:#7cc4ff;background-image:linear-gradient(105deg,#1a6fe0 0 38%,#c8e8ff 46%,#fff 50%,#c8e8ff 54%,#2d8cff 62% 100%);filter:drop-shadow(0 2px 0 #06204a) drop-shadow(0 0 8px #3fa9ff) drop-shadow(0 0 18px #3fa9ff88)}
+.goat-head .b{color:#ff7a88;background-image:linear-gradient(105deg,#d1122b 0 38%,#ffd0d6 46%,#fff 50%,#ffd0d6 54%,#ff2d48 62% 100%);filter:drop-shadow(0 2px 0 #4a0610) drop-shadow(0 0 8px #ff3348) drop-shadow(0 0 18px #ff334888);animation-delay:-1.6s}
+@keyframes title-shine{0%{background-position:100% 0}55%,100%{background-position:0 0}}
+.goat-head .g::after,.goat-head .b::after{content:'';position:absolute;top:-.12em;right:-.28em;width:.42em;height:.42em;background:#fff;clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%);filter:drop-shadow(0 0 4px #fff);animation:title-twinkle 1.6s ease-in-out infinite;-webkit-text-fill-color:initial}
+.goat-head .b::after{right:auto;left:-.28em;top:auto;bottom:-.08em;animation-delay:-.8s}
+@keyframes title-twinkle{0%,100%{transform:scale(.2) rotate(0);opacity:0}50%{transform:scale(1) rotate(45deg);opacity:1}}
+@media(prefers-reduced-motion:reduce){.goat-head .g,.goat-head .b,.goat-head .g::after,.goat-head .b::after{animation:none}}
 .goat-head small{font:italic 700 .42em Georgia,serif;color:#e8dcc0}
 .spin-centre .goat-head{flex-direction:column;align-items:center;font-size:clamp(28px,9vw,58px)!important;gap:.12em}
 .cr7-dialog .goat-title.goat-head{position:absolute;top:4%;left:0;right:0;filter:drop-shadow(0 3px 0 #000) drop-shadow(0 0 16px #000c);font-size:clamp(26px,8vw,44px)!important;padding:0 40px;-webkit-background-clip:initial;background-clip:initial}

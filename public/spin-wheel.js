@@ -54,6 +54,8 @@ export function spinner(root,tiles,{onStep}={}){
     timer=setTimeout(next,TOP);
    });
   },
+  // puts the light on `target` straight away, silently (used once the screen has gone dark)
+  jump(target){running=false;clearTimeout(timer);pos=target;els.forEach(e=>e.classList.remove('lit'));els[target].classList.add('lit','won');root.classList.remove('spinning');},
   stop(){running=false;clearTimeout(timer);root.classList.remove('spinning');}
  };
 }

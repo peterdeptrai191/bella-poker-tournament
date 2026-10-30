@@ -59,7 +59,12 @@ function wheelDialog(mode){
    if(getAccount()?.id!==accountId){sp.stop();d.close();return;}
    result=data.result;const tile=Number.isInteger(result.tile)?result.tile:mode.tiles.indexOf(result.skin);
    const c=characterById(result.skin);
-   if(mode.reveal){const dim=dimmer(d);await sp.land(tile,{onPlan:ms=>dim.fade(ms),winSound:false});await revealCard(d,c,mode.frame(c),{duplicate:result.duplicate});dim.remove();}
+   if(mode.reveal){
+    // the screen goes fully dark while the light is still slowing down, so the last few cards (and the one
+    // it stops on) happen in the dark; the tunnel then shows the prize
+    const dim=dimmer(d);let plan=0;sp.land(tile,{onPlan:ms=>{plan=ms;dim.fade(ms*.62);},winSound:false});
+    await new Promise(r=>setTimeout(r,plan*.62+250));sp.jump(tile);
+    await revealCard(d,c,mode.frame(c),{duplicate:result.duplicate});dim.remove();}
    else await sp.land(tile);
    receipt=null;if(mode.storageKey)try{localStorage.removeItem(mode.storageKey(accountId));}catch{}
    centre.innerHTML=animatedCharacter(c,'spin-prize');wheel.classList.add('has-prize');
