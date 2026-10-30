@@ -83,3 +83,21 @@ input,select{background:#0b0a0c!important;border:1px solid #ffffff26!important;b
 .character-summary strong,.cr7-result-name{font-weight:900!important}
 .hero h1{background:none!important;filter:none!important;-webkit-text-fill-color:initial;color:inherit!important}.hero h1 .h1-line{display:block;width:max-content;max-width:100%;color:transparent;-webkit-text-fill-color:transparent;background:linear-gradient(180deg,#ffffff 0%,#f7f8fa 30%,#dfe2e7 52%,#c3c8cf 70%,#d6dade 86%,#eef0f3 100%);-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 1px 0 #8a9099) drop-shadow(0 2px 3px #0008)}
 .hero h1 em{display:inline-block}
+
+/* rename: a small glossy navy pill that matches the other buttons */
+.account-toolbar .rename-button{display:inline-flex!important;align-items:center;gap:4px;margin-left:8px;padding:5px 11px!important;border-radius:99px!important;font:700 11px/1 Inter,'Segoe UI',sans-serif!important;letter-spacing:.02em!important;white-space:nowrap;text-transform:none;vertical-align:middle}
+/* stitching on secondary dialogs too (character shop, settings, daily gift, rewards, missions...) */
+dialog,.cr7-dialog,.deck-dialog,dialog.character-modal,.auth-card{outline:1.5px dashed #fcebe540!important;outline-offset:-9px!important}
+dialog .character-preview,dialog .mystery-pack,.daily-day,.setting-row,.cr7-reward-grid article,.m-list li,.m-wallet div,.character-option{outline:1px dashed #fcebe52e;outline-offset:-5px}
+/* sign-in screen in the same leather */
+.auth-card{background:var(--felt-grain),var(--felt-blue)!important;border:1px solid #ffffff1f!important;box-shadow:var(--raised)!important;color:var(--cream)}
+.auth-card h1{font:400 clamp(30px,8vw,40px)/1.05 Anton,Impact,'Arial Narrow',sans-serif!important;letter-spacing:.02em;color:transparent;-webkit-text-fill-color:transparent;background:linear-gradient(180deg,#ffffff 0%,#f7f8fa 30%,#dfe2e7 52%,#c3c8cf 70%,#d6dade 86%,#eef0f3 100%);-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 1px 0 #8a9099) drop-shadow(0 2px 3px #0008);display:inline-block}
+.auth-card p,.auth-card label{color:#fcebe5cc}
+.auth-tabs{background:linear-gradient(#0b1a30,#142a49)!important;box-shadow:inset 0 2px 4px #000c,0 1px 0 #ffffff26}
+.auth-tabs button{border-radius:9px!important;color:#fcebe5cc!important;font-weight:700}
+.auth-tabs button.active{background:linear-gradient(#ff6676,#ff2a42 49%,#ff001e 51%,#b80016)!important;color:#fff!important;box-shadow:inset 0 1px 0 #ffffff66,0 1px 2px #000a!important;text-shadow:0 -1px 0 #0006}
+.auth-starter{border-top:1px dashed #fcebe540!important}
+.auth-starter strong{color:#fff}
+.auth-brand{color:var(--cream)}
+/* the eyebrow above the home title in blue metal */
+.hero .eyebrow{background:linear-gradient(180deg,#ffffff 0,#dff0ff 22%,#7fc0ff 45%,#2d7ae6 62%,#1a4f9e 80%,#5a9cf0 100%)!important;-webkit-background-clip:text!important;background-clip:text!important;filter:drop-shadow(0 1px 0 #0d2f63) drop-shadow(0 2px 3px #000b)!important}

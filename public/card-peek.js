@@ -18,7 +18,7 @@ function face(c){
 export function createCardPeek({onReact,soundUrl}){
  let el=null,handId=null,until=0,total=1,revealed=[false,false],chosen=null,frame=null,closing=null;
  const base=typeof Audio==='undefined'?null:new Audio(soundUrl);if(base)base.preload='auto';
- const playSound=()=>{if(!base||!sfxEnabled())return;try{const a=base.cloneNode();a.volume=Math.min(1,.45*sfxVolume());a.play().catch(()=>{});}catch{}};
+ const playSound=()=>{if(!base||!sfxEnabled())return;try{const a=base.cloneNode();a.volume=Math.min(1,.22*sfxVolume());a.play().catch(()=>{});}catch{}};
 
  function close(){
   if(!el||closing)return;cancelAnimationFrame(frame);const node=el;closing=node;node.classList.add('closing');document.body.classList.remove('peek-open');
