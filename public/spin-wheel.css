@@ -101,7 +101,7 @@
 .cr7-reward-grid .skin-sil{height:190px}@media(max-width:420px){.cr7-reward-grid .skin-sil{height:150px}}
 
 /* Face-down card, design C: carbon leather and gold foil */
-.potw.back-c{background:linear-gradient(135deg,#0000 47%,#e7c06333 48% 49%,#0000 50%) 0 0/14px 14px,radial-gradient(ellipse at 50% 40%,#29272d,#09090b 72%)!important;display:grid;place-items:center}
+.potw.back-c{--stripe:#e7c06338;background:linear-gradient(135deg,#0000 46%,var(--stripe) 47% 51%,#0000 52%) 0 0/12px 12px,radial-gradient(ellipse at 50% 40%,#29272d,#09090b 72%)!important;display:grid;place-items:center}
 .potw.back-c::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='.2'/%3E%3C/svg%3E");mix-blend-mode:overlay;pointer-events:none}
 .potw-q{position:relative;font:400 1em/1 Anton,Impact,sans-serif;font-size:clamp(20px,7cqi,60px);color:transparent;background:linear-gradient(160deg,#fff4cf,#c99a3e 45%,#6b4a17 60%,#f3d48a);-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 2px 0 #000) drop-shadow(0 0 8px #e7c06340)}
 .potw{container-type:inline-size}
@@ -121,5 +121,29 @@
 .cf-stars i::after{content:'';display:block;width:100%;height:100%;clip-path:inherit;background:#141316;transform:scale(.72)}
 .cf-stars i.on{background:linear-gradient(180deg,#fff8d6,#e7c063 55%,#a7781f);filter:drop-shadow(0 1px 1px #000)}
 .cf-stars i.on::after{display:none}
-.cr7-reward-grid .cf-stars{position:static;background:none;padding:4px 0 0;container-type:normal}
+.cr7-reward-grid .cf-stars{display:flex!important;position:static;background:none;padding:4px 0 0;container-type:normal}
 .cr7-reward-grid .cf-stars i{width:14px}
+/* tickets and group missions (missions.js) */
+.ticket-chip{display:inline-flex;align-items:center;gap:5px}.ticket-chip small{opacity:.75;font-size:.85em}
+.missions-dialog{width:min(520px,94vw);text-align:left}
+.missions-dialog>small,.missions-dialog h2{text-align:center;display:block}
+.m-wallet{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0 6px}
+.m-wallet div{display:grid;place-items:center;padding:10px 4px;border-radius:12px;background:#ffffff0a;border:1px solid #ffffff1a}
+.m-wallet b{font:400 26px/1 Anton,Impact,sans-serif;color:#fff}.m-wallet span{font-size:11px;color:#c5cfe0}
+.missions-dialog h3{font-size:14px;margin:16px 0 6px;color:#ffe29b}
+.m-list{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.m-list li{display:grid;grid-template-columns:22px 1fr auto;gap:10px;align-items:center;padding:10px 12px;border-radius:12px;background:#ffffff08;border:1px solid #ffffff14}
+.m-list li.done{border-color:#71d5ac66;background:#71d5ac12}
+.m-check{width:20px;height:20px;border-radius:50%;border:1.5px solid #ffffff55;display:grid;place-items:center;font-size:12px;color:#71d5ac}
+.m-list b{display:block;font-size:13.5px}.m-list small{display:block;font-size:11.5px;color:#aeb6c4;line-height:1.4}
+.m-list em{font-style:normal;font-weight:800;font-size:12px;color:#ffd66e;white-space:nowrap}
+.m-bar{display:block;height:4px;border-radius:4px;background:#ffffff1a;margin-top:6px;overflow:hidden}.m-bar i{display:block;height:100%;background:linear-gradient(90deg,#d6152f,#ff5a6e)}
+.m-note{font-size:12px!important;margin-top:14px}
+
+.potw.back-c[data-t=gold]{--stripe:#e7c06340}.potw.back-c[data-t=red]{--stripe:#ff3b5545}.potw.back-c[data-t=purple]{--stripe:#b07bff45}
+/* stars in the same glossy, extruded style as the G.O.A.T lettering; smaller and lower */
+.cf-stars{gap:1.6cqi;padding:5cqi 0 3cqi;background:linear-gradient(transparent,#000a 70%)}
+.cf-stars i{width:7.2cqi;background:#ffffffd9}
+.cf-stars i::after{transform:scale(.62);background:#121115}
+.cf-stars i.on{background:linear-gradient(180deg,#fff 0,#fff3c4 22%,#f2c14e 50%,#a7781f 72%,#f6d77e 100%);filter:drop-shadow(0 1px 0 #6b4a17) drop-shadow(0 1px 0 #5a3e12) drop-shadow(0 1px 0 #3a280b) drop-shadow(0 2px 2px #000c)}
+.cr7-reward-grid .cf-stars i{width:12px}

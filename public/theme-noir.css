@@ -1,4 +1,4 @@
-/* Black – red – white look (loaded last). Dark surfaces are warm blacks, main actions are raised red buttons,
+/* Red – blue – black – white look on felt (loaded last). Dark surfaces are warm blacks, main actions are raised red buttons,
    secondary actions white, gold only for coins and stars; the table felt is deep green. */
 :root{--bg:#0a0a0c;--panel:#151417;--line:#2d2a2e;--muted:#a49e97;--white:#f6f3ee;--noir-red:#d6152f;--noir-red-hi:#ff3049;--noir-red-lo:#6e0612}
 body{background:radial-gradient(ellipse at 80% -10%,#3a070f 0,transparent 55%),radial-gradient(ellipse at 0 110%,#1c0408 0,transparent 50%),var(--bg)}
@@ -16,3 +16,24 @@ dialog{background:#141316;border-color:#2d2a2e}
 .game-actions button:not([data-action="fold"]):not([data-raise-toggle]):not([data-action="allin"]){background:linear-gradient(#ffffff,#dcd7cf)!important;color:#141316!important;border-color:#fff!important;box-shadow:0 3px 0 #8f8a83,0 5px 8px #0006,inset 0 1px 0 #fff!important}
 .game-actions [data-raise-toggle],.game-actions [data-action="allin"],.game-actions [data-action="raise"]{background:linear-gradient(#ff2a45,#b40d24)!important;color:#fff!important;border-color:#ff5a6e!important;box-shadow:0 3px 0 #6e0612,0 5px 8px #0006,inset 0 1px 0 #ff8a99!important}
 .game-actions button:hover:enabled{filter:brightness(1.08)}
+
+/* ---- Felt everywhere: fabric grain, stitched edge and a raised, slightly 3D block for every frame ---- */
+:root{--felt-grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.15' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23f)'/%3E%3C/svg%3E");
+ --felt-blue:radial-gradient(ellipse at 30% 0%,#2a56b8 0,#163a8a 45%,#0c2259 100%);--felt-red:radial-gradient(ellipse at 30% 0%,#d8253d 0,#a3122a 45%,#5e0612 100%);--felt-black:radial-gradient(ellipse at 30% 0%,#2a282c 0,#18171a 50%,#0d0c0e 100%);
+ --raised:inset 0 1px 0 #ffffff2e,inset 0 -2px 0 #00000059,0 5px 0 #050506,0 6px 0 #ffffff0d,0 14px 26px #000000b3}
+body{background:var(--felt-grain),radial-gradient(ellipse at 85% -10%,#5e061255 0,transparent 55%),radial-gradient(ellipse at 0 110%,#0c225955 0,transparent 55%),#0b0a0c}
+.panel,.character-summary,.account-toolbar,.mystery-pack,.player-slot,.config-strip,.recent,.sidebar,.step,.join-box,.create-box{background:var(--felt-grain),var(--felt-blue)!important;border:1px solid #ffffff1f!important;box-shadow:var(--raised)!important;outline:1px dashed #ffffff26;outline-offset:-7px}
+.hero-art{box-shadow:var(--raised)!important;border:1px solid #ffffff22!important;outline:1px dashed #ffffff26;outline-offset:-8px}
+.player-slot.empty{background:var(--felt-grain),var(--felt-black)!important}
+dialog,.cr7-dialog,.deck-dialog,dialog.character-modal{background:var(--felt-grain),var(--felt-black)!important;border:1px solid #ffffff22!important;box-shadow:0 0 0 1px #000,0 8px 0 #050506,0 24px 70px #000d!important}
+/* buttons: red = main action, blue = secondary, all raised like felt-covered blocks */
+:is(.account-toolbar button,.waiting-bottom button:not(.primary),.room-heading button,.form-actions button:not(.primary),.character-summary button,.cr7-list,.cr7-equip,.recent button,.section-title button){background:var(--felt-grain),linear-gradient(#2a56b8,#163a8a)!important;border:1px solid #6b8fe0!important;color:#fff!important;box-shadow:inset 0 1px 0 #ffffff40,0 3px 0 #08163a,0 6px 12px #0008!important}
+:is(.account-toolbar button,.waiting-bottom button:not(.primary),.room-heading button,.form-actions button:not(.primary),.character-summary button,.cr7-list,.cr7-equip,.recent button,.section-title button):active:enabled{transform:translateY(2px);box-shadow:inset 0 1px 0 #ffffff40,0 1px 0 #08163a!important}
+.header nav button{background:none!important;border:0!important;box-shadow:none!important}
+.header nav button.current{color:#fff!important;box-shadow:inset 0 -3px 0 var(--noir-red)!important}
+input,select{background:#0b0a0c!important;border:1px solid #ffffff26!important;box-shadow:inset 0 2px 4px #000a}
+/* the spin board: blue felt block with a gold rim */
+.spin-wheel.potw-board{background:var(--felt-grain),var(--felt-blue)!important;box-shadow:0 0 0 2.5px #c99a3e,inset 0 2px 0 #ffffff26,inset 0 -3px 0 #0006,0 7px 0 #050506,0 18px 34px #000c!important}
+.spin-centre{background:var(--felt-grain),radial-gradient(ellipse at 50% 35%,#1d3f8f,#0a1a45 75%)!important;box-shadow:inset 0 3px 10px #000b,inset 0 -1px 0 #ffffff1a!important;border:1px solid #ffffff22!important}
+.potw-board .spin-tile{box-shadow:inset 0 0 0 1px #0006,0 3px 0 #050506,0 5px 8px #000a!important}
+.spin-badge{box-shadow:inset 0 1px 0 #fff8,0 3px 0 #5a3e12,0 5px 8px #000a!important}

@@ -66,7 +66,7 @@ export function chipRain({full=true,target=null,delay=0,volume=1}={}){
 // ---------- Sound: five recordings of real chips on a table, from one chip to a whole stack ----------
 // They are decoded once into memory, so a sound starts instantly and several can overlap.
 // Browsers only allow audio after the player has touched the page, so everything starts on the first tap.
-const SOUNDS={one:'/assets/sfx/chip-1.mp3',small:'/assets/sfx/chip-stack-s.mp3',medium:'/assets/sfx/chip-stack-m.mp3',allin:'/assets/sfx/chip-allin.mp3',win:'/assets/sfx/chip-win.mp3',cheer:'/assets/sfx/crowd-cheer.mp3',crowd:'/assets/sfx/crowd-cheer-long.mp3'};
+const SOUNDS={one:'/assets/sfx/chip-1.mp3',small:'/assets/sfx/chip-stack-s.mp3',medium:'/assets/sfx/chip-stack-m.mp3',allin:'/assets/sfx/chip-allin.mp3',win:'/assets/sfx/chip-win.mp3',cheer:'/assets/sfx/crowd-cheer.mp3',crowd:'/assets/sfx/crowd-cheer-long.mp3',anthem:'/assets/music/c1-reveal.mp3',deal:'/assets/sfx/card-deal.mp3',shuffle:'/assets/sfx/card-shuffle.mp3'};
 let audio=null,loading=null;const buffers={};
 function load(){loading??=Promise.all(Object.entries(SOUNDS).map(async([name,url])=>{try{const data=await (await fetch(url)).arrayBuffer();buffers[name]=await audio.decodeAudioData(data);}catch{}}));return loading;}
 function unlock(){try{audio??=new (window.AudioContext||window.webkitAudioContext)();if(audio.state==='suspended')audio.resume();load();}catch{}}

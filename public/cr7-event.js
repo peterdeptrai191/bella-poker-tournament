@@ -84,10 +84,10 @@ export function openCr7Pack(){
   sub:ODDS_LINE,
   footnote:`Mỗi tài khoản được tặng 1 lượt quay. Các lượt sau ${CR7_PRICE} coin. Tối đa ${DAILY_SPINS} lượt mỗi ngày. Skin trùng không hoàn coin.`,
   storageKey:id=>'bella.'+CR7_EVENT+'.pending.'+id,validReceipt:r=>r&&typeof r.free==='boolean'&&typeof r.requestId==='string',
-  newReceipt:a=>({requestId:crypto.randomUUID(),free:!a.cr7Event?.freeUsed}),
-  button:(a,r)=>{const free=r?r.free:!a.cr7Event?.freeUsed;return r?{text:'Tiếp tục lượt đang quay'}:(a.cr7Event?.spinsToday||0)>=DAILY_SPINS?{text:'Hết lượt hôm nay · quay lại ngày mai',disabled:true}:free?{text:'Quay miễn phí 🎁'}:a.coins<CR7_PRICE?{text:`Chưa đủ ${CR7_PRICE} coin`,disabled:true}:{text:`Quay · ${CR7_PRICE} coin`};},
-  walletNote:a=>(a.cr7Event?.freeUsed?`Lượt tiếp: ${CR7_PRICE} coin`:'Còn 1 lượt miễn phí')+` · Hôm nay: ${Math.max(0,DAILY_SPINS-(a.cr7Event?.spinsToday||0))}/${DAILY_SPINS} lượt`,
-  request:r=>performRequest({op:'openCr7Pack',...r}),resetOn:/đã dùng lượt miễn phí|chưa đủ \d+ coin|quay đủ \d+ lượt/});
+  newReceipt:a=>{const free=!a.cr7Event?.freeUsed;return {requestId:crypto.randomUUID(),free,ticket:!free&&(a.tickets||0)>0};},
+  button:(a,r)=>{const free=r?r.free:!a.cr7Event?.freeUsed;return r?{text:'Tiếp tục lượt đang quay'}:(a.cr7Event?.spinsToday||0)>=DAILY_SPINS?{text:'Hết lượt hôm nay · quay lại ngày mai',disabled:true}:free?{text:'Quay miễn phí 🎁'}:(a.tickets||0)>0?{text:`Quay bằng vé 🎟 · còn ${a.tickets} vé`}:a.coins<CR7_PRICE?{text:`Chưa đủ ${CR7_PRICE} coin`,disabled:true}:{text:`Quay · ${CR7_PRICE} coin`};},
+  walletNote:a=>(a.cr7Event?.freeUsed?((a.tickets||0)>0?`Vé: ${a.tickets}`:`Lượt tiếp: ${CR7_PRICE} coin`):'Còn 1 lượt miễn phí')+` · Hôm nay: ${Math.max(0,DAILY_SPINS-(a.cr7Event?.spinsToday||0))}/${DAILY_SPINS} lượt`,
+  request:r=>performRequest({op:'openCr7Pack',...r}),resetOn:/đã dùng lượt miễn phí|chưa đủ \d+ coin|quay đủ \d+ lượt|chưa có vé/});
 }
 
 const MYSTERY_TIERS=[[3,50],[10,35],[15,15],[20,5]];

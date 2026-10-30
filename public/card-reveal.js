@@ -120,7 +120,10 @@ export function revealCard(host,c,tier,{duplicate=false}={}){
    // the crowd: a murmur in the tunnel that grows, then a second wave timed so the loudest roar lands
    // exactly when the card turns into the skin (the recording is 10.7 s, the show 18 s)
    crowd.push(playShaped('crowd',[[0,.08],[2,.16],[7,.35],[10,.5],[10.7,0]]));
-   crowd.push(playShaped('crowd',[[0,0],[1.4,.6],[3,.9],[5.2,1.6],[8.5,1.6],[10.7,0]],{delay:9600}));
+   crowd.push(playShaped('crowd',[[0,0],[1.4,.45],[3,.6],[5.2,1.05],[8.5,1.05],[10.7,0]],{delay:9600}));
+   // the Champions League-style anthem: its last 16 s start as the gate opens, so the final big chord
+   // (12.8 s into the clip) lands exactly when the card glows and turns into the skin
+   crowd.push(playShaped('anthem',[[0,.0],[1.2,.35],[5,.55],[9,.75],[12.6,1.15],[15,1.1],[16.2,.9]],{delay:2000}));
    for(const [name,at] of steps)timers.push(setTimeout(()=>apply(name),at));
   }
   el.querySelector('.rv-ok').onclick=()=>{el.classList.add('s-leaving');for(const c of crowd)c.peak(.5);setTimeout(()=>{fx.stop();el.remove();done();},250);};
