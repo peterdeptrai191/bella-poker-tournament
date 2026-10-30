@@ -62,7 +62,7 @@ input,select{background:#0b0a0c!important;border:1px solid #ffffff26!important;b
 @media(max-width:760px){.header{padding-inline:14px}.header nav button{padding:8px 10px!important;font-size:11px!important}.brand small{display:none}}
 /* hero title in the new lettering */
 .hero .eyebrow{font:400 13px/1 Anton,Impact,sans-serif;letter-spacing:.22em;color:var(--noir-red-hi)}
-.hero h1{font:400 clamp(40px,6vw,72px)/1.04 Anton,Impact,'Arial Narrow',sans-serif!important;letter-spacing:.01em!important;color:var(--cream);text-shadow:0 1px 0 #c9b8b0,0 2px 0 #a8968e,0 3px 0 #85746c,0 4px 0 #5d4f49,0 8px 14px #000c}
+.hero h1{font:700 clamp(40px,6vw,72px)/1.12 Oswald,'Barlow Condensed','Arial Narrow',Impact,sans-serif!important;letter-spacing:.01em!important;color:var(--cream);text-shadow:0 1px 0 #c9b8b0,0 2px 0 #a8968e,0 3px 0 #85746c,0 4px 0 #5d4f49,0 8px 14px #000c}
 .hero h1 em{color:#ff2a42;text-shadow:0 1px 0 #c40017,0 2px 0 #a30013,0 3px 0 #82000f,0 4px 0 #5e000b,0 8px 14px #000c}
 /* portrait table: your character stands on top of your chip card (20% bigger), the dealer/blind badge also
    sits above the card so the turn timer ring never covers either of them */
@@ -79,7 +79,7 @@ input,select{background:#0b0a0c!important;border:1px solid #ffffff26!important;b
 .hero h1 em,.hero .eyebrow{color:transparent!important;-webkit-text-fill-color:transparent;background:linear-gradient(180deg,#fff 0,#ffe0e4 20%,#ff7d8e 42%,#ff001e 60%,#8a0012 80%,#ff3349 100%)!important;-webkit-background-clip:text!important;background-clip:text!important;text-shadow:none!important}
 .hero .eyebrow{display:inline-block;filter:drop-shadow(0 1px 0 #7a000e) drop-shadow(0 2px 3px #000b)}
 /* a few headings are wider families; keep their weight bold enough for the metal to read */
-:is(.panel h2,.section-title h2,.room-heading h1,.deck-head h2,.character-dialog-head h2,.cr7-dialog>h2:not(.goat-head),.cr7-rewards h2,.mystery-pack h3,.join-box h2,.create-box h2){font-family:Anton,Impact,'Arial Narrow',sans-serif!important;font-weight:400!important;letter-spacing:.02em!important}
+:is(.panel h2,.section-title h2,.room-heading h1,.deck-head h2,.character-dialog-head h2,.cr7-dialog>h2:not(.goat-head),.cr7-rewards h2,.mystery-pack h3,.join-box h2,.create-box h2){font-family:Oswald,'Barlow Condensed','Arial Narrow',Impact,sans-serif!important;font-weight:700!important;letter-spacing:.01em!important;line-height:1.15!important}
 .character-summary strong,.cr7-result-name{font-weight:900!important}
 .hero h1{background:none!important;filter:none!important;-webkit-text-fill-color:initial;color:inherit!important}.hero h1 .h1-line{display:block;width:max-content;max-width:100%;color:transparent;-webkit-text-fill-color:transparent;background:linear-gradient(180deg,#ffffff 0%,#f7f8fa 30%,#dfe2e7 52%,#c3c8cf 70%,#d6dade 86%,#eef0f3 100%);-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 1px 0 #8a9099) drop-shadow(0 2px 3px #0008)}
 .hero h1 em{display:inline-block}
@@ -91,7 +91,7 @@ dialog,.cr7-dialog,.deck-dialog,dialog.character-modal,.auth-card{outline:1.5px 
 dialog .character-preview,dialog .mystery-pack,.daily-day,.setting-row,.cr7-reward-grid article,.m-list li,.m-wallet div,.character-option{outline:1px dashed #fcebe52e;outline-offset:-5px}
 /* sign-in screen in the same leather */
 .auth-card{background:var(--felt-grain),var(--felt-blue)!important;border:1px solid #ffffff1f!important;box-shadow:var(--raised)!important;color:var(--cream)}
-.auth-card h1{font:400 clamp(30px,8vw,40px)/1.05 Anton,Impact,'Arial Narrow',sans-serif!important;letter-spacing:.02em;color:transparent;-webkit-text-fill-color:transparent;background:linear-gradient(180deg,#ffffff 0%,#f7f8fa 30%,#dfe2e7 52%,#c3c8cf 70%,#d6dade 86%,#eef0f3 100%);-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 1px 0 #8a9099) drop-shadow(0 2px 3px #0008);display:inline-block}
+.auth-card h1{font:700 clamp(30px,8vw,40px)/1.15 Oswald,'Barlow Condensed','Arial Narrow',Impact,sans-serif!important;letter-spacing:.02em;color:transparent;-webkit-text-fill-color:transparent;background:linear-gradient(180deg,#ffffff 0%,#f7f8fa 30%,#dfe2e7 52%,#c3c8cf 70%,#d6dade 86%,#eef0f3 100%);-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 1px 0 #8a9099) drop-shadow(0 2px 3px #0008);display:inline-block}
 .auth-card p,.auth-card label{color:#fcebe5cc}
 .auth-tabs{background:linear-gradient(#0b1a30,#142a49)!important;box-shadow:inset 0 2px 4px #000c,0 1px 0 #ffffff26}
 .auth-tabs button{border-radius:9px!important;color:#fcebe5cc!important;font-weight:700}
@@ -120,3 +120,6 @@ dialog .character-preview,dialog .mystery-pack,.daily-day,.setting-row,.cr7-rewa
 @keyframes gift-idle{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-6px) rotate(-1.5deg)}}
 @media(prefers-reduced-motion:reduce){.gift-mini{animation:none}}
 .gift-q{inset:auto!important;left:50%!important;top:38%!important;translate:-50% -50%;width:42%;aspect-ratio:1;border-radius:50%;z-index:3!important;font-size:clamp(34px,11vw,62px)!important;color:#5a3e12!important;-webkit-text-fill-color:#5a3e12;text-shadow:0 1px 0 #fff6d6;background:radial-gradient(circle at 35% 30%,#fff6d6,#e7c063 45%,#a7781f 85%)!important;-webkit-background-clip:border-box!important;background-clip:border-box!important;filter:none!important;box-shadow:inset 0 2px 0 #fff8,inset 0 -3px 4px #0005,0 4px 8px #000a}
+
+/* Vietnamese text never uses Anton (it lacks letters like ộ, ị, ủ); Oswald has the full Vietnamese set */
+.character-summary strong,.cr7-result-name,.rv-info strong,.gift-info strong{font-family:Oswald,'Barlow Condensed','Arial Narrow',Impact,sans-serif!important;font-weight:700!important}
