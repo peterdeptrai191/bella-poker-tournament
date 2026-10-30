@@ -10,6 +10,9 @@ export const sfxEnabled=()=>state.sfx!==false&&state.sfxVolume>0;
 export const sfxVolume=()=>state.sfx===false?0:state.sfxVolume;
 
 let track=null,unlocked=false,duck=1,duckTimer=null;
+// Keep the same jazz position across Bella game pages; never override the user's mute preference.
+export function rememberMusic(){try{if(track)sessionStorage.setItem('bella.music.position',JSON.stringify({time:track.currentTime,at:Date.now(),playing:!track.paused}));}catch{}}
+function resumeSavedMusic(){try{const saved=JSON.parse(sessionStorage.getItem('bella.music.position'));if(!saved||Date.now()-saved.at>7200000||!state.music)return;const audio=player();audio.addEventListener('loadedmetadata',()=>{if(Number.isFinite(audio.duration)&&audio.duration>0)audio.currentTime=(Number(saved.time)||0)%audio.duration;},{once:true});if(saved.playing){unlocked=true;sync();}}catch{}}
 // Lowers the background music to `level` (0–1 of its normal volume) over `ms`, e.g. while a prize is revealed.
 export function duckMusic(level,ms=1500){clearInterval(duckTimer);const from=duck,start=performance.now();duckTimer=setInterval(()=>{const k=Math.min(1,(performance.now()-start)/ms);duck=from+(level-from)*k;if(track)track.volume=Math.max(0,Math.min(1,state.volume*duck));if(k>=1)clearInterval(duckTimer);},50);}
 function player(){
@@ -21,6 +24,7 @@ function sync(){
  if(state.music&&state.volume>0)player().play().catch(()=>{});else track?.pause();
 }
 if(typeof window!=='undefined'){
+ resumeSavedMusic();window.addEventListener('pagehide',rememberMusic);
  const start=()=>{unlocked=true;sync();};
  for(const type of ['pointerdown','keydown'])window.addEventListener(type,start,{capture:true,passive:true,once:true});
  // Music keeps playing while you look at another tab. If the phone stopped it in the background, start it again

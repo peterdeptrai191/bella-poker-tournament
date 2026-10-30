@@ -4,9 +4,16 @@
   "functions": {
     "api/index.js": {
       "maxDuration": 30
+    },
+    "api/fishing.js": {
+      "maxDuration": 30
     }
   },
   "rewrites": [
+    {
+      "source": "/fishing",
+      "destination": "/fishing/index.html"
+    },
     {
       "source": "/api",
       "destination": "/api/index"

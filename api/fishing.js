@@ -1,0 +1,10 @@
+import {authenticateAccount,cookieToken} from '../lib/accounts.js';
+import {gateAllowed,gateValue,passAllowed,fishingRequest} from '../lib/fishing/service.js';
+import {limit} from '../lib/store.js';
+import {demand} from '../lib/poker.js';
+export default async function fishingHandler(req,res){res.setHeader('Cache-Control','no-store, private');res.setHeader('Content-Type','application/json; charset=utf-8');res.setHeader('X-Content-Type-Options','nosniff');
+ try{demand(req.method==='POST','Dùng POST cho Fishing.',405);const origin=req.headers.origin;if(origin)demand(new URL(origin).host===req.headers.host,'Nguồn gửi không hợp lệ.',403);let body=req.body||{};if(typeof body==='string'){demand(Buffer.byteLength(body)<=8192,'Yêu cầu quá lớn.',413);body=JSON.parse(body);}demand(Buffer.byteLength(JSON.stringify(body))<=8192,'Yêu cầu quá lớn.',413);const token=cookieToken(req.headers.cookie),identity=await authenticateAccount(token);demand(identity,'Vui lòng đăng nhập tại sảnh Bella.',401);
+  if(body.op==='enter'){await limit('fishing-gate:'+identity.id,8);const ip=String(req.headers['x-forwarded-for']||'local').split(',')[0].trim();await limit('fishing-gate-ip:'+ip,30);demand(passAllowed(body.password),'Mật khẩu thử nghiệm chưa đúng.',403);const secure=process.env.VERCEL==='1'||req.headers['x-forwarded-proto']==='https';res.setHeader('Set-Cookie',`bella_fishing=${gateValue(identity,token)}; HttpOnly; SameSite=Strict; Path=/; Max-Age=28800${secure?'; Secure':''}`);res.end(JSON.stringify({ok:true}));return;}
+  const gate=String(req.headers.cookie||'').split(';').map(s=>s.trim()).find(s=>s.startsWith('bella_fishing='))?.slice(14);demand(gateAllowed(identity,token,gate),'Nhập mật khẩu để vào Bella Fishing thử nghiệm.',403);const result=await fishingRequest({identity,body});res.end(JSON.stringify(result));
+ }catch(e){res.statusCode=e.status||500;res.end(JSON.stringify({error:e.status?e.message:'Fishing đang gặp lỗi. Hãy thử lại cùng thao tác.'}));if(!e.status)console.error('Fishing request failed:',e.name);}
+}
