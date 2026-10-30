@@ -201,3 +201,21 @@ button.primary:hover:enabled,.cr7-gold:hover:enabled{background:linear-gradient(
 }
 @media(max-width:760px){.promo-slide{grid-template-columns:1fr!important}.promo-copy{padding-inline:22px}.promo-copy .primary{white-space:nowrap}}
 @media(min-width:761px){.promo-slide{min-height:360px}}
+/* event cards keep one rectangle shape at any window size or zoom: everything inside scales with the card */
+.promo-slide{min-height:0!important;aspect-ratio:16/5;container-type:inline-size}
+.promo-copy{padding:0 0 0 4.2cqi!important;gap:1.1cqi!important;justify-content:center}
+.promo-tag{font-size:1.15cqi!important}
+.promo-copy h2{font-size:4.4cqi!important}
+.promo-copy p{font-size:1.35cqi!important;max-width:40cqi}
+.promo-copy .primary,.promo-soon{font-size:1.3cqi!important;padding:1cqi 2cqi!important;margin-top:.6cqi!important}
+.promo-char{max-height:26cqi!important}.promo-gift{width:20cqi!important}.promo-wip .promo-char{max-height:23cqi!important}.promo-wip .promo-logo{max-height:12cqi!important}
+.promo-dots{bottom:1.6cqi}
+@media(max-width:760px){
+ .promo-slide{aspect-ratio:4/5}
+ .promo-copy{padding:0 6cqi 12cqi!important;gap:2.4cqi!important;align-self:end}
+ .promo-tag{font-size:3cqi!important}.promo-copy h2{font-size:9.5cqi!important}.promo-copy p{font-size:3.8cqi!important;max-width:none}
+ .promo-copy .primary,.promo-soon{font-size:3.8cqi!important;padding:2.6cqi 5cqi!important}
+ .promo-slide:not(.full) .promo-copy{padding-top:0!important}
+ .promo-art{inset:4cqi 4cqi auto auto!important}.promo-char{max-height:44cqi!important}.promo-gift{width:34cqi!important}.promo-wip .promo-char{max-height:36cqi!important}.promo-wip .promo-logo{max-height:20cqi!important}
+ .promo-dots{bottom:4cqi}
+}
