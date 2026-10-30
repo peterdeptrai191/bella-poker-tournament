@@ -100,7 +100,7 @@ function listMystery(){const d=dialog('cr7-rewards');const total=MYSTERY_TIERS.r
  d.innerHTML='<button class="cr7-close" aria-label="Đóng">×</button><small>BELLA MYSTERY PACK</small><h2>Tỷ lệ gói bí ẩn</h2><p>Bốc nhóm giá theo tỷ lệ, rồi chọn đều một skin trong nhóm.</p>'+MYSTERY_TIERS.map(([p,w])=>{const skins=CHARACTERS.filter(c=>c.price===p&&!c.event);return `<h3>Skin ${p} coin · ${pct(w/total)}</h3><div class="cr7-reward-grid">${skins.map(c=>`<article style="--cr7-color:${c.color}">${art(c)}<b>${esc(c.name)}</b><span>${pct(w/total/skins.length)}</span></article>`).join('')}</div>`;}).join('');
  d.querySelector('button').onclick=()=>d.close();d.showModal();}
 export function openMysteryPack(onDone){
- wheelDialog({cls:'mystery-wheel',gift:true,eyebrow:'BELLA MYSTERY PACK',title:'Ai đang chờ bạn?',label:'?',badge:'?',tiles:mysteryTiles(),
+ wheelDialog({cls:'mystery-wheel',gift:true,eyebrow:'BELLA MYSTERY PACK',title:'Ai đang chờ bạn?',label:'<span class="gift-mini" aria-hidden="true"><span class="gift-lid"><i class="rib-v"></i><span class="bow"><i></i><i></i></span></span><span class="gift-body"><i class="rib-v"></i><i class="rib-h"></i><b class="gift-q">?</b></span></span>',badge:'?',tiles:mysteryTiles(),
   sub:'3 coin: 47,62% · 10 coin: 33,33% · 15 coin: 14,29% · 20 coin: 4,76%',
   footnote:'Giá 10 coin/lượt. Có thể ra skin đã sở hữu, skin trùng không hoàn coin.',list:listMystery,
   newReceipt:()=>({requestId:crypto.randomUUID()}),
