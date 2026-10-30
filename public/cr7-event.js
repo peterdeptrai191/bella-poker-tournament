@@ -9,7 +9,7 @@ import {openGift} from './gift-box.js';
 // small white glints that flash on the G.O.A.T / B.O.A.T lettering
 export function addGlints(root){root.querySelectorAll('.goat-head:not(.cf-label)').forEach(h=>{if(h.querySelector('.goat-glint'))return;[[6,8,0],[44,58,.8],[66,4,1.6],[94,52,.4]].forEach(([x,y,d])=>{const g=document.createElement('i');g.className='goat-glint';g.style.left=x+'%';g.style.top=y+'%';g.style.animationDelay=d+'s';h.append(g);});});}
 const GOAT_HEAD='<span class="w g" data-t="G.O.A.T">G.O.A.T</span><small>or</small><span class="w b" data-t="B.O.A.T">B.O.A.T</span>';
-const ODDS_LINE=`Thẻ đỏ ${GROUP_ODDS.red}% · Thẻ tím ${GROUP_ODDS.purple}% · Thẻ vàng ${GROUP_ODDS.gold}%`;
+const ODDS_LINE=`Thẻ đỏ ${GROUP_ODDS.red}% · Thẻ vàng ${GROUP_ODDS.box}% · Thẻ tím ${GROUP_ODDS.shop}%`;
 let getAccount=()=>null,performRequest,isHome=()=>false,offering=false;
 const offered=new Set();
 export function configureCr7(o){getAccount=o.getAccount;performRequest=o.request;isHome=o.isHome;}
