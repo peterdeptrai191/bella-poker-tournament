@@ -1,4 +1,4 @@
-# Bella Fishing — private alpha
+# Bella Fishing — private alpha (economy v2)
 
 Entry: gray **BELLA FISHING / COMING SOON** tile in the authenticated Poker home. A server-validated passphrase unlocks an HttpOnly session-bound 8-hour cookie. Default alpha code: `1901`; override with `FISHING_ALPHA_PASS`. This is a shared preview code, not an admin role. The static UI is public, but every Fishing data/game API requires both account authentication and the alpha cookie. Direct `/fishing` entry prompts for the code.
 
@@ -19,10 +19,10 @@ All Fishing commands have receipts. A retry with the same ID returns the prior r
 ## Implemented rules
 
 - 120 species, 15 per lake, 8 lakes; 50/30/15/4/1% tier odds.
-- Lake fees .100/.200/.300/.400/.500/.600/.800/1.000; sale multipliers .65/1/2/5/15. Size is a record, not a sale multiplier.
-- Ten free training casts; training fish are not stored/sold or credited to collection/XP. Completion awards 2 coin once. Abandoning/missing counts as a completed training attempt.
-- Daily rescue vouchers: 2/day, cap 6; Lotus Lake + ordinary bait only. Regular bait included, specialty bait +.010, targeted bait +.020. Baits change species preferences, never rarity odds; targeted species must already be discovered and have siblings in its tier.
-- One active cast/account. Server chooses hidden species/size. Bite and hook deadlines are authoritative. A 100ms deterministic simulation uses the equipped gear and server seed; finish requests replay timestamped hold/release transitions and enforce real elapsed time. Late hooks, invalid logs, fast-forwarded results and double sales are rejected.
+- All casts and all baits are free. Sale bands: Common 1–3, Uncommon 4–6, Rare 7–10, Epic 11–15, Legendary 16–20 coin. Each species has a fixed integer price in its band; size is only a record. Lake unlocks and equipment remain paid.
+- No training gate or training reward. Every successful catch goes to inventory (or auto-sale), XP and collection immediately, including accounts with zero coins.
+- Rescue vouchers removed. All baits are free and change species preferences, never rarity odds; targeted species must already be discovered and have siblings in its tier.
+- One active cast/account. Server chooses hidden species/size. Bite and hook deadlines are authoritative. A 100ms deterministic simulation uses the equipped gear and server seed; finish requests replay timestamped hold/release transitions and enforce real elapsed time. Late hooks, invalid logs, fast-forwarded results and double sales are rejected. Version-1 inventory and active catches are repriced lazily/atomically on account access; a pending training cast becomes an ordinary cast, with no tutorial reward. Historical debits/credits are not refunded or altered.
 - Persistent bag, sale, release, favorites lock, optional common auto-sale, collection and size records, XP, lake unlocks, rods/reels/lines/hooks/floats and sequential bag upgrades.
 - Collection milestones per lake: 5 species +.300, 10 +.700, 15 +2.000 coin, once each. Daily missions pay .100/.100/.300; weekly 100 catches pays 2.000. Vietnam day boundaries; weeks start Monday.
 - Online private rooms up to four authenticated, alpha-unlocked players. Every player must own lake access. Slots stable, presence expires after 90s, 10s visible-tab polling. Fishing remains individual per account. Shared emotes and visible casting/pulling states. Rooms survive host leaving, expire after a day of inactivity.
