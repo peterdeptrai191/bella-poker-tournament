@@ -4,23 +4,9 @@
   "functions": {
     "api/index.js": {
       "maxDuration": 30
-    },
-    "api/fishing.js": {
-      "maxDuration": 30
-    },
-    "api/sam.js": {
-      "maxDuration": 30
     }
   },
   "rewrites": [
-    {
-      "source": "/sam",
-      "destination": "/sam/index.html"
-    },
-    {
-      "source": "/fishing",
-      "destination": "/fishing/index.html"
-    },
     {
       "source": "/api",
       "destination": "/api/index"

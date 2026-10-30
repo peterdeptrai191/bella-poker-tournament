@@ -18,9 +18,8 @@ test('animation registry releases detached trees and does not re-observe retaine
  for(let i=0;i<100;i++){const removed=node();registry.scan(removed);removed.isConnected=false;registry.prune();}
  assert.equal(registry.size,1);assert.equal(observed.size,1);retained.isConnected=false;registry.prune();assert.equal(registry.size,0);assert.equal(observed.size,0);
 });
-test('dark card skins maintain readable face colors and Sam cannot override their tokens',()=>{
- const css=readFileSync(new URL('../public/card-skins.css',import.meta.url),'utf8'),sam=readFileSync(new URL('../public/sam/style.css',import.meta.url),'utf8');
+test('dark card skins maintain readable face colors',()=>{
+ const css=readFileSync(new URL('../public/card-skins.css',import.meta.url),'utf8');
  const lum=hex=>{const a=hex.replace('#','').match(/../g).map(x=>parseInt(x,16)/255).map(x=>x<=.04045?x/12.92:((x+.055)/1.055)**2.4);return a[0]*.2126+a[1]*.7152+a[2]*.0722;};
  for(const id of ['neon','ruby','gold','galaxy','jade']){const block=css.match(new RegExp('\\[data-card-skin="'+id+'"\\]\\{([^}]+)'))[1],token=name=>block.match(new RegExp('--deck-'+name+':(#[a-f0-9]{6})'))[1];for(const ink of ['ink','red'])assert.ok((lum(token(ink))+.05)/(lum(token('bg'))+.05)>=4.5,`${id} ${ink}`);}
- assert.ok(!/\.card\{[^}]*--deck-(?:ink|red):/.test(sam),'Card face must inherit skin ink tokens');
 });
