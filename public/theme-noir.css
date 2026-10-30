@@ -180,3 +180,23 @@ dialog .character-preview,dialog .mystery-pack,.daily-day,.setting-row,.cr7-rewa
 /* red buttons: deeper red and a dark edge, matching the navy buttons */
 button.primary,.cr7-gold,.lobby-cta,.game-actions [data-raise-toggle],.game-actions [data-action="allin"],.game-actions [data-action="raise"],.auth-tabs button.active,.header nav button.current{background:linear-gradient(#e8384d,#c8142c 49%,#a3001a 51%,#7a0012)!important;border:1px solid #2a0006!important;box-shadow:inset 0 1px 0 #ff8a9966,0 3px 0 #3a0008,0 6px 12px #0008!important}
 button.primary:hover:enabled,.cr7-gold:hover:enabled{background:linear-gradient(#f04257,#d4182f 49%,#b0001c 51%,#850014)!important}
+/* promo slider v2: full-bleed pictures that fade and blur toward the text */
+.promo-slide{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important}
+.promo-slide.full .promo-copy{grid-column:1}
+.promo-bg{position:absolute;inset:0;background-size:cover;background-repeat:no-repeat}
+.promo-veil{position:absolute;inset:0;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);mask-image:linear-gradient(90deg,#000 0,#000 30%,transparent 62%);-webkit-mask-image:linear-gradient(90deg,#000 0,#000 30%,transparent 62%);background:linear-gradient(90deg,#010313f0 0,#010313c8 32%,#01031366 52%,transparent 68%)}
+.tone-green .promo-veil{background:linear-gradient(90deg,#03140cf2 0,#03140cc8 32%,#03140c66 52%,transparent 68%)}
+.promo-art{position:relative;display:grid;place-items:center;mask-image:none!important;background:none!important;margin:0!important;padding:18px}
+.promo-char{max-height:250px;width:auto;filter:drop-shadow(0 12px 18px #000c)}
+.promo-gift{width:min(36vw,210px)}
+.promo-wip{display:flex;align-items:flex-end;gap:14px}
+.promo-wip .promo-char{max-height:220px}
+.promo-wip .promo-logo{max-height:120px;opacity:.95;filter:drop-shadow(0 6px 10px #000a)}
+@media(max-width:760px){
+ .promo-slide.full .promo-veil{mask-image:linear-gradient(0deg,#000 0,#000 40%,transparent 75%);-webkit-mask-image:linear-gradient(0deg,#000 0,#000 40%,transparent 75%);background:linear-gradient(0deg,#010313f2 0,#010313c8 38%,#01031355 62%,transparent 80%)}
+ .promo-slide.full .promo-copy{align-self:end}
+ .promo-art{position:absolute!important;inset:12px 12px auto auto!important;width:auto!important;height:auto!important;opacity:1!important;padding:0}
+ .promo-char{max-height:150px}.promo-gift{width:120px}.promo-wip .promo-char{max-height:120px}.promo-wip .promo-logo{max-height:70px}
+ .promo-slide:not(.full) .promo-copy{padding-top:170px}
+}
+@media(max-width:760px){.promo-slide{grid-template-columns:1fr!important}.promo-copy{padding-inline:22px}.promo-copy .primary{white-space:nowrap}}
