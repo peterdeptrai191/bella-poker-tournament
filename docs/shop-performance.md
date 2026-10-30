@@ -1,8 +1,9 @@
-# Shop performance and dark card contrast
+# Skin shop performance
 
-- Character catalog uses lazy, asynchronously decoded still images. The selected large preview retains full animation. Event silhouettes remain hidden until owned. Iron Man keeps the correct crop from the current source asset.
-- Re-selecting a skin preserves the existing catalog DOM and skips generating/parsing a replacement grid. Ownership or balance changes rebuild it so purchase state stays accurate.
-- IntersectionObserver unregisters detached animation roots. Modal-state queries only run when dialogs change; timer text updates no longer trigger a document-wide dialog scan. Hidden-tab and modal-covered effects pause. Offscreen tile layout uses content visibility.
-- The all-owned 28-skin illustration markup drops from 907 elements / 65,254 characters to 29 elements / 4,885 characters (illustrations only). This measures DOM complexity, not device FPS. Browser check: zero animated catalog skins, one selected animated preview, background paused under shop.
-- Golden Flame resolves to gold `#f3d084` and coral `#ff967e` over charcoal `#171c24`. Other dark skins retain their own bright cyan/pink/lavender/jade palettes. Automated tests require at least 4.5:1 contrast for both suit colors on each dark skin.
-- `test/ui-performance.test.js` verifies asset availability/crop, the catalog DOM budget, observer cleanup across 100 removal cycles, and dark-theme contrast/token inheritance. No server or game rule changes in this patch.
+Shop slots retain the original full-quality animated SVG renderer. Artwork is created only when its card enters a 160px margin around the shop's scroll viewport. Observing the card rather than its descendants works with content-visibility and stable placeholder dimensions.
+
+Off-screen artwork pauses and resumes on return. Hidden-page and covered-background throttling remains enabled, while the selected preview retains its full effects when visible.
+
+The grid is preserved across selection, wallet changes and repeated opens when the shared modal still contains it. Text, ownership and selection update in place; only an ownership change that replaces an event silhouette regenerates that card's artwork. Observers disconnect when the shop closes.
+
+`test/skin-grid.test.js` covers deferred hydration, reuse, targeted ownership refresh, observer cleanup and the no-IntersectionObserver fallback. Existing UI tests cover asset paths, animation registry cleanup and dark card readability.
