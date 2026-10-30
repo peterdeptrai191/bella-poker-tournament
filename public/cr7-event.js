@@ -19,7 +19,7 @@ function listRewards(){
  d.querySelector('button').onclick=()=>d.close();d.showModal();
 }
 
-export function offerCr7(){const a=getAccount();if(!a||!isHome()||a.cr7Event?.seen||offered.has(a.id)||offering)return;offering=true;setTimeout(()=>{offering=false;const current=getAccount();if(current?.id!==a.id||!isHome())return;const opened=document.querySelector('dialog[open]');if(opened){opened.addEventListener('close',()=>setTimeout(offerCr7,300),{once:true});return;}offered.add(a.id);const d=dialog('cr7-poster');d.innerHTML=`<button class="cr7-close" aria-label="Đóng sự kiện">×</button><div class="cr7-poster-art"><img src="/assets/events/cr7-boat/cr7-boat-popup-preview.webp" alt="Bộ sưu tập CR7 B.O.A.T"></div><h2>${BOX_NAME} · Tặng bạn 1 lượt quay</h2><p>${goatTiles().length} ô, ô nào cũng như nhau<br>Lượt đầu miễn phí · Các lượt sau ${CR7_PRICE} coin</p><button class="cr7-gold" data-enter>Quay miễn phí →</button>`;d.querySelector('.cr7-close').onclick=()=>d.close();d.querySelector('[data-enter]').onclick=()=>{d.close();openCr7Pack();};d.showModal();performRequest({op:'seeCr7Event'}).catch(()=>{offered.delete(a.id);});},650);}
+export function offerCr7(){const a=getAccount();if(!a||!isHome()||a.cr7Event?.seen||offered.has(a.id)||offering)return;offering=true;setTimeout(()=>{offering=false;const current=getAccount();if(current?.id!==a.id||!isHome())return;const opened=document.querySelector('dialog[open]');if(opened){opened.addEventListener('close',()=>setTimeout(offerCr7,300),{once:true});return;}offered.add(a.id);const d=dialog('cr7-poster');d.innerHTML=`<button class="cr7-close" aria-label="Đóng sự kiện">×</button><div class="cr7-poster-art goat-poster"><img src="/assets/events/cr7-boat/goat-or-boat-poster.webp" alt="M10 và CR7 quay lưng vào nhau"><h2 class="goat-title">GOAT<small>or</small>BOAT</h2></div><h2>Tặng bạn 1 lượt quay</h2><p>${goatTiles().length} ô, ô nào cũng như nhau<br>Lượt đầu miễn phí · Các lượt sau ${CR7_PRICE} coin</p><button class="cr7-gold" data-enter>Quay miễn phí →</button>`;d.querySelector('.cr7-close').onclick=()=>d.close();d.querySelector('[data-enter]').onclick=()=>{d.close();openCr7Pack();};d.showModal();performRequest({op:'seeCr7Event'}).catch(()=>{offered.delete(a.id);});},650);}
 
 const idle=label=>`<b class="spin-logo">${label}</b>`;
 const stepCentre=id=>{const c=characterById(id);return `<img class="spin-peek" src="${stillArt(c)}" alt="" onerror="this.remove()"><em>${esc(c.name)}</em>`;};
@@ -27,37 +27,42 @@ const stepCentre=id=>{const c=characterById(id);return `<img class="spin-peek" s
 // Shared wheel dialog. mode: {title, sub, tiles, label, cost(account,receipt), canSpin, buttonText, request(receipt), storageKey, footnote, onDone}
 function wheelDialog(mode){
  const a=getAccount();if(!a||document.querySelector('.spin-dialog[open]'))return;
- const accountId=a.id,d=dialog('cr7-pack spin-dialog '+(mode.cls||''));let pending=false,receipt=null,result=null;
+ const accountId=a.id,d=dialog('cr7-pack spin-dialog '+(mode.cls||''));let pending=false,receipt=null,result=null,canStop=false,stopNow=null;
  if(mode.storageKey){try{receipt=JSON.parse(localStorage.getItem(mode.storageKey(accountId)));if(!mode.validReceipt(receipt))receipt=null;}catch{receipt=null;}}
  d.addEventListener('cancel',e=>{if(pending)e.preventDefault();});
- d.innerHTML=`<button class="cr7-close" aria-label="Đóng">×</button><small>${mode.eyebrow}</small><h2>${mode.title}</h2><p class="spin-sub">${mode.sub}</p>${wheelHTML(mode.tiles,idle(mode.label))}<h3 class="cr7-result-name" aria-live="polite"></h3><p class="spin-msg"></p><p class="cr7-wallet"></p><button class="cr7-gold" data-open></button><button class="cr7-equip" hidden>Dùng skin vừa nhận</button><button class="cr7-list">✧ Xem tỷ lệ & hiệu ứng</button><p class="cr7-error" role="status"></p><small class="cr7-footnote">${mode.footnote}</small>`;
+ d.innerHTML=`<button class="cr7-close" aria-label="Đóng">×</button><small>${mode.eyebrow}</small><h2>${mode.title}</h2><p class="spin-sub">${mode.sub}</p>${wheelHTML(mode.tiles,idle(mode.label),mode.badge)}<h3 class="cr7-result-name" aria-live="polite"></h3><p class="spin-msg"></p><p class="cr7-wallet"></p><button class="cr7-gold" data-open></button><button class="cr7-gold spin-stop" data-stop hidden>DỪNG ✋</button><button class="cr7-equip" hidden>Dùng skin vừa nhận</button><button class="cr7-list">✧ Xem tỷ lệ & hiệu ứng</button><p class="cr7-error" role="status"></p><small class="cr7-footnote">${mode.footnote}</small>`;
  const $=s=>d.querySelector(s),centre=$('.spin-centre'),wheel=$('.spin-wheel');
  const sp=spinner(wheel,mode.tiles,{onStep:id=>{centre.innerHTML=stepCentre(id);}});
  const ui=(error='')=>{const current=getAccount();if(current?.id!==accountId){d.close();return;}
   const b=$('[data-open]'),btn=mode.button(current,receipt);
-  b.textContent=pending?'Đang quay…':btn.text;b.disabled=pending||btn.disabled;
+  b.textContent=btn.text;b.disabled=pending||btn.disabled;b.hidden=pending;const st=$('[data-stop]');st.hidden=!pending;st.disabled=!canStop;st.textContent=canStop?'DỪNG ✋':stopNow===false?'Đang dừng…':'Đang tăng tốc…';
   $('.cr7-close').disabled=pending;$('.cr7-list').disabled=pending;
   $('.cr7-wallet').textContent='Số dư: '+current.coins+' coin'+(mode.walletNote?' · '+mode.walletNote(current):'');
   $('.cr7-error').textContent=error;$('.cr7-equip').hidden=!result||pending;
  };
  $('.cr7-close').onclick=()=>d.close();$('.cr7-list').onclick=mode.list||listRewards;
+ $('[data-stop]').onclick=()=>{if(canStop&&typeof stopNow==='function')stopNow();};
  $('.cr7-equip').onclick=async e=>{e.currentTarget.disabled=true;try{await performRequest({op:'equipSkin',character:result.skin});d.close();}catch(err){e.currentTarget.disabled=false;ui(err.message);}};
  $('[data-open]').onclick=async()=>{if(pending)return;const current=getAccount();receipt??=mode.newReceipt(current);if(mode.storageKey)try{localStorage.setItem(mode.storageKey(accountId),JSON.stringify(receipt));}catch{}
-  pending=true;result=null;$('.cr7-result-name').textContent='';$('.spin-msg').textContent='';wheel.classList.remove('has-prize');ui();sp.start();const started=Date.now();
-  try{const data=await mode.request(receipt);await new Promise(r=>setTimeout(r,Math.max(0,1300-(Date.now()-started))));
+  pending=true;canStop=false;stopNow=null;result=null;$('.cr7-result-name').textContent='';$('.spin-msg').textContent='';wheel.classList.remove('has-prize');ui();
+  try{const [data]=await Promise.all([mode.request(receipt),sp.start()]);
+   // full speed and the prize is known: now the player may press DỪNG (or it stops by itself after 8 s)
+   canStop=true;ui();$('[data-stop]').focus();
+   await new Promise(r=>{const t=setTimeout(r,8000);stopNow=()=>{clearTimeout(t);r();};});
+   canStop=false;stopNow=false;ui();
    if(getAccount()?.id!==accountId){sp.stop();d.close();return;}
    result=data.result;const tile=Number.isInteger(result.tile)?result.tile:mode.tiles.indexOf(result.skin);
    await sp.land(tile);receipt=null;if(mode.storageKey)try{localStorage.removeItem(mode.storageKey(accountId));}catch{}
    const c=characterById(result.skin);centre.innerHTML=animatedCharacter(c,'spin-prize');wheel.classList.add('has-prize');
    $('.cr7-result-name').textContent=c.name;$('.spin-msg').textContent=result.duplicate?'Bạn đã có skin này rồi (không hoàn coin).':'Skin mới đã vào bộ sưu tập!';
    celebrate(c);pending=false;ui();mode.onDone?.(result);
-  }catch(err){sp.stop();if(mode.resetOn?.test(err.message)){receipt=null;if(mode.storageKey)try{localStorage.removeItem(mode.storageKey(accountId));}catch{}}pending=false;ui(err.message+(receipt?' — Bấm lại để tiếp tục đúng lượt này, không trừ coin hai lần.':''));}
+  }catch(err){sp.stop();canStop=false;stopNow=null;if(mode.resetOn?.test(err.message)){receipt=null;if(mode.storageKey)try{localStorage.removeItem(mode.storageKey(accountId));}catch{}}pending=false;ui(err.message+(receipt?' — Bấm lại để tiếp tục đúng lượt này, không trừ coin hai lần.':''));}
  };
  ui();d.showModal();
 }
 
 export function openCr7Pack(){
- wheelDialog({eyebrow:'BELLA • VÒNG QUAY',title:BOX_NAME,label:'GOAT<small>or</small>BOAT',tiles:goatTiles(),
+ wheelDialog({eyebrow:'BELLA • VÒNG QUAY',title:BOX_NAME,label:'GOAT<small>or</small>BOAT',badge:'🐐',tiles:goatTiles(),
   sub:`${goatTiles().length} ô · ô nào cũng có cơ hội như nhau · skin dưới 10 coin chiếm 2 ô`,
   footnote:`Mỗi tài khoản được tặng 1 lượt quay. Các lượt sau ${CR7_PRICE} coin. Skin trùng không hoàn coin.`,
   storageKey:id=>'bella.'+CR7_EVENT+'.pending.'+id,validReceipt:r=>r&&typeof r.free==='boolean'&&typeof r.requestId==='string',
@@ -73,7 +78,7 @@ function listMystery(){const d=dialog('cr7-rewards');const total=MYSTERY_TIERS.r
  d.innerHTML='<button class="cr7-close" aria-label="Đóng">×</button><small>BELLA MYSTERY PACK</small><h2>Tỷ lệ gói bí ẩn</h2><p>Bốc nhóm giá theo tỷ lệ, rồi chọn đều một skin trong nhóm.</p>'+MYSTERY_TIERS.map(([p,w])=>{const skins=CHARACTERS.filter(c=>c.price===p&&!c.event);return `<h3>Skin ${p} coin · ${pct(w/total)}</h3><div class="cr7-reward-grid">${skins.map(c=>`<article style="--cr7-color:${c.color}">${art(c)}<b>${esc(c.name)}</b><span>${pct(w/total/skins.length)}</span></article>`).join('')}</div>`;}).join('');
  d.querySelector('button').onclick=()=>d.close();d.showModal();}
 export function openMysteryPack(onDone){
- wheelDialog({cls:'mystery-wheel',eyebrow:'BELLA MYSTERY PACK',title:'Ai đang chờ bạn?',label:'?',tiles:mysteryTiles(),
+ wheelDialog({cls:'mystery-wheel',eyebrow:'BELLA MYSTERY PACK',title:'Ai đang chờ bạn?',label:'?',badge:'?',tiles:mysteryTiles(),
   sub:'3 coin: 47,62% · 10 coin: 33,33% · 15 coin: 14,29% · 20 coin: 4,76%',
   footnote:'Giá 10 coin/lượt. Có thể ra skin đã sở hữu, skin trùng không hoàn coin.',list:listMystery,
   newReceipt:()=>({requestId:crypto.randomUUID()}),

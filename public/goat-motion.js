@@ -3,7 +3,7 @@
 // a name plate at the feet. The two Barca versions get an eFootball "Big Time" style plate with the match date.
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export const GOAT_ART={
- 'goat-m10-barca-2015':{w:599,scene:'blaugrana',plate:{kind:'bigtime',name:'M10 · BARCA',date:'30.05.2015'}},
+ 'goat-m10-barca-2015':{w:534,scene:'blaugrana',plate:{kind:'bigtime',name:'M10 · BARCA',date:'06.06.2015'}},
  'goat-m10-bernabeu':{w:596,scene:'spotlight',plate:{kind:'bigtime',name:'M10 · EL CLÁSICO',date:'23.04.2017'}},
  'goat-m10-paris':{w:485,scene:'paris',plate:{kind:'goat',name:'M10 · PARIS'}},
  'goat-m10-miami':{w:698,scene:'miami',plate:{kind:'goat',name:'M10 · MIAMI'}},

@@ -1,26 +1,34 @@
 /* Spin wheel (spin-wheel.js): tiles on a ring, a light running around them, the prize in the middle. */
-.spin-dialog{width:min(560px,96vw)}
+.spin-dialog{width:min(620px,98vw)}
+@media(max-width:480px){.spin-dialog{padding:20px 6px}.spin-wheel{gap:3px;padding:5px}}
+.spin-stop{background:linear-gradient(120deg,#ff8a7a,#e0453c,#ff9b7d)!important;color:#fff!important;font-size:18px!important;letter-spacing:.08em;animation:stop-pulse .9s ease-in-out infinite}.spin-stop:disabled{animation:none}
+@keyframes stop-pulse{50%{box-shadow:0 0 26px #ff6a55}}
 .spin-dialog h2{margin:6px 20px 2px;font-size:clamp(24px,6vw,34px);letter-spacing:.04em;background:linear-gradient(100deg,#ffe9a0,#e0ad45,#fff1c2);-webkit-background-clip:text;background-clip:text;color:transparent}
 .spin-sub{margin:0 0 6px;font-size:12px!important}
-.spin-wheel{--size:min(440px,100%);container-type:inline-size;position:relative;width:var(--size);aspect-ratio:1;margin:6px auto 0}
-.spin-track{position:absolute;inset:3%;border-radius:50%;background:radial-gradient(circle,transparent 58%,#ffffff08 59%,#ffffff12 70%,transparent 71%),radial-gradient(circle,#1d3354 0,#0a1222 72%);border:2px solid #c7a75d55;box-shadow:0 0 30px #000a inset,0 0 24px #e8b85022}
-.spin-tile{--t:min(13cqi,260cqi / var(--n));position:absolute;left:var(--x);top:var(--y);width:var(--t);height:var(--t);margin:calc(var(--t) / -2) 0 0 calc(var(--t) / -2);border-radius:50%;display:grid;place-items:center;overflow:hidden;background:radial-gradient(circle at 50% 35%,#2b3e5c,#101a2c);border:2px solid var(--rc,#8a94a6);box-shadow:0 2px 6px #0008;transition:transform .08s,box-shadow .08s;z-index:1}
-.spin-tile img{width:118%;height:118%;object-fit:contain;object-position:50% 12%;translate:0 6%;pointer-events:none}
+.spin-wheel{position:relative;display:grid;grid-template-columns:repeat(var(--s),1fr);grid-template-rows:repeat(var(--s),1fr);gap:clamp(3px,.9vw,6px);width:min(560px,100%);aspect-ratio:1;margin:8px auto 0;padding:clamp(6px,1.4vw,10px);box-sizing:border-box;border-radius:20px;background:linear-gradient(145deg,#1d3354,#0a1222);border:2px solid #c7a75d77;box-shadow:inset 0 0 30px #000a,0 0 30px #e8b85022}
+.spin-tile,.spin-badge{position:relative;border-radius:clamp(6px,1.6vw,11px);overflow:hidden;display:grid;place-items:center;min-width:0;min-height:0}
+.spin-tile{background:radial-gradient(circle at 50% 30%,color-mix(in srgb,var(--c) 35%,#22344f),#0f1828);border:2px solid var(--rc,#8a94a6);box-shadow:0 2px 6px #0008;transition:transform .07s,box-shadow .07s,filter .07s;z-index:1}
+.spin-tile img{width:135%;height:135%;max-width:none;object-fit:contain;object-position:50% 0;translate:0 16%;pointer-events:none}
+.spin-badge{background:linear-gradient(145deg,#ffe9a0,#c98f2c);color:#3e2506;font:900 clamp(16px,4.5vw,28px)/1 Georgia,serif;box-shadow:inset 0 0 0 2px #fff4cc}
 .spin-tile[data-r=rare]{--rc:#4aa3ff}.spin-tile[data-r=epic]{--rc:#b06bff}.spin-tile[data-r=gold]{--rc:#ffd34d}
-.spin-tile[data-r=boat]{--rc:#ff4d5e;box-shadow:0 0 0 2px #ffd34d88,0 2px 6px #0008}.spin-tile[data-r=goat]{--rc:#6cc4ff;box-shadow:0 0 0 2px #ffd34d88,0 2px 6px #0008}
-.spin-wheel.spinning .spin-tile:not(.lit){filter:brightness(.7)}
-.spin-tile.lit{transform:scale(1.4);z-index:3;border-color:#fff7cf;box-shadow:0 0 0 3px #ffd34d,0 0 18px 6px #ffd34dcc}
+.spin-tile[data-r=boat]{--rc:#ff4d5e;box-shadow:inset 0 0 0 2px #ffd34d99,0 2px 6px #0008}.spin-tile[data-r=goat]{--rc:#6cc4ff;box-shadow:inset 0 0 0 2px #ffd34d99,0 2px 6px #0008}
+.spin-wheel.spinning .spin-tile:not(.lit){filter:brightness(.6) saturate(.8)}
+.spin-tile.lit{transform:scale(1.18);z-index:3;border-color:#fff7cf;box-shadow:0 0 0 3px #ffd34d,0 0 18px 6px #ffd34dcc;filter:none}
 .spin-tile.won{animation:spin-won .7s ease-in-out 4}
-@keyframes spin-won{50%{transform:scale(1.6);box-shadow:0 0 0 4px #fff,0 0 30px 12px #ffd34d}}
-.spin-centre{position:absolute;inset:17%;border-radius:50%;display:grid;place-items:center;align-content:center;text-align:center;overflow:hidden;background:radial-gradient(circle,#24406a,#0c1526 70%);border:2px solid #c7a75d66;box-shadow:inset 0 0 30px #000b}
-.spin-logo{font:900 clamp(26px,9cqi,44px)/.95 Georgia,serif;color:#ffe29b;text-shadow:0 0 18px #e8b850aa;letter-spacing:.04em}
+@keyframes spin-won{50%{transform:scale(1.3);box-shadow:0 0 0 4px #fff,0 0 30px 12px #ffd34d}}
+.spin-centre{position:relative;margin:4px;border-radius:16px;display:grid;place-items:center;align-content:center;text-align:center;overflow:hidden;background:radial-gradient(circle,#24406a,#0c1526 75%);border:2px solid #c7a75d66;box-shadow:inset 0 0 30px #000b;min-height:0}
+.spin-logo{font:900 clamp(30px,10vw,58px)/.95 Georgia,serif;color:#ffe29b;text-shadow:0 0 18px #e8b850aa;letter-spacing:.04em}
 .spin-logo small{display:block;margin:4px 0;font:italic 600 .42em/1 Georgia,serif;color:#c5cfe0;letter-spacing:.1em}
-.mystery-wheel .spin-logo{font-size:clamp(60px,22cqi,110px);color:#e7c9ff;text-shadow:0 0 22px #c591ef}
-.spin-peek{width:62%;height:62%;object-fit:contain}
-.spin-centre em{display:block;margin-top:2px;font-style:normal;font-weight:800;font-size:clamp(11px,3.4cqi,15px);color:#fff3d6}
+.mystery-wheel .spin-logo{font-size:clamp(60px,20vw,120px);color:#e7c9ff;text-shadow:0 0 22px #c591ef}
+.spin-peek{width:82%;height:76%;object-fit:contain}
+.spin-centre em{display:block;margin-top:2px;font-style:normal;font-weight:800;font-size:clamp(12px,3.6vw,17px);color:#fff3d6}
 .spin-prize{width:100%;height:100%;animation:cr7-prize .8s cubic-bezier(.2,.7,.2,1)}
-.spin-wheel.has-prize .spin-centre{inset:9%;z-index:4;background:radial-gradient(circle,#3a5a8c,#0c1526 72%);box-shadow:0 0 40px #ffd34d55,inset 0 0 30px #000b}
+.spin-wheel.has-prize .spin-centre{z-index:4;background:radial-gradient(circle,#3a5a8c,#0c1526 72%);box-shadow:0 0 40px #ffd34d55,inset 0 0 30px #000b}
 .spin-dialog .cr7-result-name{min-height:1.2em;margin:10px 0 2px}
 .spin-dialog .spin-msg{margin:0;min-height:1.4em}
 @media(prefers-reduced-motion:reduce){.spin-tile.won,.spin-prize{animation:none}}
 .spin-dialog [hidden]{display:none!important}
+
+.goat-poster{position:relative}
+.cr7-dialog .goat-title{position:absolute;top:4%;left:0;right:0;margin:0!important;text-align:center;font:900 clamp(44px,13vw,72px)/.9 Georgia,serif;letter-spacing:.04em;background:linear-gradient(180deg,#fff6d0,#f2c14e 55%,#b9802a);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 4px 0 #3a2208) drop-shadow(0 0 18px #000c)}
+.goat-title small{display:block;font:italic 700 .38em/1.3 Georgia,serif;letter-spacing:.2em}
