@@ -22,5 +22,12 @@ export const CHARACTERS = [
  ...[['mu','CR7 MU','#ff443d'],['sporting','CR7 Sporting','#55ef99'],['real','CR7 Real','#b3dfff'],['al-nassr','CR7 Al Nassr','#ffd64d']].map(([id,name,color])=>({id:'cr7-'+id,name,color,tag:'B.O.A.T · Độc quyền pack',price:null,locked:true,event:'cr7-boat-v1',effect:'football'})),
  // GOAT skins: only from the GOAT or BOAT box (art in /assets/events/goat/, effects in goat-motion.js)
  ...[['goat-m10-barca-2015','M10 Barca','#2f5fc4','Big Time · 06.06.2015'],['goat-m10-bernabeu','M10 Bernabéu','#c4304f','Big Time · 23.04.2017'],['goat-m10-paris','M10 Paris','#3d5bb5','GOAT · Paris'],['goat-m10-miami','M10 Miami','#ff5fae','GOAT · Miami'],['goat-neymar-samba','Neymar Samba','#ffd43b','Samba · Số 10']].map(([id,name,color,tag])=>({id,name,color,tag,price:null,locked:true,event:'cr7-boat-v1',effect:'football'}))
+,
+ // Preview only: excluded from all sales and packs.
+ {id:'dangrangto',name:'Dangrangto',color:'#76d66b',tag:'Xương rồng · Coming Soon',locked:true,price:null,comingSoon:true,effect:'cactus',asset:'dangrangto.png'},
+ {id:'jack97',name:'Jack97',color:'#c8f76a',tag:'Đom đóm · Coming Soon',locked:true,price:null,comingSoon:true,effect:'fireflies',asset:'jack97.png'},
+ {id:'mck',name:'MCK',color:'#ff713c',tag:'Lửa · Coming Soon',locked:true,price:null,comingSoon:true,effect:'flames',asset:'mck.png'},
+ {id:'son-hyung-min',name:'Son Hyung Min',color:'#75b9ff',tag:'Cờ Hàn Quốc · Coming Soon',locked:true,price:null,comingSoon:true,effect:'korean-flags',asset:'son-hyung-min.png'},
+ {id:'the-weeknd',name:'The Weeknd',color:'#d697ff',tag:'Micro · Coming Soon',locked:true,price:null,comingSoon:true,effect:'microphones',asset:'the-weeknd.png'}
 ];
 export const characterById = id => CHARACTERS.find(c=>c.id===id)||CHARACTERS.find(c=>c.id===DEFAULT_CHARACTER);

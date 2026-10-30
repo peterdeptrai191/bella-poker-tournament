@@ -1,6 +1,7 @@
+import {upcomingEffects,UPCOMING_EFFECTS} from './upcoming-motion.js';
 import {musicEffects} from './music-motion.js';
 const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-export const HERO_EFFECTS=new Set(['missiles','shield','web','hearts','electric','music']);
+export const HERO_EFFECTS=new Set([...UPCOMING_EFFECTS,'missiles','shield','web','hearts','electric','music']);
 const arcPaths=[
  'M149 114 116 159 139 177 86 229 112 247 57 313 88 341 58 395 104 426 83 486 129 540',
  'M483 98 511 150 486 173 550 218 524 248 589 298 555 327 596 377 548 412 571 469 521 514',
@@ -21,6 +22,7 @@ const rocket=`<path d="M-21-10H14L32 0 14 10H-21Z" fill="#e4edf2" stroke="#25364
 const shield=`<circle r="43" fill="#c92b3d" stroke="#182a40" stroke-width="4"/><circle r="33" fill="#e9f0f3"/><circle r="24" fill="#c92b3d"/><circle r="16" fill="#246aab"/><path d="M0-14 12-7 12 7 0 14-12 7-12-7Z" fill="#fff"/>`;
 
 export function heroEffects(type){
+ if(UPCOMING_EFFECTS.includes(type))return upcomingEffects(type);
  if(type==='music')return musicEffects();
  if(type==='electric')return electricEffects();
  if(type==='hearts')return heartEffects();

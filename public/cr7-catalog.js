@@ -18,7 +18,7 @@ const RED=['son-tung-mtp','goat-m10-barca-2015','cr7-real','sydney-sweeney'],RED
 const PURPLE=['goat-m10-bernabeu','cr7-mu','goat-m10-paris','cr7-sporting','goat-m10-miami','cr7-al-nassr','goat-neymar-samba'];
 export const GROUP_ODDS={red:10,box:40,shop:50};   // box = GOAT/BOAT (gold frame), shop = shop skins (purple frame)
 const characterOf=id=>CHARACTERS.find(c=>c.id===id);
-const onBoard=()=>CHARACTERS.filter(c=>c.event===CR7_EVENT||(typeof c.price==='number'&&c.price>=10)).map(c=>c.id);
+const onBoard=()=>CHARACTERS.filter(c=>!c.comingSoon&&(c.event===CR7_EVENT||(typeof c.price==='number'&&c.price>=10))).map(c=>c.id);
 export const goatFrame=c=>RED.includes(c.id)?'red':c.event===CR7_EVENT?'gold':'purple';
 export function goatGroups(){
  const ids=onBoard(),box=[...PURPLE.filter(id=>ids.includes(id)),...ids.filter(id=>!RED.includes(id)&&!PURPLE.includes(id)&&characterOf(id).event===CR7_EVENT)];

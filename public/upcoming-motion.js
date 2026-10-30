@@ -1,0 +1,11 @@
+export const UPCOMING_EFFECTS=['cactus','fireflies','flames','korean-flags','microphones'];
+const cactus='<path d="M-7 28V-24Q0-37 7-24V28Z M-7 5H-19Q-27 5-27-3V-17H-17V-7H-7 M7 13H22Q30 13 30 4V-11H20V2H7" fill="#64c963" stroke="#164f39" stroke-width="3"/><path d="M0-20V23M-23-12V-5M25-6V5" stroke="#e4ffbd" stroke-width="2"/>';
+const firefly='<ellipse cx="-10" cy="-7" rx="13" ry="7" fill="#d4faff" opacity=".7" transform="rotate(30)"/><ellipse cx="10" cy="-7" rx="13" ry="7" fill="#d4faff" opacity=".7" transform="rotate(-30)"/><ellipse cy="8" rx="8" ry="13" fill="#dbff6c"/><circle cy="-9" r="6" fill="#304d38"/><circle cy="12" r="15" fill="#d7ff55" opacity=".25"/>';
+const flame='<path d="M0-35C10-15 28-7 23 13C18 37-19 37-25 14C-31-7-8-16-9-29L1-13Q8-22 0-35Z" fill="#ff642e" stroke="#ffd45d" stroke-width="2"/><path d="M0-7Q20 18 0 28Q-18 19 0-7" fill="#fff3a2"/>';
+const mic='<g transform="rotate(28)"><rect x="-7" y="-3" width="14" height="37" rx="5" fill="#262b40" stroke="#d8e3f9" stroke-width="2"/><rect x="-15" y="-32" width="30" height="36" rx="14" fill="#c4cfe1" stroke="#343d56" stroke-width="3"/><path d="M-11-23H11M-13-16H13M-12-9H12M-4-29V0M4-29V0" stroke="#65738c" stroke-width="2"/></g>';
+// Taegeuk and all four trigrams remain visible at preview scale.
+const flag='<rect x="-39" y="-27" width="78" height="54" rx="3" fill="white" stroke="#c8d2e3"/><g transform="rotate(32)"><circle r="14" fill="#cd2e3a"/><path d="M-14 0A14 14 0 0 0 14 0A7 7 0 0 0 0 0A7 7 0 0 1-14 0" fill="#0047a0"/></g><g stroke="#111" stroke-width="2.4"><path d="M-30-17L-22-22M-28-13L-20-18M-26-9L-18-14M18 14L21 12M23 11L26 9M20 18L23 16M25 15L28 13M22 22L25 20M27 19L30 17M18-14L21-12M23-11L26-9M20-18L28-13M22-22L25-20M27-19L30-17M-30 17L-22 22M-28 13L-25 15M-23 16L-20 18M-26 9L-18 14"/></g>';
+export function upcomingEffects(type){
+ const icon={cactus,fireflies:firefly,flames:flame,'korean-flags':flag,microphones:mic}[type];
+ return `<g class="hero-effects upcoming-effects upcoming-${type}" aria-hidden="true">${[[82,160],[552,205],[64,365],[571,430],[116,572],[518,590]].map(([x,y],i)=>`<g transform="translate(${x} ${y})"><g class="upcoming-float" style="--upcoming-delay:${-i*.7}s">${icon}</g></g>`).join('')}</g>`;
+}
