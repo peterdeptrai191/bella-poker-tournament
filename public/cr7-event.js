@@ -18,7 +18,7 @@ const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'
 const pct=x=>(x*100).toLocaleString('vi-VN',{maximumFractionDigits:2})+'%';
 const art=c=>animatedCharacter(c,'cr7-preview-art');
 // Box-only skins you do not own yet show as a shadow figure; the name and the odds stay visible.
-export const silhouette=(c,cls='cr7-preview-art')=>`<span class="${cls} skin-sil" role="img" aria-label="Skin bí ẩn: ${esc(c.name)}"><img src="${stillArt(c)}" alt="" onerror="this.remove()"></span>`;
+export const silhouette=(c,cls='cr7-preview-art')=>`<span class="${cls} skin-sil" role="img" aria-label="Skin bí ẩn: ${esc(c.name)}"><img src="${stillArt(c)}" alt="" loading="lazy" decoding="async" onerror="this.remove()"></span>`;
 const boxArt=c=>c.event&&!getAccount()?.ownedSkins?.includes(c.id)?silhouette(c):art(c);
 
 function listRewards(){
