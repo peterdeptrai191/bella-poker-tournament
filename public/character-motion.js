@@ -28,6 +28,7 @@ const glitter=w=>`<g class="bella-glitter" aria-hidden="true">${GLITTER.map(([x,
 const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 export function animatedCharacter(character,cls='character-avatar'){
+ if(character.id.startsWith('goat-m10'))return cr7Character(character,cls);
  if(character.id.startsWith('goat-'))return goatCharacter(character,cls);
  if(character.event==='cr7-boat-v1')return cr7Character(character,cls);
  const hero=heroCharacter(character,cls);if(hero)return hero;

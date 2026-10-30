@@ -14,16 +14,21 @@ export function stillArt(c){
 export const rarity=c=>c.id.startsWith('goat-')?'goat':c.id.startsWith('cr7-')?'boat':c.price>=20?'gold':c.price>=15?'epic':c.price>=10?'rare':'common';
 export const isJackpot=c=>['goat','boat','gold'].includes(rarity(c));
 
+// A face-down card in the style of a "player of the week" card: tier colour, light rays, chevrons and a
+// shadow figure. Used on the GOAT or BOAT board so the board stays mysterious and clean.
+const SIL='<svg class="potw-sil" viewBox="0 0 100 140" aria-hidden="true"><path d="M50 6C57 15 67 12 64 25C73 30 71 44 61 48C56 53 44 53 39 48C29 44 30 31 36 27C34 19 42 21 42 12C46 17 48 13 50 6Z M36 52H64L69 88H31Z M62 55 79 34 87 40 70 63Z M38 56 23 72 31 79 43 66Z M33 87 28 126H41L49 91Z M51 91 59 126H72L67 87Z"/><circle cx="84" cy="33" r="7"/></svg>';
+export const potwCard=(tier,extra='')=>`<span class="potw" data-t="${tier}"><i class="potw-rays"></i><i class="potw-chev"></i>${SIL}<b class="potw-base">★★★★★</b>${extra}</span>`;
+const SPARKS='<i class="spark-star" style="--d:0s"></i><i class="spark-star" style="--d:-1.1s"></i><i class="spark-star" style="--d:-2.2s"></i>';
 // Cells of an s×s square's edge, clockwise from the top-left corner.
 function edge(s){const out=[];for(let c=0;c<s;c++)out.push([0,c]);for(let r=1;r<s;r++)out.push([r,s-1]);for(let c=s-2;c>=0;c--)out.push([s-1,c]);for(let r=s-2;r>0;r--)out.push([r,0]);return out;}
-export function wheelHTML(tiles,centre='',badge='★',frame=rarity,sparkle=new Set()){
+export function wheelHTML(tiles,centre='',badge='★',frame=rarity,sparkle=new Set(),hidden=false){
  const n=tiles.length;let s=3;while(4*(s-1)<n)s++;
  const cells=edge(s),spare=cells.length-n,corners=[0,s-1,2*(s-1),3*(s-1)].slice(0,spare);  // leftover corners become badges
  let k=0;const html=cells.map(([r,c],i)=>{const pos=`grid-area:${r+1}/${c+1}`;
   if(corners.includes(i))return `<span class="spin-badge" style="${pos}" aria-hidden="true">${badge}</span>`;
   const id=tiles[k],ch=characterById(id),j=k++;
-  return `<span class="spin-tile" data-r="${frame(ch)}"${sparkle.has(id)?' data-sparkle':''} data-i="${j}" style="${pos};--c:${ch.color}" title="${esc(ch.name)}"><img src="${stillArt(ch)}" alt="" loading="lazy" onerror="this.remove()"></span>`;}).join('');
- return `<div class="spin-wheel" style="--s:${s}">${html}<div class="spin-centre" style="grid-area:2/2/${s}/${s}">${centre}</div></div>`;
+  return `<span class="spin-tile" data-r="${frame(ch)}"${sparkle.has(id)?' data-sparkle':''} data-i="${j}" style="${pos};--c:${ch.color}" title="${hidden?'Thẻ bí ẩn':esc(ch.name)}">${hidden?potwCard(frame(ch))+(sparkle.has(id)?SPARKS:''):`<img src="${stillArt(ch)}" alt="" loading="lazy" onerror="this.remove()">`}</span>`;}).join('');
+ return `<div class="spin-wheel${hidden?' potw-board':''}" style="--s:${s}">${html}<div class="spin-centre" style="grid-area:2/2/${s}/${s}">${centre}</div></div>`;
 }
 
 export function spinner(root,tiles,{onStep}={}){
@@ -39,12 +44,13 @@ export function spinner(root,tiles,{onStep}={}){
    return new Promise(atTop=>{let k=0;const loop=()=>{if(!running)return;step();k++;const t=Math.min(1,k/14),wait=TOP+(1-t)*(1-t)*300;if(k===14)atTop();timer=setTimeout(loop,wait);};loop();});
   },
   // slows down onto tile `target`; resolves when the light has stopped
-  land(target){running=false;clearTimeout(timer);
+  land(target,{onPlan,winSound=true}={}){running=false;clearTimeout(timer);
    return new Promise(done=>{
-    const finish=()=>{light(target);root.classList.remove('spinning');els[target].classList.add('won');playSound('win',{volume:.8});done();};
-    if(reduced){pos=target;finish();return;}
-    const steps=((target-pos+n)%n)+n;let k=0;
-    const next=()=>{k++;if(k>=steps){pos=target;finish();return;}step();const t=k/steps;timer=setTimeout(next,TOP+Math.pow(t,2.6)*480);};
+    const finish=()=>{light(target);root.classList.remove('spinning');els[target].classList.add('won');if(winSound)playSound('win',{volume:.8});done();};
+    if(reduced){pos=target;onPlan?.(0);finish();return;}
+    const steps=((target-pos+n)%n)+n,wait=k=>TOP+Math.pow(k/steps,2.6)*480;let k=0;
+    onPlan?.(Array.from({length:steps},(_,i)=>wait(i)).reduce((a,b)=>a+b,0));
+    const next=()=>{k++;if(k>=steps){pos=target;finish();return;}step();timer=setTimeout(next,wait(k));};
     timer=setTimeout(next,TOP);
    });
   },

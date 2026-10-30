@@ -66,7 +66,7 @@ export function chipRain({full=true,target=null,delay=0,volume=1}={}){
 // ---------- Sound: five recordings of real chips on a table, from one chip to a whole stack ----------
 // They are decoded once into memory, so a sound starts instantly and several can overlap.
 // Browsers only allow audio after the player has touched the page, so everything starts on the first tap.
-const SOUNDS={one:'/assets/sfx/chip-1.mp3',small:'/assets/sfx/chip-stack-s.mp3',medium:'/assets/sfx/chip-stack-m.mp3',allin:'/assets/sfx/chip-allin.mp3',win:'/assets/sfx/chip-win.mp3'};
+const SOUNDS={one:'/assets/sfx/chip-1.mp3',small:'/assets/sfx/chip-stack-s.mp3',medium:'/assets/sfx/chip-stack-m.mp3',allin:'/assets/sfx/chip-allin.mp3',win:'/assets/sfx/chip-win.mp3',cheer:'/assets/sfx/crowd-cheer.mp3'};
 let audio=null,loading=null;const buffers={};
 function load(){loading??=Promise.all(Object.entries(SOUNDS).map(async([name,url])=>{try{const data=await (await fetch(url)).arrayBuffer();buffers[name]=await audio.decodeAudioData(data);}catch{}}));return loading;}
 function unlock(){try{audio??=new (window.AudioContext||window.webkitAudioContext)();if(audio.state==='suspended')audio.resume();load();}catch{}}
@@ -74,6 +74,16 @@ if(typeof window!=='undefined'){for(const type of ['pointerdown','keydown'])wind
 export function playSound(name,{delay=0,volume=1}={}){
  if(!audio||audio.state!=='running'||!buffers[name]||volume<=0||!sfxEnabled())return;
  const source=audio.createBufferSource(),gain=audio.createGain();source.buffer=buffers[name];gain.gain.value=volume;source.connect(gain).connect(audio.destination);source.start(audio.currentTime+delay/1000);
+}
+// A whoosh made on the spot: a burst of noise swept from low to high through a band filter.
+export function whoosh({volume=.7,ms=650}={}){
+ if(!audio||audio.state!=='running'||!sfxEnabled())return;
+ const t=audio.currentTime,len=Math.ceil(audio.sampleRate*ms/1000),buf=audio.createBuffer(1,len,audio.sampleRate),d=buf.getChannelData(0);
+ for(let i=0;i<len;i++)d[i]=Math.random()*2-1;
+ const src=audio.createBufferSource(),bp=audio.createBiquadFilter(),g=audio.createGain();src.buffer=buf;bp.type='bandpass';bp.Q.value=1.4;
+ bp.frequency.setValueAtTime(260,t);bp.frequency.exponentialRampToValueAtTime(3200,t+ms/1000*.7);
+ g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(volume,t+ms/1000*.35);g.gain.exponentialRampToValueAtTime(0.0001,t+ms/1000);
+ src.connect(bp).connect(g).connect(audio.destination);src.start(t);src.stop(t+ms/1000);
 }
 // The bigger the bet, the bigger the sound: one chip for blinds and small calls, a short stack for an
 // ordinary raise, a bigger stack for a large raise, and a whole stack pushed in for an all-in.
