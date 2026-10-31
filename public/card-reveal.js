@@ -120,7 +120,10 @@ export function preloadReveal(tier){
   // at least the start loaded)
   const ready=new Promise(res=>{let can=false;v.addEventListener('canplay',()=>{can=true;},{once:true});v.addEventListener('canplaythrough',()=>res(v),{once:true});
    setTimeout(()=>{if(can)res(v);},6000);v.addEventListener('error',()=>{videoCache.delete(key);res(null);},{once:true});});
-  v.src=`/assets/reveal/${key}.mp4`;v.load();videoCache.set(key,ready);
+  // stream when the server answers byte ranges (needed to jump back for the loop); otherwise load it whole
+  const src=`/assets/reveal/${key}.mp4`;
+  fetch(src,{headers:{Range:'bytes=0-1'}}).then(r=>r.status===206?src:fetch(src).then(r=>r.ok?r.blob():Promise.reject()).then(b=>URL.createObjectURL(b))).then(u=>{v.src=u;v.load();}).catch(()=>{videoCache.delete(key);v.dispatchEvent(new Event('error'));});
+  videoCache.set(key,ready);
  }
  return videoCache.get(key);
 }
