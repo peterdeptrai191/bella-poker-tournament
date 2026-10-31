@@ -15,6 +15,7 @@ export default async function handler(req,res){
    if(req.method==='GET')body={op:'account'};
    result=await accountRequest({body,token:accountToken,ip});
    if(Object.hasOwn(result,'cookieToken')){res.setHeader('Set-Cookie',cookieHeader(result.cookieToken,process.env.VERCEL==='1'||req.headers['x-forwarded-proto']==='https'));delete result.cookieToken;}
-  }else result=await service({method:req.method,body,code,token,ip,account:code==='health'?null:await authenticateAccount(accountToken)});res.statusCode=200;res.end(JSON.stringify(result));
+  // table polls (GET) authenticate inside service, in the same Redis read as the room
+  }else result=await service({method:req.method,body,code,token,ip,...(req.method==='GET'&&code!=='health'?{accountToken}:{account:code==='health'?null:await authenticateAccount(accountToken)})});res.statusCode=200;res.end(JSON.stringify(result));
  }catch(error){res.statusCode=error.status||500;res.end(JSON.stringify({error:error.status?error.message:'Có lỗi máy chủ. Vui lòng thử lại.'}));if(!error.status)console.error('Request failed:',error.name);}
 }

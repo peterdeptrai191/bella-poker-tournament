@@ -13,3 +13,13 @@ test('HTTP registration issues a private cookie, restores wallet without another
  const created=await send({op:'create',name:'Ignored'},cookie);assert.equal(created.statusCode,200);assert.equal(created.body.room.players[0].name,'HTTP Player');
  await send({op:'logout'},cookie);assert.equal((await send(null,cookie,'/api?code=account')).statusCode,401);
 });
+
+test('a table poll reads only the session and the room, in one combined read, and sends no account',async()=>{
+ clearMemory();const send=async(body,cookie='',url='/api',auth='')=>{const res=response();await handler({method:body?'POST':'GET',headers:{host:'localhost',cookie,...(auth?{authorization:'Bearer '+auth}:{})},url,body},res);return res;};
+ const registered=await send({op:'register',username:'Poll Player',password:'example-password'});const cookie=registered.headers['Set-Cookie'].split(';')[0];
+ const created=await send({op:'create',withBot:true,requestId:'create-poll-1'},cookie);const code=created.body.room.code,token=created.body.token;
+ const poll=await send(null,cookie,'/api?code='+code,token);assert.equal(poll.statusCode,200);assert.equal(poll.body.room.code,code);assert.equal(poll.body.account,undefined);
+ assert.equal((await send(null,'','/api?code='+code,token)).statusCode,401);                       // no login cookie
+ assert.equal((await send(null,'bella_session=bad','/api?code='+code,token)).statusCode,401);       // bad cookie
+ const synced=await send({op:'sync',code,requestId:'sync-poll-1'},cookie,'/api',token);assert.equal(synced.statusCode,200);assert.equal(synced.body.account.username,'Poll Player');
+});

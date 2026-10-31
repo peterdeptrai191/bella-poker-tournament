@@ -39,5 +39,6 @@ test('active room refresh restores default cosmetics and sends the current walle
  const f=await fixture();const roomCall=(body,token,code)=>service({account:f.member.identity,method:body?'POST':'GET',body:body?{requestId:randomUUID(),...body}:undefined,token,code,ip:'asset-room'});
  const created=await roomCall({op:'create',withBot:true});const code=created.room.code;await roomCall({op:'ready',ready:true,code},created.token);await roomCall({op:'start',code},created.token);
  await call(f.owner,'adminResetAccountAssets',{username:'AssetPlayer',reason:'Đặt lại khi đang chơi',confirmation:'RESET'});
- const state=await roomCall(null,created.token,code),me=state.room.players.find(p=>p.id===state.room.me);assert.equal(me.character,'farmer');assert.equal(me.cardSkin,'classic');assert.equal(state.account.coins,0);assert.equal(state.account.equippedChipSkin,'classic');
+ assert.equal((await roomCall(null,created.token,code)).account,undefined);   // a poll no longer reads the account
+ const state=await roomCall({op:'sync',code},created.token,code),me=state.room.players.find(p=>p.id===state.room.me);assert.equal(me.character,'farmer');assert.equal(me.cardSkin,'classic');assert.equal(state.account.coins,0);assert.equal(state.account.equippedChipSkin,'classic');
 });

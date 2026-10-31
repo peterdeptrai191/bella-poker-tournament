@@ -38,10 +38,15 @@ let winningCards=null,equityKey=null,equityResult=null,equityWorker=null,equityB
 let raiseOpen=false,raiseOpenKey=null,gamePanel=null;
 const save=()=>{if(account)localStorage.setItem('bella.sessions.'+account.id,JSON.stringify(sessions));};
 function toast(message){$('#toast').textContent=message;$('#toast').classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>$('#toast').classList.remove('show'),5000);}
+// Table polls no longer carry the account, so the seat is synced with it explicitly: right after the player changes
+// name, skin or card back, and once a minute while seated (so an admin reset or a purchase elsewhere shows up).
+const SEAT_OPS=new Set(['equipSkin','equipCardSkin','renameAccount','setDisplayName','buySkin','buyCardSkin']);
+function syncSeat(){if(!session||!room||page!=='room'||room.status==='finished')return;request({op:'sync',code:session.code}).then(d=>{if(d.account)applyAccount(d.account);accept(d);}).catch(()=>{});}
+setInterval(()=>{if(!document.hidden)syncSeat();},60000);
 async function request(body,code=session?.code,token=session?.token){
  const generation=accountGeneration;
  const response=await fetch(body?'/api':`/api?code=${encodeURIComponent(code||'health')}`,{method:body?'POST':'GET',headers:{...(body?{'Content-Type':'application/json'}:{}),...(token?{Authorization:`Bearer ${token}`}:{})},body:body?JSON.stringify({...body,requestId:body.requestId||crypto.randomUUID()}):undefined,credentials:'same-origin',cache:'no-store',signal:AbortSignal.timeout(12000)});
- let data;try{data=await response.json();}catch{throw new Error('Không kết nối được máy chủ.');}if(code!=='health'&&generation!==accountGeneration)throw new Error('Phiên tài khoản đã thay đổi.');if(!response.ok)throw new Error(data.error||'Không thực hiện được yêu cầu.');return data;
+ let data;try{data=await response.json();}catch{throw new Error('Không kết nối được máy chủ.');}if(code!=='health'&&generation!==accountGeneration)throw new Error('Phiên tài khoản đã thay đổi.');if(!response.ok)throw new Error(data.error||'Không thực hiện được yêu cầu.');if(body&&SEAT_OPS.has(body.op))setTimeout(syncSeat,0);return data;
 }
 function applyAccount(value){if(account?.id===value.id&&(value.version||0)<(account.version||0))return;const changed=account?.id!==value.id;account=value;if(document.documentElement){document.documentElement.dataset.cardSkin=value.equippedCardSkin||'classic';document.documentElement.dataset.chipSkin=value.equippedChipSkin||'classic';}selectedCharacter=value.equippedSkin;unlockedCharacters=value.ownedSkins;profile=value.name||value.username;if(changed){accountGeneration++;sessions=read('bella.sessions.'+value.id,{});session=null;room=null;page='home';}}
 async function refreshWallet(){const data=await request(null,'account',null);applyAccount(data.account);render();}
