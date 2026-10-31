@@ -103,29 +103,50 @@ function carpetScene(){
 }
 const EDGE_STARS=Array.from({length:44},(_,i)=>{const side=i%4,t=((i*37)%100)/100;const [x,y]=side===0?[t*100,1.5]:side===1?[98.5,t*100]:side===2?[t*100,98.5]:[1.5,t*100];return `<i style="left:${x}%;top:${y}%;--d:${-(i*.13)%1.2}s;--s:${.6+((i*7)%5)/6}"></i>`;}).join('');
 
+// The stage (tunnel, gate, red carpet, crowd, fireworks, sparkles) is a pre-recorded video per prize colour
+// and screen orientation: phones decode video in hardware, so it plays smoothly and stays cool even on slow
+// devices. The card, its glow and flip, the name and the sounds stay live on top, on the same 18 s timeline.
+// The video's last seconds (crowd lights and sparkles only) loop until "Nhận thẻ". If the video cannot be
+// loaded or played in time, the stage is drawn live as before.
+const LOOP_FROM=21,videoCache=new Map();
+const orientation=()=>innerWidth>innerHeight?'l':'p';
+export function preloadReveal(tier){
+ if(reduced()||!['gold','purple','red'].includes(tier))return Promise.resolve(null);const key=tier+'-'+orientation();
+ if(!videoCache.has(key))videoCache.set(key,fetch(`/assets/reveal/${key}.mp4`).then(r=>r.ok?r.blob():null).then(b=>b?URL.createObjectURL(b):null).catch(()=>null));
+ return videoCache.get(key);
+}
+const within=(promise,ms)=>Promise.race([promise,new Promise(r=>setTimeout(()=>r(null),ms))]);
+async function stageVideo(tier){
+ const url=await within(preloadReveal(tier),3000);if(!url)return null;
+ const v=document.createElement('video');v.className='rv-video';v.muted=true;v.playsInline=true;v.setAttribute('playsinline','');v.setAttribute('aria-hidden','true');v.preload='auto';v.src=url;
+ v.addEventListener('ended',()=>{v.currentTime=LOOP_FROM;v.play().catch(()=>{});});
+ return v;
+}
+
 // Shows the card; resolves when the player taps "Nhận thẻ".
-export function revealCard(host,c,tier,{duplicate=false}={}){
+export async function revealCard(host,c,tier,{duplicate=false}={}){
+ const video=reduced()?null:await stageVideo(tier);
  return new Promise(done=>{
-  const scene=carpetScene(),el=document.createElement('div');el.className='reveal';el.dataset.tier=tier;el.setAttribute('role','dialog');el.setAttribute('aria-label','Phần thưởng: '+c.name);
-  el.innerHTML=`<div class="rv-tunnel" aria-hidden="true"><i class="tn-ceil"></i><i class="tn-floor"></i><i class="tn-wall l"></i><i class="tn-wall r"></i>
+  const live=!video,scene=live?carpetScene():null,el=document.createElement('div');el.className='reveal'+(live?'':' v-mode');el.dataset.tier=tier;el.setAttribute('role','dialog');el.setAttribute('aria-label','Phần thưởng: '+c.name);
+  el.innerHTML=`${live?`<div class="rv-tunnel" aria-hidden="true"><i class="tn-ceil"></i><i class="tn-floor"></i><i class="tn-wall l"></i><i class="tn-wall r"></i>
    <div class="tn-ribs">${Array.from({length:7},(_,i)=>`<i style="--d:${-i*.3}s"></i>`).join('')}</div>
    <div class="tn-exit"><div class="tn-light"></div><i class="tn-gate l"></i><i class="tn-gate r"></i></div>${scene.svg}<div class="tn-haze"></div></div>
-  <canvas class="rv-fire"></canvas>
+  <canvas class="rv-fire"></canvas>`:''}
   <div class="rv-card" data-tier="${tier}"><div class="rv-face rv-back">${potwCard(tier)}</div><div class="rv-face rv-front">${cardFace(c,animatedCharacter(c,'rv-art'))}</div><div class="rv-white"></div></div>
-  <div class="rv-flash"></div><div class="rv-edge" aria-hidden="true">${EDGE_STARS}</div>
+  ${live?`<div class="rv-flash"></div><div class="rv-edge" aria-hidden="true">${EDGE_STARS}</div>`:''}
   <div class="rv-info"><strong>${esc(c.name)}</strong><span>${duplicate?'Bạn đã có skin này rồi (không hoàn coin).':'Skin mới đã vào bộ sưu tập!'}</span><button type="button" class="cr7-gold rv-ok">Nhận thẻ</button></div>`;
+  if(video)el.prepend(video);
   host.append(el);
-  const fx=sparks(el.querySelector('.rv-fire'));
+  const fx=live?sparks(el.querySelector('.rv-fire')):null;
   const steps=[['s-walk',100],['s-gate',2000],['s-carpet',7000],['s-approach',10000],['s-glow',14000],['s-flip',14800],['s-celebrate',15000],['s-done',18000]];
   const timers=[],crowd=[];
   const apply=name=>{el.classList.add(name);
    if(name==='s-gate'){gateSound(5000,1);whoosh({volume:1.6,ms:5200});}
-   if(name==='s-carpet'){scene.unroll(el,3000);fx.rockets(3600);whoosh({volume:.7,ms:2600});}
+   if(name==='s-carpet'){if(live){scene.unroll(el,3000);fx.rockets(3600);}whoosh({volume:.7,ms:2600});}
    if(name==='s-approach')whoosh({volume:.6,ms:3800});
    if(name==='s-glow')whoosh({volume:.9,ms:900});
-   if(name==='s-flip'){playSound('win',{volume:1});fx.fireworks(3600);}};
-  if(reduced()){el.classList.add('s-instant',...steps.map(s=>s[0]));scene.finish(el);}
-  else{
+   if(name==='s-flip'){playSound('win',{volume:1});fx?.fireworks(3600);}};
+  const run=()=>{
    // the crowd: a murmur in the tunnel that grows, then a second wave timed so the loudest roar lands
    // exactly when the card turns into the skin (the recording is 10.7 s, the show 18 s)
    crowd.push(playShaped('crowd',[[0,.08],[2,.16],[7,.35],[10,.5],[10.7,0]]));
@@ -137,7 +158,15 @@ export function revealCard(host,c,tier,{duplicate=false}={}){
    // as the anthem's last chord fades, so the two never fight
    duckMusic(.06,2500);timers.push(setTimeout(()=>duckMusic(1,4500),15600));
    for(const [name,at] of steps)timers.push(setTimeout(()=>apply(name),at));
+  };
+  if(reduced()){el.classList.add('s-instant',...steps.map(s=>s[0]));scene?.finish(el);}
+  else if(video){
+   // the timeline starts with the first video frame; if the browser refuses to play it, show the card at once
+   let started=false;const go=()=>{if(started)return;started=true;run();};
+   video.addEventListener('playing',go,{once:true});
+   video.play().catch(()=>{if(!started){started=true;el.classList.add('s-instant',...steps.map(s=>s[0]));}});
   }
-  el.querySelector('.rv-ok').onclick=()=>{duckMusic(1,1500);el.classList.add('s-leaving');for(const c of crowd)c.peak(.5);setTimeout(()=>{fx.stop();scene.cleanup();el.remove();done();},250);};
+  else run();
+  el.querySelector('.rv-ok').onclick=()=>{duckMusic(1,1500);el.classList.add('s-leaving');for(const c of crowd)c.peak(.5);setTimeout(()=>{fx?.stop();scene?.cleanup();video?.pause();timers.forEach(clearTimeout);el.remove();done();},250);};
  });
 }

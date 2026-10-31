@@ -15,7 +15,11 @@ export function evaluate(cards){let best=null;for(let a=0;a<cards.length-4;a++)f
 export const handName=score=>['Bài cao','Một đôi','Hai đôi','Bộ ba','Sảnh','Thùng','Cù lũ','Tứ quý','Thùng phá sảnh'][score?.[0]??0];
 // English hand names shown on the table when a hand is won at showdown.
 export const handNameEn=score=>score?.[0]===8&&score[1]===14?'Royal Flush':['High Card','One Pair','Two Pair','Three of a Kind','Straight','Flush','Full House','Four of a Kind','Straight Flush'][score?.[0]??0];
-// All-in run-out: the remaining board cards are turned one at a time. The client times the cards with these
-// numbers and the server keeps the next hand back until the winner has been shown.
-export const RUNOUT_LEAD=1000,RUNOUT_STEP=1800;
-export const runoutRevealMs=cards=>cards>0?RUNOUT_LEAD+(cards-1)*RUNOUT_STEP+900:0;
+// All-in run-out: the remaining board cards are turned one at a time, RUNOUT_STEP apart, with extra suspense
+// before the turn (+0.5 s) and the river (+1 s). After the last card everyone gets 1.5 s to read the board, then
+// the winner, the hand name and the chips are shown. The client times the cards with these numbers and the
+// server keeps the next hand back until the winner has been shown.
+export const RUNOUT_LEAD=1000,RUNOUT_STEP=1800,RUNOUT_FLIP=720,RUNOUT_READ=1500,RUNOUT_EXTRA={3:500,4:1000};
+// delays (ms from the all-in) for board positions from..4
+export function runoutDelays(from){const out=[];let t=0;for(let i=from;i<5;i++){t=(i===from?RUNOUT_LEAD:t+RUNOUT_STEP)+(RUNOUT_EXTRA[i]||0);out.push(t);}return out;}
+export const runoutRevealMs=from=>from>=5?0:runoutDelays(from).at(-1)+RUNOUT_FLIP+RUNOUT_READ;

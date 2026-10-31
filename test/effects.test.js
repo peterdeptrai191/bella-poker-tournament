@@ -65,10 +65,10 @@ test('a skipped snapshot can show card reveals, actual chip deductions and elimi
 
 test('all-in runout turns the board one card at a time and hides the result until the last card',()=>{
  const before=snapshot(),after=structuredClone(before);after.hand.board=[1,2,3,4,5];after.hand.runoutFrom=0;
- assert.deepEqual(diffTableEffects(before,after).filter(e=>e.type==='board').map(e=>e.delay),[1000,2800,4600,6400,8200]);
- assert.equal(diffTableEffects(before,after).find(e=>e.type==='runout').delay,9100);
+ assert.deepEqual(diffTableEffects(before,after).filter(e=>e.type==='board').map(e=>e.delay),[1000,2800,4600,6900,9700]);
+ assert.equal(diffTableEffects(before,after).find(e=>e.type==='runout').delay,11920);
  const flop=structuredClone(before);flop.hand.board=[1,2,3];after.hand.runoutFrom=3;
- assert.deepEqual(diffTableEffects(flop,after).filter(e=>e.type==='board').map(e=>e.delay),[1000,2800]);assert.equal(diffTableEffects(flop,after).find(e=>e.type==='runout').delay,3700);assert.deepEqual(diffTableEffects(after,after),[]);
+ assert.deepEqual(diffTableEffects(flop,after).filter(e=>e.type==='board').map(e=>e.delay),[1500,4300]);assert.equal(diffTableEffects(flop,after).find(e=>e.type==='runout').delay,6520);assert.deepEqual(diffTableEffects(after,after),[]);
 });
 test('two newly dealt local cards flip once and do not animate unknown opponents',()=>{
  const before=snapshot(),after=structuredClone(before);after.me='a';after.players[0].hole=[1,2];

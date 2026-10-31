@@ -267,7 +267,7 @@ function flyBets(){
 // Waits for any board cards still being revealed so the result is never spoiled early.
 function chipMoments(before,after){
  const h=after.hand;if(!h||!before||before.code!==after.code||h.stage!=='complete'||before.hand?.id!==h.id||before.hand.stage==='complete'||potSettle.has(h.id))return;
- const now=Date.now(),boardWait=Math.max(0,...[...tableEffects.values()].filter(e=>e.type==='board').map(e=>e.started+e.duration-now)),wait=boardWait+350;
+ const now=Date.now(),boardWait=Math.max(0,...[...tableEffects.values()].filter(e=>e.type==='board').map(e=>e.started+e.duration-now)),wait=Math.max(boardWait+350,runoutLeft(h));   // after an all-in the chips go only once the winner is shown
  potSettle.set(h.id,now+wait);if(potSettle.size>20)potSettle.delete(potSettle.keys().next().value);
  const winners=[...new Set(h.winners.filter(w=>w.hand!=='Hoàn phần cược dư').map(w=>w.id))],iWon=winners.includes(after.me);
  setTimeout(()=>{const pot=document.querySelector('.pot-stage .pot-group');let land=0;for(const id of winners)land=Math.max(land,flyChips(pot,seatEl(id),{amount:h.winners.filter(w=>w.id===id).reduce((n,w)=>n+w.amount,0),count:6,duration:600}));

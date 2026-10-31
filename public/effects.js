@@ -1,4 +1,4 @@
-import {RUNOUT_LEAD,RUNOUT_STEP,runoutRevealMs} from './hand-evaluator.js';
+import {RUNOUT_FLIP,runoutDelays,runoutRevealMs} from './hand-evaluator.js';
 export const displayedPot=room=>!room?.hand?0:room.hand.stage==='complete'?(room.hand.winners||[]).reduce((n,w)=>n+w.amount,0):(room.hand.pot||0);
 // Compare authoritative snapshots, never infer eliminations from a zero stack alone.
 export function diffTableEffects(before,after){
@@ -10,8 +10,8 @@ export function diffTableEffects(before,after){
  const count=sameHand?before.hand.board.length:0;
  // After an all-in the rest of the board is turned one card at a time (RUNOUT_STEP apart) and the winner is
  // only revealed once the last card is down (the 'runout' event; app.js hides the result until then).
- const runout=hand.runoutFrom!=null&&hand.board.length===5&&count<5,reveal=runout?runoutRevealMs(5-count):0;
- for(let i=count;i<hand.board.length;i++){const delay=runout?RUNOUT_LEAD+(i-count)*RUNOUT_STEP:(i-count)*190;events.push({key:`${after.code}:${hand.id}:board:${i}`,type:'board',index:i,delay,duration:(runout?720:540)+delay,runout});}
+ const runout=hand.runoutFrom!=null&&hand.board.length===5&&count<5,reveal=runout?runoutRevealMs(count):0,times=runout?runoutDelays(count):[];
+ for(let i=count;i<hand.board.length;i++){const delay=runout?times[i-count]:(i-count)*190;events.push({key:`${after.code}:${hand.id}:board:${i}`,type:'board',index:i,delay,duration:(runout?RUNOUT_FLIP:540)+delay,runout});}
  if(runout)events.push({key:`${after.code}:${hand.id}:runout`,type:'runout',handId:hand.id,delay:reveal,duration:reveal+100});
  const mine=after.players.find(p=>p.id===after.me),oldMine=before.players.find(p=>p.id===after.me);
  if(mine?.hole?.length===2&&(!sameHand||!oldMine?.hole))for(let i=0;i<2;i++)events.push({key:`${after.code}:${hand.id}:hole:${mine.id}:${i}`,type:'hole',playerId:mine.id,index:i,delay:i*220,duration:650+i*220});

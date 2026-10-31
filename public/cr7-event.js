@@ -3,7 +3,7 @@ import {CHARACTERS,characterById} from './characters.js';
 import {animatedCharacter} from './character-motion.js';
 import {CR7_EVENT,CR7_PRICE,BOX_NAME,DAILY_SPINS,cr7Skins,goatSkins,goatTiles,goatFrame,goatOdds,GROUP_ODDS,SPARKLE} from './cr7-catalog.js';
 import {wheelHTML,spinner,stillArt,celebrate,potwCard} from './spin-wheel.js';
-import {dimmer,revealCard} from './card-reveal.js';
+import {dimmer,revealCard,preloadReveal} from './card-reveal.js';
 import {starRow} from './card-face.js';
 import {openGift} from './gift-box.js';
 // small white glints that flash on the G.O.A.T / B.O.A.T lettering
@@ -59,12 +59,14 @@ function wheelDialog(mode){
    if(mode.gift)data=await mode.request(receipt);          // mystery pack: no wheel, a gift box to tap open
    else{[data]=await Promise.all([mode.request(receipt),sp.start()]);
    // full speed and the prize is known: now the player may press DỪNG (or it stops by itself after 8 s)
+   if(mode.reveal&&data?.result?.skin)preloadReveal(mode.frame(characterById(data.result.skin)));
    canStop=true;ui();$('[data-stop]').focus();
    await new Promise(r=>{const t=setTimeout(r,8000);stopNow=()=>{clearTimeout(t);r();};});
    canStop=false;stopNow=false;ui();}
    if(getAccount()?.id!==accountId){sp.stop();d.close();return;}
    result=data.result;const tile=Number.isInteger(result.tile)?result.tile:mode.tiles.indexOf(result.skin);
    const c=characterById(result.skin);
+   if(mode.reveal)preloadReveal(mode.frame(c));   // the stage video loads while the light slows down
    if(mode.reveal){
     // the screen goes fully dark while the light is still slowing down, so the last few cards (and the one
     // it stops on) happen in the dark; the tunnel then shows the prize
