@@ -89,3 +89,10 @@ html[data-effects="reduced"]{.reveal *{animation:none!important;transition:none!
 .reveal.v-mode{background:#000}
 /* short landscape screens: smaller card, raised, so the name and button fit underneath */
 @media (orientation:landscape) and (max-height:560px){.rv-card{top:39%;width:min(300px,34vh)}.rv-info{padding:24px 20px max(10px,2vh);gap:2px}.rv-info .rv-ok{margin-top:4px;min-height:40px}}
+/* While the reveal is up, nothing underneath it (the GOAT or BOAT board, its glowing tiles and prize art) is
+   drawn or animated: it is fully covered, and keeping it running made the video stutter on phones. */
+:has(> .reveal) > :not(.reveal):not(.reveal-dim){visibility:hidden}
+:has(> .reveal) > :not(.reveal) *,:has(> .reveal) > :not(.reveal) *::before,:has(> .reveal) > :not(.reveal) *::after{animation-play-state:paused!important}
+/* the skin's own animation starts only when the card turns over */
+.reveal:not(.s-glow) .rv-front{visibility:hidden}
+.reveal:not(.s-glow) .rv-front *{animation-play-state:paused!important}

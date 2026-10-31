@@ -110,16 +110,21 @@ const EDGE_STARS=Array.from({length:44},(_,i)=>{const side=i%4,t=((i*37)%100)/10
 // loaded or played in time, the stage is drawn live as before.
 const LOOP_FROM=21,videoCache=new Map();
 const orientation=()=>innerWidth>innerHeight?'l':'p';
+// The video streams: it starts loading as soon as the prize is known and can start playing once the first
+// seconds are in, while the rest keeps downloading (about 1.2 Mbit/s is enough).
 export function preloadReveal(tier){
  if(reduced()||!['gold','purple','red'].includes(tier))return Promise.resolve(null);const key=tier+'-'+orientation();
- if(!videoCache.has(key))videoCache.set(key,fetch(`/assets/reveal/${key}.mp4`).then(r=>r.ok?r.blob():null).then(b=>b?URL.createObjectURL(b):null).catch(()=>null));
+ if(!videoCache.has(key)){
+  const v=document.createElement('video');v.className='rv-video';v.muted=true;v.playsInline=true;v.setAttribute('playsinline','');v.setAttribute('muted','');v.setAttribute('aria-hidden','true');v.preload='auto';
+  const ready=new Promise(res=>{v.addEventListener('canplay',()=>res(v),{once:true});v.addEventListener('error',()=>{videoCache.delete(key);res(null);},{once:true});});
+  v.src=`/assets/reveal/${key}.mp4`;v.load();videoCache.set(key,ready);
+ }
  return videoCache.get(key);
 }
 const within=(promise,ms)=>Promise.race([promise,new Promise(r=>setTimeout(()=>r(null),ms))]);
 async function stageVideo(tier){
- const url=await within(preloadReveal(tier),3000);if(!url)return null;
- const v=document.createElement('video');v.className='rv-video';v.muted=true;v.playsInline=true;v.setAttribute('playsinline','');v.setAttribute('aria-hidden','true');v.preload='auto';v.src=url;
- v.addEventListener('ended',()=>{v.currentTime=LOOP_FROM;v.play().catch(()=>{});});
+ const v=await within(preloadReveal(tier),8000);if(!v)return null;
+ v.currentTime=0;v.onended=()=>{v.currentTime=LOOP_FROM;v.play().catch(()=>{});};
  return v;
 }
 
