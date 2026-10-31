@@ -8,4 +8,4 @@ The free opening and one-time gift notice are server-side account flags, default
 
 A stable account-scoped request ID is retained until accepting the card. Reloads and retries resume the same opening without another debit. Duplicate skins cost the normal 15 coins and do not refund coins; this is disclosed before opening. Four new singers are Masked Singer exclusive; Son Hyung Min is available in the shop for 20 coins.
 
-The foil artwork is generated for this event and stored at `public/assets/masked-packet.png`. Background spotlights, tearing segments and celebration particles are rendered by the event UI. The in-game full-effects preference also controls this event.
+The foil artwork is generated for this event and stored at `public/assets/masked-packet.webp`. Background spotlights, tearing segments and celebration particles are rendered by the event UI. The in-game full-effects preference also controls this event.

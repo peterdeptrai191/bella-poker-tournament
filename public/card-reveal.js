@@ -25,7 +25,7 @@ export function dimmer(host){
 }
 
 // One particle engine for the sparkler fountains and the fireworks.
-function sparks(canvas){
+export function sparks(canvas){
  const ctx=canvas.getContext('2d'),dpr=Math.min(1.5,devicePixelRatio||1),W=canvas.width=innerWidth*dpr,H=canvas.height=innerHeight*dpr,parts=[],jobs=[];let running=true;
  const COLORS=['#ffd34d','#ff2d55','#ffffff','#ff8a3d','#ff5fae','#7cc4ff','#b98cff'];
  const add=(x,y,vx,vy,c,life=1,size=2.2,drag=.985,grav=.06)=>parts.push({x,y,vx,vy,c,life,size,drag,grav});
@@ -64,10 +64,10 @@ function carpetScene(){
  let seed=7;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;const people=[];
  for(const side of [-1,1])for(let row=2;row>=0;row--)for(let i=0;i<11;i++){const t=.02+i*.085+row*.012+rnd()*.02;if(t>.95)continue;const y=lerp(y0,H*1.02,t),s=scaleAt(y);
   people.push({y,s,x:cx+side*(halfAt(y)+(46+row*30+rnd()*10)*s),h:H*(.16+rnd()*.03)*s,side,row,kind:(i+row+(side>0?1:0))%3===0?'press':'fan',arm:rnd()<.45,phone:rnd()<.6,d:(rnd()*3).toFixed(2)});}
- people.sort((a,b)=>a.y-b.y||b.row-a.row);const lights=[];
+ people.sort((a,b)=>a.y-b.y||b.row-a.row);const lights=[];let ph=0,fl=0;  // only every other phone / camera gets a light
  const person=p=>{const {x,y,h,s}=p,hy=y-h*.84,bob=`style="--d:-${p.d}s"`;let extra='';
-  if(p.kind==='fan'&&p.arm){const ax=x-p.side*h*.14,top=y-h*1.12;extra=`<path d="M${x-p.side*h*.1} ${y-h*.56} L${ax} ${top}" stroke="#050506" stroke-width="${h*.07}" stroke-linecap="round"/>`+(p.phone?`<rect x="${ax-h*.04}" y="${top-h*.1}" width="${h*.08}" height="${h*.12}" rx="${h*.015}" fill="#fffbe0"/>`:'');if(p.phone)lights.push(`<i class="cp-phone" style="left:${ax}px;top:${top-h*.04}px;width:${h*.16}px;height:${h*.2}px;--d:-${p.d}s"></i>`);}
-  if(p.kind==='press')extra=`<rect x="${x-p.side*h*.18-h*.12}" y="${hy-h*.04}" width="${h*.24}" height="${h*.15}" rx="${h*.02}" fill="#050506"/><circle cx="${x-p.side*h*.32}" cy="${hy+h*.03}" r="${h*.055}" fill="#16161a"/>`;lights.push(`<i class="cp-flash" style="left:${x-p.side*h*.2}px;top:${hy-h*.08}px;width:${h}px;height:${h}px;--d:-${p.d}s"></i>`);
+  if(p.kind==='fan'&&p.arm){const ax=x-p.side*h*.14,top=y-h*1.12;extra=`<path d="M${x-p.side*h*.1} ${y-h*.56} L${ax} ${top}" stroke="#050506" stroke-width="${h*.07}" stroke-linecap="round"/>`+(p.phone?`<rect x="${ax-h*.04}" y="${top-h*.1}" width="${h*.08}" height="${h*.12}" rx="${h*.015}" fill="#fffbe0"/>`:'');if(p.phone&&ph++%2===0)lights.push(`<i class="cp-phone" style="left:${ax}px;top:${top-h*.04}px;width:${h*.16}px;height:${h*.2}px;--d:-${p.d}s"></i>`);}
+  if(p.kind==='press')extra=`<rect x="${x-p.side*h*.18-h*.12}" y="${hy-h*.04}" width="${h*.24}" height="${h*.15}" rx="${h*.02}" fill="#050506"/><circle cx="${x-p.side*h*.32}" cy="${hy+h*.03}" r="${h*.055}" fill="#16161a"/>`;if(fl++%2===0)lights.push(`<i class="cp-flash" style="left:${x-p.side*h*.2}px;top:${hy-h*.08}px;width:${h}px;height:${h}px;--d:-${p.d}s"></i>`);
   return `<g><path d="M${x-h*.25} ${y}Q${x-h*.27} ${y-h*.6} ${x} ${y-h*.64}Q${x+h*.27} ${y-h*.6} ${x+h*.25} ${y}Z" fill="#050506" stroke="#ff6a7c40" stroke-width="1"/><ellipse cx="${x}" cy="${hy}" rx="${h*.11}" ry="${h*.13}" fill="#050506" stroke="#ff6a7c40" stroke-width="1"/>${extra}</g>`;};
  const posts=[.06,.2,.42,.78].map(t=>{const y=lerp(y0,H*1.02,t),s=scaleAt(y);return {y,s,h:H*.2*s,side:[-1,1].map(side=>cx+side*(halfAt(y)+22*s))};});
  const post=(x,p)=>{const {y,s,h}=p,w=7*s;return `<ellipse cx="${x}" cy="${y+2*s}" rx="${16*s}" ry="${4.5*s}" fill="#000" opacity=".55" filter="url(#cp-blur)"/><ellipse cx="${x}" cy="${y}" rx="${11*s}" ry="${3.6*s}" fill="url(#cp-goldH)"/><rect x="${x-w/2}" y="${y-h}" width="${w}" height="${h}" fill="url(#cp-goldH)"/><ellipse cx="${x}" cy="${y-h*.55}" rx="${w*.75}" ry="${1.6*s}" fill="url(#cp-goldH)"/><circle cx="${x}" cy="${y-h-4*s}" r="${6.5*s}" fill="url(#cp-knob)"/>`;};
@@ -103,29 +103,66 @@ function carpetScene(){
 }
 const EDGE_STARS=Array.from({length:44},(_,i)=>{const side=i%4,t=((i*37)%100)/100;const [x,y]=side===0?[t*100,1.5]:side===1?[98.5,t*100]:side===2?[t*100,98.5]:[1.5,t*100];return `<i style="left:${x}%;top:${y}%;--d:${-(i*.13)%1.2}s;--s:${.6+((i*7)%5)/6}"></i>`;}).join('');
 
+// The stage (tunnel, gate, red carpet, crowd, fireworks, sparkles) is a pre-recorded video per prize colour
+// and screen orientation: phones decode video in hardware, so it plays smoothly and stays cool even on slow
+// devices. The card, its glow and flip, the name and the sounds stay live on top, on the same 18 s timeline.
+// The video's last seconds (crowd lights and sparkles only) loop until "Nhận thẻ". If the video cannot be
+// loaded or played in time, the stage is drawn live as before.
+const LOOP_FROM=23,LOOP_TO=28,videoCache=new Map();
+const orientation=()=>innerWidth>innerHeight?'l':'p';
+// The video streams: it starts loading as soon as the prize is known and can start playing once the first
+// seconds are in, while the rest keeps downloading (about 1.2 Mbit/s is enough).
+export function preloadReveal(tier){
+ if(reduced()||!['gold','purple','red'].includes(tier))return Promise.resolve(null);const key=tier+'-'+orientation();
+ if(!videoCache.has(key)){
+  const v=document.createElement('video');v.className='rv-video';v.muted=true;v.playsInline=true;v.setAttribute('playsinline','');v.setAttribute('muted','');v.setAttribute('aria-hidden','true');v.preload='auto';
+  // ready once the browser expects to play to the end without stopping (or, on a slow line, after 6 s with
+  // at least the start loaded)
+  const ready=new Promise(res=>{let can=false;v.addEventListener('canplay',()=>{can=true;},{once:true});v.addEventListener('canplaythrough',()=>res(v),{once:true});
+   setTimeout(()=>{if(can)res(v);},6000);v.addEventListener('error',()=>{videoCache.delete(key);res(null);},{once:true});});
+  // stream when the server answers byte ranges (needed to jump back for the loop); otherwise load it whole
+  const src=`/assets/reveal/${key}.mp4`;
+  fetch(src,{headers:{Range:'bytes=0-1'}}).then(r=>r.status===206?src:fetch(src).then(r=>r.ok?r.blob():Promise.reject()).then(b=>URL.createObjectURL(b))).then(u=>{v.src=u;v.load();}).catch(()=>{videoCache.delete(key);v.dispatchEvent(new Event('error'));});
+  videoCache.set(key,ready);
+ }
+ return videoCache.get(key);
+}
+const within=(promise,ms)=>Promise.race([promise,new Promise(r=>setTimeout(()=>r(null),ms))]);
+async function stageVideo(tier){
+ const v=await within(preloadReveal(tier),8000);if(!v)return null;
+ v.currentTime=0;
+ // the last second of the video is blended into the second before LOOP_FROM, so jumping back 5 s at the
+ // very last frame is invisible; 'ended' is the fallback where frame callbacks are not available
+ const back=()=>{v.currentTime=Math.max(LOOP_FROM-.05,v.currentTime-(LOOP_TO-LOOP_FROM));};
+ if(v.requestVideoFrameCallback){const tick=(_,m)=>{if(!v.isConnected)return;if(m.mediaTime>=LOOP_TO-.03)back();v.requestVideoFrameCallback(tick);};v.requestVideoFrameCallback(tick);}
+ v.onended=()=>{v.currentTime=LOOP_FROM;v.play().catch(()=>{});};
+ return v;
+}
+
 // Shows the card; resolves when the player taps "Nhận thẻ".
-export function revealCard(host,c,tier,{duplicate=false}={}){
+export async function revealCard(host,c,tier,{duplicate=false}={}){
+ const video=reduced()?null:await stageVideo(tier);
  return new Promise(done=>{
-  const scene=carpetScene(),el=document.createElement('div');el.className='reveal';el.dataset.tier=tier;el.setAttribute('role','dialog');el.setAttribute('aria-label','Phần thưởng: '+c.name);
-  el.innerHTML=`<div class="rv-tunnel" aria-hidden="true"><i class="tn-ceil"></i><i class="tn-floor"></i><i class="tn-wall l"></i><i class="tn-wall r"></i>
+  const live=!video,scene=live?carpetScene():null,el=document.createElement('div');el.className='reveal'+(live?'':' v-mode');el.dataset.tier=tier;el.setAttribute('role','dialog');el.setAttribute('aria-label','Phần thưởng: '+c.name);
+  el.innerHTML=`${live?`<div class="rv-tunnel" aria-hidden="true"><i class="tn-ceil"></i><i class="tn-floor"></i><i class="tn-wall l"></i><i class="tn-wall r"></i>
    <div class="tn-ribs">${Array.from({length:7},(_,i)=>`<i style="--d:${-i*.3}s"></i>`).join('')}</div>
    <div class="tn-exit"><div class="tn-light"></div><i class="tn-gate l"></i><i class="tn-gate r"></i></div>${scene.svg}<div class="tn-haze"></div></div>
-  <canvas class="rv-fire"></canvas>
+  <canvas class="rv-fire"></canvas>`:''}
   <div class="rv-card" data-tier="${tier}"><div class="rv-face rv-back">${potwCard(tier)}</div><div class="rv-face rv-front">${cardFace(c,animatedCharacter(c,'rv-art'))}</div><div class="rv-white"></div></div>
-  <div class="rv-flash"></div><div class="rv-edge" aria-hidden="true">${EDGE_STARS}</div>
+  ${live?`<div class="rv-flash"></div><div class="rv-edge" aria-hidden="true">${EDGE_STARS}</div>`:''}
   <div class="rv-info"><strong>${esc(c.name)}</strong><span>${duplicate?'Bạn đã có skin này rồi (không hoàn coin).':'Skin mới đã vào bộ sưu tập!'}</span><button type="button" class="cr7-gold rv-ok">Nhận thẻ</button></div>`;
+  if(video)el.prepend(video);
   host.append(el);
-  const fx=sparks(el.querySelector('.rv-fire'));
+  const fx=live?sparks(el.querySelector('.rv-fire')):null;
   const steps=[['s-walk',100],['s-gate',2000],['s-carpet',7000],['s-approach',10000],['s-glow',14000],['s-flip',14800],['s-celebrate',15000],['s-done',18000]];
   const timers=[],crowd=[];
   const apply=name=>{el.classList.add(name);
    if(name==='s-gate'){gateSound(5000,1);whoosh({volume:1.6,ms:5200});}
-   if(name==='s-carpet'){scene.unroll(el,3000);fx.rockets(3600);whoosh({volume:.7,ms:2600});}
+   if(name==='s-carpet'){if(live){scene.unroll(el,3000);fx.rockets(3600);}whoosh({volume:.7,ms:2600});}
    if(name==='s-approach')whoosh({volume:.6,ms:3800});
    if(name==='s-glow')whoosh({volume:.9,ms:900});
-   if(name==='s-flip'){playSound('win',{volume:1});fx.fireworks(3600);}};
-  if(reduced()){el.classList.add('s-instant',...steps.map(s=>s[0]));scene.finish(el);}
-  else{
+   if(name==='s-flip'){playSound('win',{volume:1});fx?.fireworks(3600);}};
+  const run=()=>{
    // the crowd: a murmur in the tunnel that grows, then a second wave timed so the loudest roar lands
    // exactly when the card turns into the skin (the recording is 10.7 s, the show 18 s)
    crowd.push(playShaped('crowd',[[0,.08],[2,.16],[7,.35],[10,.5],[10.7,0]]));
@@ -137,7 +174,15 @@ export function revealCard(host,c,tier,{duplicate=false}={}){
    // as the anthem's last chord fades, so the two never fight
    duckMusic(.06,2500);timers.push(setTimeout(()=>duckMusic(1,4500),15600));
    for(const [name,at] of steps)timers.push(setTimeout(()=>apply(name),at));
+  };
+  if(reduced()){el.classList.add('s-instant',...steps.map(s=>s[0]));scene?.finish(el);}
+  else if(video){
+   // the timeline starts with the first video frame; if the browser refuses to play it, show the card at once
+   let started=false;const go=()=>{if(started)return;started=true;run();};
+   video.addEventListener('playing',go,{once:true});
+   video.play().catch(()=>{if(!started){started=true;el.classList.add('s-instant',...steps.map(s=>s[0]));}});
   }
-  el.querySelector('.rv-ok').onclick=()=>{duckMusic(1,1500);el.classList.add('s-leaving');for(const c of crowd)c.peak(.5);setTimeout(()=>{fx.stop();scene.cleanup();el.remove();done();},250);};
+  else run();
+  el.querySelector('.rv-ok').onclick=()=>{duckMusic(1,1500);el.classList.add('s-leaving');for(const c of crowd)c.peak(.5);setTimeout(()=>{fx?.stop();scene?.cleanup();video?.pause();timers.forEach(clearTimeout);el.remove();done();},250);};
  });
 }

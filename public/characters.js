@@ -14,9 +14,9 @@ export const CHARACTERS = [
  {id:'bella-tennis',name:'Djokovic',color:'#b5ec3b',tag:'Tennis · Xanh lá',locked:true,price:3},
  {id:'bella-tech',name:'Steve Dóp',color:'#badfff',tag:'Công nghệ · Bạc xanh',locked:true,price:10},
  {id:'farmer',name:'Bella nông dân',color:'#d7a852',tag:'Nông dân · Miễn phí',price:0},
- {id:'bella-iron',name:'Iron Man',color:'#89efff',tag:'Arc Storm · Điện năng công nghệ',locked:true,price:20,effect:'electric',asset:'iron-man-arc.png',artBox:'380 0 668 736',artWidth:1408,artHeight:736},
+ {id:'bella-iron',name:'Iron Man',color:'#89efff',tag:'Arc Storm · Điện năng công nghệ',locked:true,price:20,effect:'electric',asset:'iron-man-arc.webp',artBox:'380 0 668 736',artWidth:1408,artHeight:736},
  {id:'bella-captain',name:'Captain America',color:'#67b5f2',tag:'Quân phục xanh · Khiên',locked:true,price:3,effect:'shield'},
- {id:'bella-spider',name:'Spider-Man',color:'#77d7f8',tag:'Bella nhện · Tơ chuyển động',locked:true,price:10,effect:'web',asset:'bella-spider-transparent.png'},
+ {id:'bella-spider',name:'Spider-Man',color:'#77d7f8',tag:'Bella nhện · Tơ chuyển động',locked:true,price:10,effect:'web',asset:'bella-spider-transparent.webp'},
  {id:'sydney-sweeney',name:'Sydney Sweeney',color:'#ff9fce',tag:'Huyền thoại · Heart Royale',locked:true,price:20,effect:'hearts',rarity:'legendary'},
  {id:'son-tung-mtp',name:'Sơn Tùng MTP',color:'#c7bbff',tag:'Spotlight · Sân khấu ánh sao',locked:true,price:20,effect:'music'},
  ...[['mu','CR7 MU','#ff443d'],['sporting','CR7 Sporting','#55ef99'],['real','CR7 Real','#b3dfff'],['al-nassr','CR7 Al Nassr','#ffd64d']].map(([id,name,color])=>({id:'cr7-'+id,name,color,tag:'B.O.A.T · Độc quyền pack',price:null,locked:true,event:'cr7-boat-v1',effect:'football'})),
@@ -24,10 +24,10 @@ export const CHARACTERS = [
  ...[['goat-m10-barca-2015','M10 Barca','#2f5fc4','Big Time · 06.06.2015'],['goat-m10-bernabeu','M10 Bernabéu','#c4304f','Big Time · 23.04.2017'],['goat-m10-paris','M10 Paris','#3d5bb5','GOAT · Paris'],['goat-m10-miami','M10 Miami','#ff5fae','GOAT · Miami'],['goat-neymar-samba','Neymar Samba','#ffd43b','Samba · Số 10']].map(([id,name,color,tag])=>({id,name,color,tag,price:null,locked:true,event:'cr7-boat-v1',effect:'football'}))
 ,
  // Preview only: excluded from all sales and packs.
- {id:'dangrangto',name:'Dangrangto',color:'#76d66b',tag:'Xương rồng · The Masked Singer',locked:true,price:null,maskedExclusive:true,effect:'cactus',asset:'dangrangto.png'},
- {id:'jack97',name:'Jack97',color:'#c8f76a',tag:'Đom đóm · The Masked Singer',locked:true,price:null,maskedExclusive:true,effect:'fireflies',asset:'jack97.png'},
- {id:'mck',name:'MCK',color:'#ff713c',tag:'Lửa · The Masked Singer',locked:true,price:null,maskedExclusive:true,effect:'flames',asset:'mck.png'},
- {id:'son-hyung-min',name:'Son Hyung Min',color:'#75b9ff',tag:'Cờ Hàn Quốc',locked:true,price:20,effect:'korean-flags',asset:'son-hyung-min.png'},
- {id:'the-weeknd',name:'The Weeknd',color:'#d697ff',tag:'Micro · The Masked Singer',locked:true,price:null,maskedExclusive:true,effect:'microphones',asset:'the-weeknd.png'}
+ {id:'dangrangto',name:'Dangrangto',color:'#76d66b',tag:'Xương rồng · The Masked Singer',locked:true,price:null,maskedExclusive:true,effect:'cactus',asset:'dangrangto.webp'},
+ {id:'jack97',name:'Jack97',color:'#c8f76a',tag:'Đom đóm · The Masked Singer',locked:true,price:null,maskedExclusive:true,effect:'fireflies',asset:'jack97.webp'},
+ {id:'mck',name:'MCK',color:'#ff713c',tag:'Lửa · The Masked Singer',locked:true,price:null,maskedExclusive:true,effect:'flames',asset:'mck.webp'},
+ {id:'son-hyung-min',name:'Son Hyung Min',color:'#75b9ff',tag:'Cờ Hàn Quốc',locked:true,price:20,effect:'korean-flags',asset:'son-hyung-min.webp'},
+ {id:'the-weeknd',name:'The Weeknd',color:'#d697ff',tag:'Micro · The Masked Singer',locked:true,price:null,maskedExclusive:true,effect:'microphones',asset:'the-weeknd.webp'}
 ];
 export const characterById = id => CHARACTERS.find(c=>c.id===id)||CHARACTERS.find(c=>c.id===DEFAULT_CHARACTER);

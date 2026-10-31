@@ -15,7 +15,13 @@ test('only eliminated viewers can see a selected live hand and every client sees
  assert.equal(watched.players.find(p=>p.id===target.room.me).hole.length,2);assert.equal(watched.players.find(p=>p.id===other.room.me).hole,null);
  const live=(await call(null,other.token,code)).room;
  assert.equal(live.players.find(p=>p.id===out.room.me).watchingId,target.room.me);assert.equal(live.players.filter(p=>p.hole).length,1);
- assert.equal((await call({op:'watch',playerId:null,code},out.token)).room.players.find(p=>p.id===target.room.me).hole,null);
+ // locked for the rest of the hand: no switching, no clearing
+ await assert.rejects(()=>call({op:'watch',playerId:other.room.me,code},out.token),/Mỗi ván chỉ được chọn 1 người/);
+ await assert.rejects(()=>call({op:'watch',playerId:null,code},out.token),/Mỗi ván chỉ được chọn 1 người/);
+ // a new hand frees the choice again
+ {const {room,raw}=await readRoom(code);room.hand.id='next-hand';await writeRoom(code,raw,room);}
+ assert.equal((await call({op:'watch',playerId:other.room.me,code},out.token)).room.players.find(p=>p.id===other.room.me).hole.length,2);
+ {const {room,raw}=await readRoom(code);room.hand.id='third-hand';await writeRoom(code,raw,room);}
  await assert.rejects(()=>call({op:'watch',playerId:out.room.me,code},out.token),/không còn/);
 });
 
@@ -29,4 +35,10 @@ test('folded cards can only be voluntarily shown by their owner after that hand 
  await assert.rejects(()=>call({op:'showCards',handId:'stale',code},folder.token),/thay đổi/);
  await call({op:'showCards',handId:state.hand.id,code},folder.token);
  const shown=(await call(null,other.token,code)).room;assert.equal(shown.players.find(p=>p.id===folder.room.me).hole.length,2);assert.deepEqual(shown.hand.shownCards,[folder.room.me]);assert.ok(!JSON.stringify(shown).includes('tokenHash'));
+});
+
+test('everyone out picks a player again at the start of each hand',async()=>{
+ const {startHand}=await import('../lib/poker.js');
+ const {code}=await table(3);const {room}=await readRoom(code);const p=room.players[0];p.rank=3;p.stack=0;p.watchingId=room.players[1].id;p.watchHand=room.hand.id;
+ startHand(room,Date.now());assert.equal(p.watchingId,null);assert.equal(p.watchHand,null);
 });
