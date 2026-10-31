@@ -13,3 +13,9 @@ export function evaluate5(cards){
 }
 export function evaluate(cards){let best=null;for(let a=0;a<cards.length-4;a++)for(let b=a+1;b<cards.length-3;b++)for(let c=b+1;c<cards.length-2;c++)for(let d=c+1;d<cards.length-1;d++)for(let e=d+1;e<cards.length;e++){const score=evaluate5([cards[a],cards[b],cards[c],cards[d],cards[e]]);if(!best||compare(score,best)>0)best=score;}return best;}
 export const handName=score=>['Bài cao','Một đôi','Hai đôi','Bộ ba','Sảnh','Thùng','Cù lũ','Tứ quý','Thùng phá sảnh'][score?.[0]??0];
+// English hand names shown on the table when a hand is won at showdown.
+export const handNameEn=score=>score?.[0]===8&&score[1]===14?'Royal Flush':['High Card','One Pair','Two Pair','Three of a Kind','Straight','Flush','Full House','Four of a Kind','Straight Flush'][score?.[0]??0];
+// All-in run-out: the remaining board cards are turned one at a time. The client times the cards with these
+// numbers and the server keeps the next hand back until the winner has been shown.
+export const RUNOUT_LEAD=1000,RUNOUT_STEP=1800;
+export const runoutRevealMs=cards=>cards>0?RUNOUT_LEAD+(cards-1)*RUNOUT_STEP+900:0;

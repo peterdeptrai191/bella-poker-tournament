@@ -40,7 +40,7 @@ export function offerMaskedGift(){
    const show=()=>{
     if(account()?.id!==a.id)return;
     const active=document.querySelector('dialog[open]');if(active){active.addEventListener('close',show,{once:true});return;}
-    const d=document.createElement('dialog');d.className='cr7-dialog ms-gift-popup';d.innerHTML='<button class="ms-gift-close" aria-label="Đóng thông báo">×</button><img src="/assets/promo/masked-singer.png" alt="Bella ca sĩ mặt nạ"><small>QUÀ TẶNG TOÀN SERVER</small><h2>Tặng bạn 1 lượt mở miễn phí!</h2><p>Khám phá The Masked Singer · Bella.<br>Chạm 3 lần để xé gói và lộ diện nhân vật.<br>Lượt miễn phí đã sẵn sàng trong tài khoản của bạn.</p><button class="cr7-gold" data-gift-open>Mở miễn phí ngay →</button><button class="cr7-list" data-gift-later>Để sau</button>';
+    const d=document.createElement('dialog');d.className='cr7-dialog ms-gift-popup';d.innerHTML='<button class="ms-gift-close" aria-label="Đóng thông báo">×</button><img src="/assets/promo/masked-singer.webp" alt="Bella ca sĩ mặt nạ"><small>QUÀ TẶNG TOÀN SERVER</small><h2>Tặng bạn 1 lượt mở miễn phí!</h2><p>Khám phá The Masked Singer · Bella.<br>Chạm 3 lần để xé gói và lộ diện nhân vật.<br>Lượt miễn phí đã sẵn sàng trong tài khoản của bạn.</p><button class="cr7-gold" data-gift-open>Mở miễn phí ngay →</button><button class="cr7-list" data-gift-later>Để sau</button>';
     d.querySelector('.ms-gift-close').onclick=()=>d.close();d.querySelector('[data-gift-later]').onclick=()=>d.close();d.querySelector('[data-gift-open]').onclick=()=>{d.close();openMaskedPack();};d.onclose=()=>d.remove();document.body.append(d);d.showModal();
    };show();
   }catch{giftPending.delete(a.id);}

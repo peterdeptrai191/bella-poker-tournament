@@ -7,3 +7,19 @@
 @media(orientation:landscape) and (max-height:600px){.hole-slot{--hole-w:34px;--hole-h:49px}}
 
 .game-actions .watch-picker{min-width:0;margin:0;display:flex;flex-direction:column;justify-content:center;gap:4px}.game-actions .watch-picker select{width:100%;flex:0 1 auto;min-height:32px}.game-actions .show-folded{margin:0;font-size:12px}.game-shell:has(.watch-status) .hero-hand{bottom:calc(var(--dock-height) + var(--hero-gap) + var(--community-height,0px))}.game-shell:has(.watch-status) .game-rank-shortcut,.game-shell:has(.watch-status) .game-level{margin-bottom:var(--community-height,0px)}
+/* one-pick-per-hand spectator picker */
+.watch-picker.choose,.watch-picker.locked{display:flex;flex-direction:column;align-items:stretch;gap:6px;margin:0;padding:8px 10px;border-radius:14px;background:#0b1222e6;border:1px solid #ffd34d66;color:#f9e7b0;font-size:12px;text-align:center}
+.watch-picker.choose{animation:watch-ask 1.6s ease-in-out infinite alternate}
+@keyframes watch-ask{to{border-color:#ffd34d;box-shadow:0 0 14px #ffd34d55}}
+.watch-picker small{font-size:10px;color:#aab8d2}
+.watch-choices{display:flex;gap:6px;justify-content:center;overflow-x:auto;scrollbar-width:none;padding:2px}
+.watch-choices button{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:64px;max-width:86px;padding:5px 6px;border-radius:11px;border:1px solid #ffffff2a;background:linear-gradient(#2a4a7a,#1a2f52);color:#fff;font-size:11px}
+.watch-choices button b{max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.watch-choices button:active{transform:scale(.96)}
+.watch-choices .watch-art.character-avatar{width:34px;height:38px;filter:none}
+.watch-picker.locked span{font-size:12px}
+/* while a pick is needed the picker takes the full row; the ranking button becomes a slim bar below it */
+.game-actions:has(.watch-picker.choose){grid-template-columns:1fr}
+.game-actions:has(.watch-picker.choose) .watch-picker{order:-1}
+.game-actions:has(.watch-picker.choose) .idle-action{min-height:36px;padding:6px 10px}
+.game-actions .watch-picker.choose .watch-choices button{min-width:72px}

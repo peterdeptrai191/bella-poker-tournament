@@ -63,13 +63,19 @@ test('a skipped snapshot can show card reveals, actual chip deductions and elimi
 });
 
 
-test('all-in runout pauses between flop, turn and river without replay on polling',()=>{
+test('all-in runout turns the board one card at a time and hides the result until the last card',()=>{
  const before=snapshot(),after=structuredClone(before);after.hand.board=[1,2,3,4,5];after.hand.runoutFrom=0;
- assert.deepEqual(diffTableEffects(before,after).filter(e=>e.type==='board').map(e=>e.delay),[0,190,380,1200,2400]);
+ assert.deepEqual(diffTableEffects(before,after).filter(e=>e.type==='board').map(e=>e.delay),[1000,2800,4600,6400,8200]);
+ assert.equal(diffTableEffects(before,after).find(e=>e.type==='runout').delay,9100);
  const flop=structuredClone(before);flop.hand.board=[1,2,3];after.hand.runoutFrom=3;
- assert.deepEqual(diffTableEffects(flop,after).filter(e=>e.type==='board').map(e=>e.delay),[0,1200]);assert.deepEqual(diffTableEffects(after,after),[]);
+ assert.deepEqual(diffTableEffects(flop,after).filter(e=>e.type==='board').map(e=>e.delay),[1000,2800]);assert.equal(diffTableEffects(flop,after).find(e=>e.type==='runout').delay,3700);assert.deepEqual(diffTableEffects(after,after),[]);
 });
 test('two newly dealt local cards flip once and do not animate unknown opponents',()=>{
  const before=snapshot(),after=structuredClone(before);after.me='a';after.players[0].hole=[1,2];
  const e=diffTableEffects(before,after).filter(e=>e.type==='hole');assert.equal(e.length,2);assert.deepEqual(e.map(x=>x.delay),[0,220]);assert.ok(e.every(x=>x.playerId==='a'));assert.deepEqual(diffTableEffects(after,after),[]);
+});
+
+test('english hand names for the winner banner',async()=>{
+ const {handNameEn}=await import('../public/hand-evaluator.js');
+ assert.equal(handNameEn([8,14]),'Royal Flush');assert.equal(handNameEn([8,9]),'Straight Flush');assert.equal(handNameEn([2,9,4,3]),'Two Pair');assert.equal(handNameEn([5,14,9,7,4,2]),'Flush');
 });

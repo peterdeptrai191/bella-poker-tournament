@@ -25,7 +25,7 @@ export function dimmer(host){
 }
 
 // One particle engine for the sparkler fountains and the fireworks.
-function sparks(canvas){
+export function sparks(canvas){
  const ctx=canvas.getContext('2d'),dpr=Math.min(1.5,devicePixelRatio||1),W=canvas.width=innerWidth*dpr,H=canvas.height=innerHeight*dpr,parts=[],jobs=[];let running=true;
  const COLORS=['#ffd34d','#ff2d55','#ffffff','#ff8a3d','#ff5fae','#7cc4ff','#b98cff'];
  const add=(x,y,vx,vy,c,life=1,size=2.2,drag=.985,grav=.06)=>parts.push({x,y,vx,vy,c,life,size,drag,grav});
@@ -64,10 +64,10 @@ function carpetScene(){
  let seed=7;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;const people=[];
  for(const side of [-1,1])for(let row=2;row>=0;row--)for(let i=0;i<11;i++){const t=.02+i*.085+row*.012+rnd()*.02;if(t>.95)continue;const y=lerp(y0,H*1.02,t),s=scaleAt(y);
   people.push({y,s,x:cx+side*(halfAt(y)+(46+row*30+rnd()*10)*s),h:H*(.16+rnd()*.03)*s,side,row,kind:(i+row+(side>0?1:0))%3===0?'press':'fan',arm:rnd()<.45,phone:rnd()<.6,d:(rnd()*3).toFixed(2)});}
- people.sort((a,b)=>a.y-b.y||b.row-a.row);const lights=[];
+ people.sort((a,b)=>a.y-b.y||b.row-a.row);const lights=[];let ph=0,fl=0;  // only every other phone / camera gets a light
  const person=p=>{const {x,y,h,s}=p,hy=y-h*.84,bob=`style="--d:-${p.d}s"`;let extra='';
-  if(p.kind==='fan'&&p.arm){const ax=x-p.side*h*.14,top=y-h*1.12;extra=`<path d="M${x-p.side*h*.1} ${y-h*.56} L${ax} ${top}" stroke="#050506" stroke-width="${h*.07}" stroke-linecap="round"/>`+(p.phone?`<rect x="${ax-h*.04}" y="${top-h*.1}" width="${h*.08}" height="${h*.12}" rx="${h*.015}" fill="#fffbe0"/>`:'');if(p.phone)lights.push(`<i class="cp-phone" style="left:${ax}px;top:${top-h*.04}px;width:${h*.16}px;height:${h*.2}px;--d:-${p.d}s"></i>`);}
-  if(p.kind==='press')extra=`<rect x="${x-p.side*h*.18-h*.12}" y="${hy-h*.04}" width="${h*.24}" height="${h*.15}" rx="${h*.02}" fill="#050506"/><circle cx="${x-p.side*h*.32}" cy="${hy+h*.03}" r="${h*.055}" fill="#16161a"/>`;lights.push(`<i class="cp-flash" style="left:${x-p.side*h*.2}px;top:${hy-h*.08}px;width:${h}px;height:${h}px;--d:-${p.d}s"></i>`);
+  if(p.kind==='fan'&&p.arm){const ax=x-p.side*h*.14,top=y-h*1.12;extra=`<path d="M${x-p.side*h*.1} ${y-h*.56} L${ax} ${top}" stroke="#050506" stroke-width="${h*.07}" stroke-linecap="round"/>`+(p.phone?`<rect x="${ax-h*.04}" y="${top-h*.1}" width="${h*.08}" height="${h*.12}" rx="${h*.015}" fill="#fffbe0"/>`:'');if(p.phone&&ph++%2===0)lights.push(`<i class="cp-phone" style="left:${ax}px;top:${top-h*.04}px;width:${h*.16}px;height:${h*.2}px;--d:-${p.d}s"></i>`);}
+  if(p.kind==='press')extra=`<rect x="${x-p.side*h*.18-h*.12}" y="${hy-h*.04}" width="${h*.24}" height="${h*.15}" rx="${h*.02}" fill="#050506"/><circle cx="${x-p.side*h*.32}" cy="${hy+h*.03}" r="${h*.055}" fill="#16161a"/>`;if(fl++%2===0)lights.push(`<i class="cp-flash" style="left:${x-p.side*h*.2}px;top:${hy-h*.08}px;width:${h}px;height:${h}px;--d:-${p.d}s"></i>`);
   return `<g><path d="M${x-h*.25} ${y}Q${x-h*.27} ${y-h*.6} ${x} ${y-h*.64}Q${x+h*.27} ${y-h*.6} ${x+h*.25} ${y}Z" fill="#050506" stroke="#ff6a7c40" stroke-width="1"/><ellipse cx="${x}" cy="${hy}" rx="${h*.11}" ry="${h*.13}" fill="#050506" stroke="#ff6a7c40" stroke-width="1"/>${extra}</g>`;};
  const posts=[.06,.2,.42,.78].map(t=>{const y=lerp(y0,H*1.02,t),s=scaleAt(y);return {y,s,h:H*.2*s,side:[-1,1].map(side=>cx+side*(halfAt(y)+22*s))};});
  const post=(x,p)=>{const {y,s,h}=p,w=7*s;return `<ellipse cx="${x}" cy="${y+2*s}" rx="${16*s}" ry="${4.5*s}" fill="#000" opacity=".55" filter="url(#cp-blur)"/><ellipse cx="${x}" cy="${y}" rx="${11*s}" ry="${3.6*s}" fill="url(#cp-goldH)"/><rect x="${x-w/2}" y="${y-h}" width="${w}" height="${h}" fill="url(#cp-goldH)"/><ellipse cx="${x}" cy="${y-h*.55}" rx="${w*.75}" ry="${1.6*s}" fill="url(#cp-goldH)"/><circle cx="${x}" cy="${y-h-4*s}" r="${6.5*s}" fill="url(#cp-knob)"/>`;};

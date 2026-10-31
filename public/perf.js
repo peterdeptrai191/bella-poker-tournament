@@ -9,7 +9,7 @@ export function createAnimationRegistry(observer){
  };
 }
 if(typeof window!=='undefined'){
- const link=document.createElement('link');link.rel='stylesheet';link.href='/perf.css';document.head.append(link);
+ const link=document.createElement('link');link.rel='stylesheet';link.href=new URL('./perf.css',import.meta.url).href;document.head.append(link);
  const io=typeof IntersectionObserver==='undefined'?null:new IntersectionObserver(entries=>{for(const e of entries)e.target.classList.toggle('anim-off',!e.isIntersecting);},{rootMargin:'60px'}),registry=createAnimationRegistry(io);
  let queued=false,modalDirty=true;const additions=new Set();
  const flush=()=>{queued=false;registry.prune();for(const root of additions)if(root.isConnected)registry.scan(root);additions.clear();if(modalDirty){modalDirty=false;document.body?.classList.toggle('modal-up',!!document.querySelector('dialog:modal'));}};
