@@ -66,11 +66,17 @@ export function chipRain({full=true,target=null,delay=0,volume=1}={}){
 
 // ---------- Sound: five recordings of real chips on a table, from one chip to a whole stack ----------
 // They are decoded once into memory, so a sound starts instantly and several can overlap.
-// Browsers only allow audio after the player has touched the page, so everything starts on the first tap.
+// Browsers only allow audio after the player has touched the page, so playback starts on the first tap.
+// The files come in two groups, each loaded only when it is needed:
+//  'table'  chips and cards (about 80 KB): when you sit at a table, or open a pack or the GOAT or BOAT wheel
+//  'show'   crowd, cheer and the anthem (about 370 KB): when GOAT or BOAT opens or a tournament ends
 const SOUNDS={one:'/assets/sfx/chip-1.mp3',small:'/assets/sfx/chip-stack-s.mp3',medium:'/assets/sfx/chip-stack-m.mp3',allin:'/assets/sfx/chip-allin.mp3',win:'/assets/sfx/chip-win.mp3',cheer:'/assets/sfx/crowd-cheer.mp3',crowd:'/assets/sfx/crowd-cheer-long.mp3',anthem:'/assets/music/c1-reveal.mp3',deal:'/assets/sfx/card-deal.mp3',shuffle:'/assets/sfx/card-shuffle.mp3'};
-let audio=null,loading=null;const buffers={};
-function load(){loading??=Promise.all(Object.entries(SOUNDS).map(async([name,url])=>{try{const data=await (await fetch(url)).arrayBuffer();buffers[name]=await audio.decodeAudioData(data);}catch{}}));return loading;}
-function unlock(){try{audio??=new (window.AudioContext||window.webkitAudioContext)();if(audio.state==='suspended')audio.resume();load();}catch{}}
+const GROUPS={table:['one','small','medium','allin','win','deal','shuffle'],show:['cheer','crowd','anthem']};
+let audio=null;const buffers={},files={},wanted=new Set();
+// downloads now; decodes once the audio engine exists (it can only start after the player's first tap)
+function decodeWanted(){if(!audio)return;for(const name of wanted)if(!buffers[name]&&files[name]&&!files[name].decoding){files[name].decoding=true;files[name].then(data=>audio.decodeAudioData(data)).then(b=>{buffers[name]=b;}).catch(()=>{});}}
+export function loadSounds(group){for(const name of GROUPS[group]||[]){if(!files[name])files[name]=fetch(SOUNDS[name]).then(r=>r.arrayBuffer());files[name].catch(()=>{delete files[name];});wanted.add(name);}decodeWanted();}
+function unlock(){try{audio??=new (window.AudioContext||window.webkitAudioContext)();if(audio.state==='suspended')audio.resume();decodeWanted();}catch{}}
 if(typeof window!=='undefined'){for(const type of ['pointerdown','keydown'])window.addEventListener(type,unlock,{capture:true,passive:true});}
 export function playSound(name,{delay=0,volume=1}={}){
  if(!audio||audio.state!=='running'||!buffers[name]||volume<=0||!sfxEnabled())return;

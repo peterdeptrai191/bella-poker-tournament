@@ -6,6 +6,7 @@ import {wheelHTML,spinner,stillArt,celebrate,potwCard} from './spin-wheel.js';
 import {dimmer,revealCard,preloadReveal} from './card-reveal.js';
 import {starRow} from './card-face.js';
 import {openGift} from './gift-box.js';
+import {loadSounds} from './pot-fx.js';
 // small white glints that flash on the G.O.A.T / B.O.A.T lettering
 export function addGlints(root){root.querySelectorAll('.goat-head:not(.cf-label)').forEach(h=>{if(h.querySelector('.goat-glint'))return;[[6,8,0],[44,58,.8],[66,4,1.6],[94,52,.4]].forEach(([x,y,d])=>{const g=document.createElement('i');g.className='goat-glint';g.style.left=x+'%';g.style.top=y+'%';g.style.animationDelay=d+'s';h.append(g);});});}
 const GOAT_HEAD='<span class="w g" data-t="G.O.A.T">G.O.A.T</span><small>or</small><span class="w b" data-t="B.O.A.T">B.O.A.T</span>';
@@ -86,6 +87,7 @@ function wheelDialog(mode){
 }
 
 export function openCr7Pack(){
+ loadSounds('table');loadSounds('show');
  wheelDialog({eyebrow:'BELLA • VÒNG QUAY',title:GOAT_HEAD,titleClass:'goat-head',label:GOAT_HEAD,badge:'🐐',frame:goatFrame,sparkle:SPARKLE,hidden:true,reveal:true,tiles:goatTiles(),
   sub:ODDS_LINE,
   footnote:`Mỗi tài khoản được tặng 1 lượt quay. Các lượt sau ${CR7_PRICE} coin. Tối đa ${DAILY_SPINS} lượt mỗi ngày. Skin trùng không hoàn coin.`,
@@ -102,6 +104,7 @@ function listMystery(){const d=dialog('cr7-rewards');const total=MYSTERY_TIERS.r
  d.innerHTML='<button class="cr7-close" aria-label="Đóng">×</button><small>BELLA MYSTERY PACK</small><h2>Tỷ lệ gói bí ẩn</h2><p>Bốc nhóm giá theo tỷ lệ, rồi chọn đều một skin trong nhóm.</p>'+MYSTERY_TIERS.map(([p,w])=>{const skins=CHARACTERS.filter(c=>c.price===p&&!c.event);return `<h3>Skin ${p} coin · ${pct(w/total)}</h3><div class="cr7-reward-grid">${skins.map(c=>`<article style="--cr7-color:${c.color}">${art(c)}<b>${esc(c.name)}</b><span>${pct(w/total/skins.length)}</span></article>`).join('')}</div>`;}).join('');
  d.querySelector('button').onclick=()=>d.close();d.showModal();}
 export function openMysteryPack(onDone){
+ loadSounds('table');
  wheelDialog({cls:'mystery-wheel',gift:true,eyebrow:'BELLA MYSTERY PACK',title:'Ai đang chờ bạn?',label:'<span class="gift-mini" aria-hidden="true"><span class="gift-lid"><i class="rib-v"></i><span class="bow"><i></i><i></i></span></span><span class="gift-body"><i class="rib-v"></i><i class="rib-h"></i><b class="gift-q">?</b></span></span>',badge:'?',tiles:mysteryTiles(),
   sub:'3 coin: 47,62% · 10 coin: 33,33% · 15 coin: 14,29% · 20 coin: 4,76%',
   footnote:'Giá 10 coin/lượt. Có thể ra skin đã sở hữu, skin trùng không hoàn coin.',list:listMystery,

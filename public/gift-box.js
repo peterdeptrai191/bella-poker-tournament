@@ -4,9 +4,9 @@ import {effectsReduced} from './visual-effects.js';
 // The prize is already decided by the server; the taps are only the show.
 import {animatedCharacter} from './character-motion.js';
 import {cardFace} from './card-face.js';
-import {playSound,whoosh} from './pot-fx.js';
+import {playSound,whoosh,loadSounds} from './pot-fx.js';
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-export function openGift(host,c){
+export function openGift(host,c){loadSounds('table');
  return new Promise(done=>{
   const need=3+Math.floor(Math.random()*3);let taps=0,open=false;
   const el=document.createElement('div');el.className='gift-stage';el.setAttribute('role','dialog');el.setAttribute('aria-label','Mở hộp quà');

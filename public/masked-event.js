@@ -1,12 +1,12 @@
 import {CHARACTERS,characterById} from './characters.js';
 import {MASKED_PRICE,maskedGroups,maskedOdds} from './masked-catalog.js';
 import {animatedCharacter} from './character-motion.js';
-import {playSound,whoosh} from './pot-fx.js';
+import {playSound,whoosh,loadSounds} from './pot-fx.js';
 import {effectsReduced} from './visual-effects.js';
 let account,request,isHome=()=>false;
 export function configureMasked(o){account=o.getAccount;request=o.request;isHome=o.isHome||(()=>false);}
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-export function openMaskedPack(){
+export function openMaskedPack(){loadSounds('table');
  const a=account();if(!a||document.querySelector('.ms-dialog[open]'))return;
  const owner=a.id,key='bella.masked.pending.'+owner;let receipt=null,result=null,taps=0,busy=false,done=false;
  try{const saved=JSON.parse(localStorage.getItem(key));if(typeof saved?.requestId==='string')receipt=saved;}catch{}

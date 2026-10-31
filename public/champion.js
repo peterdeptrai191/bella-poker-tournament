@@ -10,7 +10,7 @@
 import {sparks} from './card-reveal.js';
 import {animatedCharacter} from './character-motion.js';
 import {characterById} from './characters.js';
-import {playSound,playShaped,chipRain} from './pot-fx.js';
+import {playSound,playShaped,chipRain,loadSounds} from './pot-fx.js';
 import {duckMusic} from './settings.js';
 import {effectsReduced} from './visual-effects.js';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -26,6 +26,7 @@ function standings(room){
 
 // `onStay` closes the celebration and keeps the player at the table; `onLeave` takes them out of the room.
 export function celebrateChampion(room,{onStay,onLeave}={}){
+ loadSounds('table');loadSounds('show');
  if(document.querySelector('.champ'))return;
  markShown(room);
  const winner=room.players.find(p=>p.rank===1)||room.leaderboard.find(p=>p.position===1);if(!winner)return;

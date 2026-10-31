@@ -10,7 +10,7 @@ import {effectsReduced} from './visual-effects.js';
 //  18 s    name and "Nhận thẻ"
 // The colour shown from 10 s is always the real colour of the prize.
 import {animatedCharacter} from './character-motion.js';
-import {playSound,playShaped,gateSound,whoosh} from './pot-fx.js';
+import {playSound,playShaped,gateSound,whoosh,loadSounds} from './pot-fx.js';
 import {potwCard} from './spin-wheel.js';
 import {duckMusic} from './settings.js';
 import {cardFace} from './card-face.js';
@@ -141,6 +141,7 @@ async function stageVideo(tier){
 
 // Shows the card; resolves when the player taps "Nhận thẻ".
 export async function revealCard(host,c,tier,{duplicate=false}={}){
+ loadSounds('table');loadSounds('show');
  const video=reduced()?null:await stageVideo(tier);
  return new Promise(done=>{
   const live=!video,scene=live?carpetScene():null,el=document.createElement('div');el.className='reveal'+(live?'':' v-mode');el.dataset.tier=tier;el.setAttribute('role','dialog');el.setAttribute('aria-label','Phần thưởng: '+c.name);
