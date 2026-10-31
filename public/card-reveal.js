@@ -108,7 +108,7 @@ const EDGE_STARS=Array.from({length:44},(_,i)=>{const side=i%4,t=((i*37)%100)/10
 // devices. The card, its glow and flip, the name and the sounds stay live on top, on the same 18 s timeline.
 // The video's last seconds (crowd lights and sparkles only) loop until "Nhận thẻ". If the video cannot be
 // loaded or played in time, the stage is drawn live as before.
-const LOOP_FROM=21,videoCache=new Map();
+const LOOP_FROM=23,LOOP_TO=28,videoCache=new Map();
 const orientation=()=>innerWidth>innerHeight?'l':'p';
 // The video streams: it starts loading as soon as the prize is known and can start playing once the first
 // seconds are in, while the rest keeps downloading (about 1.2 Mbit/s is enough).
@@ -116,7 +116,10 @@ export function preloadReveal(tier){
  if(reduced()||!['gold','purple','red'].includes(tier))return Promise.resolve(null);const key=tier+'-'+orientation();
  if(!videoCache.has(key)){
   const v=document.createElement('video');v.className='rv-video';v.muted=true;v.playsInline=true;v.setAttribute('playsinline','');v.setAttribute('muted','');v.setAttribute('aria-hidden','true');v.preload='auto';
-  const ready=new Promise(res=>{v.addEventListener('canplay',()=>res(v),{once:true});v.addEventListener('error',()=>{videoCache.delete(key);res(null);},{once:true});});
+  // ready once the browser expects to play to the end without stopping (or, on a slow line, after 6 s with
+  // at least the start loaded)
+  const ready=new Promise(res=>{let can=false;v.addEventListener('canplay',()=>{can=true;},{once:true});v.addEventListener('canplaythrough',()=>res(v),{once:true});
+   setTimeout(()=>{if(can)res(v);},6000);v.addEventListener('error',()=>{videoCache.delete(key);res(null);},{once:true});});
   v.src=`/assets/reveal/${key}.mp4`;v.load();videoCache.set(key,ready);
  }
  return videoCache.get(key);
@@ -124,7 +127,12 @@ export function preloadReveal(tier){
 const within=(promise,ms)=>Promise.race([promise,new Promise(r=>setTimeout(()=>r(null),ms))]);
 async function stageVideo(tier){
  const v=await within(preloadReveal(tier),8000);if(!v)return null;
- v.currentTime=0;v.onended=()=>{v.currentTime=LOOP_FROM;v.play().catch(()=>{});};
+ v.currentTime=0;
+ // the last second of the video is blended into the second before LOOP_FROM, so jumping back 5 s at the
+ // very last frame is invisible; 'ended' is the fallback where frame callbacks are not available
+ const back=()=>{v.currentTime=Math.max(LOOP_FROM-.05,v.currentTime-(LOOP_TO-LOOP_FROM));};
+ if(v.requestVideoFrameCallback){const tick=(_,m)=>{if(!v.isConnected)return;if(m.mediaTime>=LOOP_TO-.03)back();v.requestVideoFrameCallback(tick);};v.requestVideoFrameCallback(tick);}
+ v.onended=()=>{v.currentTime=LOOP_FROM;v.play().catch(()=>{});};
  return v;
 }
 
